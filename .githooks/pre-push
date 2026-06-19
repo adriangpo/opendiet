@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+# OpenDiet pre-push gate (see AGENTS.md). CI is the authoritative gate; this is the fast local mirror.
+# Enable once with: git config core.hooksPath .githooks
+set -e
+
+echo "[pre-push] dart format --set-exit-if-changed ."
+dart format --output=none --set-exit-if-changed .
+
+echo "[pre-push] flutter analyze"
+flutter analyze
+
+echo "[pre-push] flutter test"
+flutter test
+
+echo "[pre-push] OK"

@@ -1,0 +1,37 @@
+# Dart / Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+.pub-cache/
+.pub/
+coverage/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets / signing -- NEVER commit (see AGENTS.md, NFR-008)
+*.env
+.env*
+**/secrets.dart
+**/key.properties
+**/*.keystore
+**/*.jks
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+
+# Generated localizations (regenerated from lib/l10n/*.arb by gen-l10n on pub get)
+lib/l10n/app_localizations*.dart
+
+# Notes:
+# - pubspec.lock IS committed (this is an app).
+# - Generated *.g.dart / *.freezed.dart ARE committed (excluded from analyzer instead).
+# - Generated gen-l10n Dart is NOT committed (regenerated from the ARB files).

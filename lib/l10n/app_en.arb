@@ -1,0 +1,7 @@
+{
+  "@@locale": "en",
+  "appTagline": "Local-first diet tracker",
+  "@appTagline": {
+    "description": "Short tagline shown on the landing screen. The brand name OpenDiet is not translated."
+  }
+}

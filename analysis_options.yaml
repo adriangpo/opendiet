@@ -1,0 +1,23 @@
+# Strict analysis for OpenDiet. See AGENTS.md "Conventions".
+include: package:very_good_analysis/analysis_options.yaml
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+  errors:
+    # Treat correctness issues as build-breaking.
+    invalid_annotation_target: ignore # noise from freezed/json_serializable
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/*.gr.dart"
+    - "**/*.config.dart"
+    - "lib/l10n/app_localizations*.dart"
+    - "build/**"
+
+linter:
+  rules:
+    # very_good_analysis already enforces a strict set; project-specific overrides go here.
+    public_member_api_docs: false # not an published package; relax doc-on-every-member

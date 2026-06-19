@@ -1,0 +1,16 @@
+# Normalize line endings to LF.
+* text=auto eol=lf
+
+# Generated Dart code: committed, but marked generated (collapsed in diffs/review).
+*.g.dart linguist-generated=true
+*.freezed.dart linguist-generated=true
+*.gr.dart linguist-generated=true
+
+# Binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.ttf binary
+*.otf binary

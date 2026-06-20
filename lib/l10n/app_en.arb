@@ -83,5 +83,15 @@
   "@foodEnergyManualLabel": { "description": "Accessible label/tooltip for the energy field when the user owns the value; tapping reverts to auto." },
   "actionSave": "Save",
   "foodErrorNameRequired": "Enter a name",
-  "foodErrorInvalidValue": "Enter valid, non-negative numbers"
+  "foodErrorInvalidValue": "Enter valid, non-negative numbers",
+  "quantityFieldAmount": "Amount",
+  "@quantityFieldAmount": { "description": "Label for the amount input of the quantity field." },
+  "quantityUnitServings": "servings",
+  "@quantityUnitServings": { "description": "Quantity-field unit toggle option for counting the food's own servings (FR-003)." },
+  "unitMilliliter": "ml",
+  "@unitMilliliter": { "description": "Abbreviation for the milliliter, the metric volume display unit." },
+  "unitOunce": "oz",
+  "@unitOunce": { "description": "Abbreviation for the avoirdupois ounce, the imperial mass display unit." },
+  "unitFluidOunce": "fl oz",
+  "@unitFluidOunce": { "description": "Abbreviation for the US fluid ounce, the imperial volume display unit." }
 }

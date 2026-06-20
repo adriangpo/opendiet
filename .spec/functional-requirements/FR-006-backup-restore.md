@@ -26,11 +26,17 @@ OpenDiet shall restore the complete dataset from a previously exported backup fi
 
 ## Implementation Notes
 
-<!-- Engineers add notes here during implementation -->
+- `BackupRepository.import()` parses and validates the JSON envelope before any
+  write: an unsupported version or a malformed record raises
+  `BackupFormatException` and the store is left untouched. The restore itself
+  runs in a single database transaction that wipes every table and re-inserts
+  the parsed dataset, so a referential-integrity failure rolls the whole thing
+  back (wipe included), leaving previously committed data intact (NFR-004).
 
 ## Test Cases
 
-<!-- QA adds test case references here -->
+- `test/features/backup/domain/backup_document_test.dart`
+- `test/features/backup/data/drift_backup_repository_test.dart`
 
 ---
 *Created: 2026-06-19*

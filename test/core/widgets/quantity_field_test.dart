@@ -191,4 +191,30 @@ void main() {
     expect(fieldText(tester), '3');
     expect(find.text('servings'), findsOneWidget);
   });
+
+  testWidgets('enters a comma decimal as a valid number', (tester) async {
+    await pumpField(tester);
+
+    await tester.enterText(find.byKey(amountField), '100,5');
+    await tester.pump();
+
+    expect(
+      emitted.last,
+      const Quantity(amount: 100.5, measure: QuantityMeasure.grams),
+    );
+  });
+
+  testWidgets(
+    'starts empty for a servings initialValue with hasServingSize false',
+    (tester) async {
+      await pumpField(
+        tester,
+        initialValue: Quantity.servings(3),
+      );
+
+      expect(fieldText(tester), '');
+      expect(find.text('servings'), findsNothing);
+      expect(find.text('g'), findsOneWidget);
+    },
+  );
 }

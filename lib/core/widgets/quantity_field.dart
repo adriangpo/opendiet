@@ -55,14 +55,16 @@ class _QuantityFieldState extends State<QuantityField> {
   void initState() {
     super.initState();
     final initialMeasure = widget.initialValue?.measure;
-    _measure = (initialMeasure != null && _measures.contains(initialMeasure))
-        ? initialMeasure
-        : _measures.first;
-    _controller = TextEditingController(
-      text: widget.initialValue == null
-          ? ''
-          : _formatAmount(_displayAmount(widget.initialValue!)),
-    );
+    if (initialMeasure != null && _measures.contains(initialMeasure)) {
+      _measure = initialMeasure;
+      _controller = TextEditingController(
+        text: _formatAmount(_displayAmount(widget.initialValue!)),
+      );
+    } else {
+      _measure = _measures.first;
+      _controller = TextEditingController(text: '');
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) => _emit());
   }
 
   @override

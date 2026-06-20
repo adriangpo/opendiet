@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:opendiet/core/widgets/app_scaffold.dart';
 import 'package:opendiet/features/diary/presentation/diary_screen.dart';
+import 'package:opendiet/features/foods/presentation/custom_food_editor.dart';
 import 'package:opendiet/features/foods/presentation/foods_screen.dart';
 import 'package:opendiet/features/recipes/presentation/recipes_screen.dart';
 import 'package:opendiet/features/settings/presentation/settings_screen.dart';
@@ -35,6 +36,13 @@ GoRouter buildAppRouter() => GoRouter(
             GoRoute(
               path: '/foods',
               builder: (context, state) => const FoodsScreen(),
+              routes: [
+                GoRoute(
+                  path: 'new',
+                  builder: (context, state) =>
+                      CustomFoodEditor(onSaved: (food) => context.pop()),
+                ),
+              ],
             ),
           ],
         ),

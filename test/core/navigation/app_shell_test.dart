@@ -58,4 +58,15 @@ void main() {
     expect(find.text('Unit system'), findsOneWidget);
     expect(find.text('%VD reference'), findsOneWidget);
   });
+
+  testWidgets('opens the food editor from the Foods tab', (tester) async {
+    await pumpAppShell(tester, overrides: overrides());
+
+    await tester.tap(find.widgetWithText(NavigationDestination, 'Foods'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('field-name')), findsOneWidget);
+  });
 }

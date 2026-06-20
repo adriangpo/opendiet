@@ -173,5 +173,15 @@
   "quantityUnitServings": "servings",
   "@quantityUnitServings": { "description": "Quantity-field unit toggle option for counting the food's own servings (FR-003)." },
   "unitMilliliter": "ml",
-  "@unitMilliliter": { "description": "Abbreviation for the milliliter, the metric volume display unit." }
+  "@unitMilliliter": { "description": "Abbreviation for the milliliter, the metric volume display unit." },
+  "nutrientTotalsRemaining": "{amount} left",
+  "@nutrientTotalsRemaining": {
+    "description": "Amount of a nutrient still left before reaching the daily target. The amount already carries its unit (e.g. 140 kcal).",
+    "placeholders": { "amount": { "type": "String", "example": "140 kcal" } }
+  },
+  "nutrientTotalsOver": "{amount} over",
+  "@nutrientTotalsOver": {
+    "description": "Amount by which a nutrient has exceeded the daily target. The amount already carries its unit (e.g. 100 kcal).",
+    "placeholders": { "amount": { "type": "String", "example": "100 kcal" } }
+  }
 }

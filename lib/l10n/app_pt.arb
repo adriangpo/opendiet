@@ -65,5 +65,7 @@
   "foodErrorInvalidValue": "Digite números válidos e não negativos",
   "quantityFieldAmount": "Quantidade",
   "quantityUnitServings": "porções",
-  "unitMilliliter": "ml"
+  "unitMilliliter": "ml",
+  "nutrientTotalsRemaining": "{amount} restante",
+  "nutrientTotalsOver": "{amount} acima"
 }

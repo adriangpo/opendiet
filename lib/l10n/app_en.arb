@@ -261,6 +261,26 @@
   "@logOptionalNutrients": {
     "description": "Section heading for optional nutrient fields on the quick-add form."
   },
+  "foodsBarcodeScan": "Scan barcode",
+  "@foodsBarcodeScan": {
+    "description": "Tooltip for the barcode scan button in the foods screen app bar."
+  },
+  "foodsSearchHint": "Search your foods + OFF...",
+  "@foodsSearchHint": {
+    "description": "Placeholder text in the foods search bar."
+  },
+  "foodsFilterMine": "Mine",
+  "@foodsFilterMine": {
+    "description": "Source filter tab showing only custom/imported foods."
+  },
+  "foodsFilterSavedFromOff": "Saved from OFF",
+  "@foodsFilterSavedFromOff": {
+    "description": "Source filter tab showing only foods saved from Open Food Facts."
+  },
+  "foodsFilterAll": "All",
+  "@foodsFilterAll": {
+    "description": "Source filter tab showing all foods regardless of source."
+  },
   "@foodEnergyPer100": {
     "description": "Per-100 energy shown on a food list tile, e.g. '180 kcal / 100 g'. The energy value is a pre-formatted number, or '--' when not informed; unit is the basis abbreviation (g or ml).",
     "placeholders": {

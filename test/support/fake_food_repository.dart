@@ -43,6 +43,14 @@ class FakeFoodRepository implements FoodRepository {
   }
 
   @override
+  Future<List<Food>> searchFoods(String query) async {
+    final lower = query.toLowerCase();
+    return savedFoods
+        .where((food) => food.name.toLowerCase().contains(lower))
+        .toList();
+  }
+
+  @override
   Future<void> deleteFood(String id) async {
     savedFoods.removeWhere((food) => food.id == id);
     _controller.add(List.of(savedFoods));

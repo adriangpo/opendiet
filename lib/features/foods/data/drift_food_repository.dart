@@ -38,6 +38,14 @@ class DriftFoodRepository implements FoodRepository {
   }
 
   @override
+  Future<List<Food>> searchFoods(String query) async {
+    final pattern = '%${query.toLowerCase()}%';
+    final queryBuilder = _database.select(_database.foods)
+      ..where((row) => row.name.lower().like(pattern));
+    return (await queryBuilder.get()).map(_toDomain).toList();
+  }
+
+  @override
   Future<void> deleteFood(String id) => (_database.delete(
     _database.foods,
   )..where((row) => row.id.equals(id))).go();

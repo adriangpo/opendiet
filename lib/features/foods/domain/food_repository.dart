@@ -18,6 +18,9 @@ abstract interface class FoodRepository {
   /// Emits the current food list on each change.
   Stream<List<Food>> watchAllFoods();
 
+  /// Searches local foods whose name contains [query] (case-insensitive).
+  Future<List<Food>> searchFoods(String query);
+
   /// Removes the food with [id].
   Future<void> deleteFood(String id);
 

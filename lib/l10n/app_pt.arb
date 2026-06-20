@@ -1,4 +1,23 @@
 {
   "@@locale": "pt",
-  "appTagline": "Rastreador de dieta local"
+  "appTagline": "Rastreador de dieta local",
+  "navDiary": "Diário",
+  "navFoods": "Alimentos",
+  "navRecipes": "Receitas",
+  "navSettings": "Ajustes",
+  "diaryTitle": "Diário",
+  "diaryEmptyMessage": "Nenhum registro ainda. Registre um alimento para começar o dia.",
+  "foodsTitle": "Alimentos",
+  "foodsEmptyMessage": "Nenhum alimento ainda. Crie um alimento personalizado ou importe uma lista.",
+  "recipesTitle": "Receitas",
+  "recipesEmptyMessage": "Nenhuma receita ainda. Monte uma a partir dos seus alimentos.",
+  "settingsTitle": "Ajustes",
+  "settingsUnitSystem": "Sistema de unidades",
+  "unitSystemMetric": "Métrico",
+  "unitSystemImperial": "Imperial",
+  "settingsVdRegion": "Referência de %VD",
+  "vdRegionBrazil": "Brasil",
+  "vdRegionUnitedStates": "Estados Unidos",
+  "vdRegionEuropeanUnion": "União Europeia",
+  "settingsLoadError": "Não foi possível carregar os ajustes."
 }

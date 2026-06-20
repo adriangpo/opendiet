@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:opendiet/features/diary/data/diary_providers.dart';
+import 'package:opendiet/features/foods/data/food_providers.dart';
 import 'package:opendiet/features/settings/data/settings_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../support/fake_food_repository.dart';
 import '../../support/fake_settings_repository.dart';
 import '../../support/test_app.dart';
 
 void main() {
   List<Override> overrides() => [
+    foodRepositoryProvider.overrideWithValue(FakeFoodRepository()),
     settingsRepositoryProvider.overrideWithValue(FakeSettingsRepository()),
+    mealSlotsProvider.overrideWithValue(const AsyncData([])),
   ];
 
   testWidgets('renders the four bottom-navigation tabs', (tester) async {
@@ -39,7 +44,8 @@ void main() {
     await pumpAppShell(tester, overrides: overrides());
 
     await tester.tap(find.widgetWithText(NavigationDestination, 'Foods'));
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump();
 
     expect(
       find.text('No foods yet. Create a custom food or import a list.'),
@@ -53,7 +59,8 @@ void main() {
     await pumpAppShell(tester, overrides: overrides());
 
     await tester.tap(find.widgetWithText(NavigationDestination, 'Settings'));
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump();
 
     expect(find.text('Unit system'), findsOneWidget);
     expect(find.text('%VD reference'), findsOneWidget);
@@ -63,9 +70,12 @@ void main() {
     await pumpAppShell(tester, overrides: overrides());
 
     await tester.tap(find.widgetWithText(NavigationDestination, 'Foods'));
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump();
+
     await tester.tap(find.byType(FloatingActionButton));
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump();
 
     expect(find.byKey(const Key('field-name')), findsOneWidget);
   });

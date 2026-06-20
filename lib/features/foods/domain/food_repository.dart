@@ -15,6 +15,9 @@ abstract interface class FoodRepository {
   /// Every stored food.
   Future<List<Food>> allFoods();
 
+  /// Emits the current food list on each change.
+  Stream<List<Food>> watchAllFoods();
+
   /// Removes the food with [id].
   Future<void> deleteFood(String id);
 }

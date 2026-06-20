@@ -77,6 +77,8 @@
     "description": "European Union %VD reference region."
   },
   "settingsLoadError": "Could not load settings.",
+  "foodsLoadError": "Could not load foods.",
+  "diaryLoadError": "Could not load diary.",
   "@settingsLoadError": {
     "description": "Shown when settings fail to load."
   },
@@ -185,6 +187,20 @@
     "placeholders": { "amount": { "type": "String", "example": "100 kcal" } }
   },
   "foodEnergyPer100": "{energy} kcal / 100 {unit}",
+  "foodEnergyPerServing": "{energy} / serving",
+  "@foodEnergyPerServing": {
+    "description": "Per-serving energy shown on a food list tile, e.g. '180 / serving'. The energy value is a pre-formatted number, or '--' when not informed.",
+    "placeholders": {
+      "energy": { "type": "String" }
+    }
+  },
+  "diaryAddToSlot": "+ Add to {slotName}",
+  "@diaryAddToSlot": {
+    "description": "Button to add a food to a named meal slot." ,
+    "placeholders": {
+      "slotName": { "type": "String", "example": "Breakfast" }
+    }
+  },
   "@foodEnergyPer100": {
     "description": "Per-100 energy shown on a food list tile, e.g. '180 kcal / 100 g'. The energy value is a pre-formatted number, or '--' when not informed; unit is the basis abbreviation (g or ml).",
     "placeholders": {

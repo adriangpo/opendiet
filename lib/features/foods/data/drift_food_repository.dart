@@ -24,8 +24,20 @@ class DriftFoodRepository implements FoodRepository {
   }
 
   @override
-  Future<List<Food>> allFoods() async =>
-      (await _database.select(_database.foods).get()).map(_toDomain).toList();
+  Future<List<Food>> allFoods() async {
+    final query = _database.select(_database.foods)
+      ..orderBy([(table) => OrderingTerm(expression: table.id)]);
+    return (await query.get()).map(_toDomain).toList();
+  }
+
+  @override
+  Stream<List<Food>> watchAllFoods() {
+    final query = _database.select(_database.foods)
+      ..orderBy([(table) => OrderingTerm(expression: table.id)]);
+    return query.watch().map(
+      (rows) => rows.map(_toDomain).toList(),
+    );
+  }
 
   @override
   Future<void> deleteFood(String id) => (_database.delete(

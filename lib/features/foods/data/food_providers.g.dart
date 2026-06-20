@@ -53,3 +53,46 @@ final class FoodRepositoryProvider
 }
 
 String _$foodRepositoryHash() => r'125392e867c4c28be985a3e4a4cb7893b7a3a683';
+
+/// The list of all saved foods, kept in sync via the repository stream.
+
+@ProviderFor(foodList)
+final foodListProvider = FoodListProvider._();
+
+/// The list of all saved foods, kept in sync via the repository stream.
+
+final class FoodListProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Food>>,
+          List<Food>,
+          Stream<List<Food>>
+        >
+    with $FutureModifier<List<Food>>, $StreamProvider<List<Food>> {
+  /// The list of all saved foods, kept in sync via the repository stream.
+  FoodListProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'foodListProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$foodListHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<List<Food>> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<Food>> create(Ref ref) {
+    return foodList(ref);
+  }
+}
+
+String _$foodListHash() => r'5c7f5fc9822e4b834a8280682fc928bdef473326';

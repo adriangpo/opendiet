@@ -20,6 +20,8 @@
   "vdRegionUnitedStates": "Estados Unidos",
   "vdRegionEuropeanUnion": "União Europeia",
   "settingsLoadError": "Não foi possível carregar os ajustes.",
+  "foodsLoadError": "Não foi possível carregar os alimentos.",
+  "diaryLoadError": "Não foi possível carregar o diário.",
   "mealBreakfast": "Café da manhã",
   "mealLunch": "Almoço",
   "mealDinner": "Jantar",
@@ -68,5 +70,7 @@
   "unitMilliliter": "ml",
   "nutrientTotalsRemaining": "{amount} restante",
   "nutrientTotalsOver": "{amount} acima",
-  "foodEnergyPer100": "{energy} kcal / 100 {unit}"
+  "foodEnergyPer100": "{energy} kcal / 100 {unit}",
+  "foodEnergyPerServing": "{energy} / porção",
+  "diaryAddToSlot": "+ Adicionar ao {slotName}"
 }

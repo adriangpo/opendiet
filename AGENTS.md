@@ -108,3 +108,11 @@ Feature-first: `lib/features/<feature>/{data,domain,presentation}` with shared c
 - Re-run `dart run build_runner build --delete-conflicting-outputs`; commit the generated `*.g.dart` / `*.freezed.dart` alongside the source and keep them excluded from the analyzer.
 - If codegen fails on analyzer/version conflicts, stop and reconcile the matched dependency set — do not "fix" it by upgrading random packages.
 </important>
+
+<important if="you write widget tests that use ProviderScope overrides">
+- **Riverpod 3.x does NOT re-export `Override` from `flutter_riverpod`.** To use `Override` as a type, import `package:riverpod_annotation/riverpod_annotation.dart` (it reaches it via `package:riverpod/src/internals.dart` -> `framework.dart`'s `part` files). Same for `AsyncData` — it IS exported from `flutter_riverpod`'s barrel in 3.x.
+- **Never override the same provider twice** in one `ProviderScope` — Riverpod 3.x asserts on it. Each test must override each provider exactly once. A shared `shellOverrides()` helper that returns `List<Override>` can't contain a provider that a test also overrides. Prefer empty helpers (`shellOverrides() => []`) and have each test provide its own full list.
+- **Override ALL providers that touch the database** in every shell test. The initial tab (Diary) calls `mealSlotsProvider` which calls `mealSlotRepository` which calls `appDatabase` -> `driftDatabase`. If unoverridden, `driftDatabase` creates a real SQLite timer that persists beyond the test teardown, causing "A Timer is still pending" failures even when the assertion passes.
+- **Avoid `CircularProgressIndicator` in loading states** if the screen is inside an `IndexedStack` (all shell branches build eagerly). Its infinite animation causes `pumpAndSettle` to time out. Use `SizedBox.shrink()` or a static placeholder instead, and call `pump()` twice (not `pumpAndSettle`) in the test helper to let `FutureProvider` microtasks resolve.
+- **Two-pump pattern for tab-switch tests**: `await tester.pump()` (process navigation, build screen, `FutureProvider` starts) then `await tester.pump()` (microtask resolves, provider emits, screen rebuilds with data).
+</important>

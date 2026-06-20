@@ -3,10 +3,9 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:opendiet/features/foods/data/csv_import/csv_import_service.dart';
 import 'package:opendiet/features/foods/data/csv_import/csv_import_providers.dart';
+import 'package:opendiet/features/foods/data/csv_import/csv_import_service.dart';
 import 'package:opendiet/features/foods/data/csv_import/csv_row_validator.dart';
-import 'package:opendiet/features/foods/data/csv_import/smart_header_mapper.dart';
 import 'package:opendiet/features/foods/domain/csv_import/column_mapping.dart';
 import 'package:opendiet/features/foods/domain/csv_import/csv_import_result.dart';
 import 'package:opendiet/features/foods/domain/csv_import/taco_preset.dart';
@@ -31,13 +30,11 @@ class _CsvImportScreenState extends ConsumerState<CsvImportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final service = ref.watch(csvImportServiceProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_stepTitle(l10n)),
-      ),
+      appBar: AppBar(title: Text(_stepTitle(l10n))),
       body: _buildStep(l10n, service),
     );
   }
@@ -138,7 +135,6 @@ class _CsvImportScreenState extends ConsumerState<CsvImportScreen> {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['csv'],
-      withData: false,
     );
 
     if (result == null || result.files.isEmpty) return;
@@ -225,9 +221,7 @@ class _CsvImportScreenState extends ConsumerState<CsvImportScreen> {
               l10n.csvImportRequiredUnmapped(
                 requiredUnmapped.map((m) => m.originalHeader).join(', '),
               ),
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.error,
-              ),
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
         Padding(
@@ -295,6 +289,12 @@ class _CsvImportScreenState extends ConsumerState<CsvImportScreen> {
             itemBuilder: (context, index) {
               final row = previewRows[index];
               final result = CsvRowValidator.validate(row, mappings);
+              final energyKcal = result is ValidRow
+                  ? result.nutrients.energyKcal
+                  : null;
+              final energyText = energyKcal == null
+                  ? null
+                  : '${energyKcal.toStringAsFixed(1)} ${l10n.unitKilocalorie}';
               return Card(
                 child: Padding(
                   padding: const EdgeInsets.all(12),
@@ -314,9 +314,9 @@ class _CsvImportScreenState extends ConsumerState<CsvImportScreen> {
                               result.name,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
-                            if (result.nutrients.energyKcal != null)
+                            if (energyText != null)
                               Text(
-                                '${result.nutrients.energyKcal!.toStringAsFixed(1)} ${l10n.unitKilocalorie}',
+                                energyText,
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
                           ],

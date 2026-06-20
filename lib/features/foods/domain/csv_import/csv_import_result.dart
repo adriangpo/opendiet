@@ -44,10 +44,7 @@ class ValidRow extends ValidationResult {
 
 /// A rejected row with the reason.
 class RejectedRow extends ValidationResult {
-  const RejectedRow({
-    required this.rowNumber,
-    required this.reason,
-  });
+  const RejectedRow({required this.rowNumber, required this.reason});
 
   /// 1-indexed row number (header is row 1, first data row is 2).
   final int rowNumber;

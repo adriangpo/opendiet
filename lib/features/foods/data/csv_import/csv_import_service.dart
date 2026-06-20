@@ -11,14 +11,11 @@ import 'package:opendiet/features/foods/domain/food_repository.dart';
 /// valid foods to the repository (FR-013, FR-014).
 class CsvImportService {
   CsvImportService({
-    required FoodRepository foodRepository,
-    required SmartHeaderMapper headerMapper,
-    required IdGenerator idGenerator,
-    required Clock clock,
-  }) : _foodRepository = foodRepository,
-       _headerMapper = headerMapper,
-       _idGenerator = idGenerator,
-       _clock = clock;
+    required this._foodRepository,
+    required this._headerMapper,
+    required this._idGenerator,
+    required this._clock,
+  });
 
   final FoodRepository _foodRepository;
   final SmartHeaderMapper _headerMapper;
@@ -40,9 +37,7 @@ class CsvImportService {
     final dataRows = rows.length > 1
         ? rows
               .sublist(1)
-              .map(
-                (row) => row.map((e) => e.toString()).toList(),
-              )
+              .map((row) => row.map((e) => e.toString()).toList())
               .toList()
         : <List<String>>[];
 
@@ -53,9 +48,9 @@ class CsvImportService {
     );
   }
 
-  /// Imports all valid rows from [csvContent] using [mappings].
+  /// Imports all valid rows from [csvContent] using selected mappings.
   ///
-  /// Valid rows are converted to [Food] entities and saved via the repository.
+  /// Valid rows are converted to food entities and saved via the repository.
   /// Returns a summary with imported/rejected counts and per-row rejection
   /// reasons.
   Future<CsvImportResult> importFromCsv(
@@ -82,10 +77,7 @@ class CsvImportService {
         importedCount++;
       } else if (result is RejectedRow) {
         rejectedRows.add(
-          RejectedRow(
-            rowNumber: rowNumber,
-            reason: result.reason,
-          ),
+          RejectedRow(rowNumber: rowNumber, reason: result.reason),
         );
       }
     }

@@ -23,7 +23,8 @@ void main() {
     });
 
     test('imports valid rows from CSV content', () async {
-      final csv = '''Name,Energy,Protein,Carbs,Fat
+      const csv = '''
+Name,Energy,Protein,Carbs,Fat
 Arroz Integral,120,2.6,26,1.0
 Frango Grelhado,200,30,0,7.0''';
 
@@ -43,7 +44,8 @@ Frango Grelhado,200,30,0,7.0''';
     });
 
     test('skips rejected rows without aborting valid ones', () async {
-      final csv = '''Name,Energy,Protein
+      const csv = '''
+Name,Energy,Protein
 Valid Food,100,10
 ,200,5
 Also Valid,150,20
@@ -62,7 +64,7 @@ Bad Energy,abc,5''';
     });
 
     test('handles header-only file (no data rows)', () async {
-      final csv = 'Name,Energy,Protein,Fat';
+      const csv = 'Name,Energy,Protein,Fat';
 
       final result = await service.importFromCsv(csv);
 
@@ -78,7 +80,8 @@ Bad Energy,abc,5''';
     });
 
     test('handles custom column mapping proposals', () async {
-      final csv = '''Product,Kcal,Proteina,Gordura
+      const csv = '''
+Product,Kcal,Proteina,Gordura
 Leite,60,3.0,3.5''';
 
       final result = await service.importFromCsv(csv);
@@ -90,7 +93,7 @@ Leite,60,3.0,3.5''';
     });
 
     test('imported foods have correct source and basis defaults', () async {
-      final csv = 'Name,Energy\nOats,180';
+      const csv = 'Name,Energy\nOats,180';
       final result = await service.importFromCsv(csv);
 
       expect(result.importedCount, 1);
@@ -100,7 +103,8 @@ Leite,60,3.0,3.5''';
     });
 
     test('provides rejected row reasons with row numbers', () async {
-      final csv = '''Name,Energy
+      const csv = '''
+Name,Energy
 Valid,100
 ,200
 BadPerRow,abc''';
@@ -119,7 +123,7 @@ BadPerRow,abc''';
     });
 
     test('parseCsv returns correct structure', () {
-      final csv = 'Name,Energy,Protein\nFoodA,100,10\nFoodB,200,20';
+      const csv = 'Name,Energy,Protein\nFoodA,100,10\nFoodB,200,20';
       final parsed = service.parseCsv(csv);
 
       expect(parsed.headers, ['Name', 'Energy', 'Protein']);

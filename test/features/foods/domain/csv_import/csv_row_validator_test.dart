@@ -83,20 +83,18 @@ void main() {
 
     test('converts energy_kj to kcal when kcal missing', () {
       final kjMappings = [
-        ColumnMapping(
+        const ColumnMapping(
           columnIndex: 0,
           originalHeader: 'Name',
           proposedField: CsvField.name,
           selectedField: CsvField.name,
-          micronutrientKey: null,
           isRequired: true,
         ),
-        ColumnMapping(
+        const ColumnMapping(
           columnIndex: 1,
           originalHeader: 'Energy (kJ)',
           proposedField: CsvField.energyKj,
           selectedField: CsvField.energyKj,
-          micronutrientKey: null,
           isRequired: true,
         ),
       ];
@@ -112,29 +110,25 @@ void main() {
 
     test('prefers kcal over kj when both present', () {
       final bothMappings = [
-        ColumnMapping(
+        const ColumnMapping(
           columnIndex: 0,
           originalHeader: 'Name',
           proposedField: CsvField.name,
           selectedField: CsvField.name,
-          micronutrientKey: null,
           isRequired: true,
         ),
-        ColumnMapping(
+        const ColumnMapping(
           columnIndex: 1,
           originalHeader: 'Energy (kcal)',
           proposedField: CsvField.energyKcal,
           selectedField: CsvField.energyKcal,
-          micronutrientKey: null,
           isRequired: true,
         ),
-        ColumnMapping(
+        const ColumnMapping(
           columnIndex: 2,
           originalHeader: 'Energy (kJ)',
           proposedField: CsvField.energyKj,
           selectedField: CsvField.energyKj,
-          micronutrientKey: null,
-          isRequired: false,
         ),
       ];
       final row = ['Test', '200', '840'];
@@ -149,29 +143,25 @@ void main() {
 
     test('stores sodium_mg from sodium field', () {
       final naMappings = [
-        ColumnMapping(
+        const ColumnMapping(
           columnIndex: 0,
           originalHeader: 'Name',
           proposedField: CsvField.name,
           selectedField: CsvField.name,
-          micronutrientKey: null,
           isRequired: true,
         ),
-        ColumnMapping(
+        const ColumnMapping(
           columnIndex: 1,
           originalHeader: 'Energy',
           proposedField: CsvField.energyKcal,
           selectedField: CsvField.energyKcal,
-          micronutrientKey: null,
           isRequired: true,
         ),
-        ColumnMapping(
+        const ColumnMapping(
           columnIndex: 2,
           originalHeader: 'Sodium (mg)',
           proposedField: CsvField.sodiumMg,
           selectedField: CsvField.sodiumMg,
-          micronutrientKey: null,
-          isRequired: false,
         ),
       ];
       final row = ['Test', '100', '500'];
@@ -195,29 +185,26 @@ void main() {
 
     test('includes micronutrients in parsed row', () {
       final microMappings = [
-        ColumnMapping(
+        const ColumnMapping(
           columnIndex: 0,
           originalHeader: 'Name',
           proposedField: CsvField.name,
           selectedField: CsvField.name,
-          micronutrientKey: null,
           isRequired: true,
         ),
-        ColumnMapping(
+        const ColumnMapping(
           columnIndex: 1,
           originalHeader: 'Energy',
           proposedField: CsvField.energyKcal,
           selectedField: CsvField.energyKcal,
-          micronutrientKey: null,
           isRequired: true,
         ),
-        ColumnMapping(
+        const ColumnMapping(
           columnIndex: 2,
           originalHeader: 'Calcium (mg)',
           proposedField: CsvField.micronutrient,
           selectedField: CsvField.micronutrient,
           micronutrientKey: 'calcium_mg',
-          isRequired: false,
         ),
       ];
       final row = ['Test', '100', '200'];
@@ -231,45 +218,37 @@ void main() {
 
     test('accepts per_serving basis with serving_size', () {
       final svMappings = [
-        ColumnMapping(
+        const ColumnMapping(
           columnIndex: 0,
           originalHeader: 'Name',
           proposedField: CsvField.name,
           selectedField: CsvField.name,
-          micronutrientKey: null,
           isRequired: true,
         ),
-        ColumnMapping(
+        const ColumnMapping(
           columnIndex: 1,
           originalHeader: 'Energy',
           proposedField: CsvField.energyKcal,
           selectedField: CsvField.energyKcal,
-          micronutrientKey: null,
           isRequired: true,
         ),
-        ColumnMapping(
+        const ColumnMapping(
           columnIndex: 2,
           originalHeader: 'Protein',
           proposedField: CsvField.protein,
           selectedField: CsvField.protein,
-          micronutrientKey: null,
-          isRequired: false,
         ),
-        ColumnMapping(
+        const ColumnMapping(
           columnIndex: 3,
           originalHeader: 'Basis',
           proposedField: CsvField.basis,
           selectedField: CsvField.basis,
-          micronutrientKey: null,
-          isRequired: false,
         ),
-        ColumnMapping(
+        const ColumnMapping(
           columnIndex: 4,
           originalHeader: 'Serving size',
           proposedField: CsvField.servingSize,
           selectedField: CsvField.servingSize,
-          micronutrientKey: null,
-          isRequired: false,
         ),
       ];
       final row = [
@@ -291,45 +270,37 @@ void main() {
 }
 
 List<ColumnMapping> _mappings() => [
-  ColumnMapping(
+  const ColumnMapping(
     columnIndex: 0,
     originalHeader: 'Name',
     proposedField: CsvField.name,
     selectedField: CsvField.name,
-    micronutrientKey: null,
     isRequired: true,
   ),
-  ColumnMapping(
+  const ColumnMapping(
     columnIndex: 1,
     originalHeader: 'Energy',
     proposedField: CsvField.energyKcal,
     selectedField: CsvField.energyKcal,
-    micronutrientKey: null,
     isRequired: true,
   ),
-  ColumnMapping(
+  const ColumnMapping(
     columnIndex: 2,
     originalHeader: 'Protein',
     proposedField: CsvField.protein,
     selectedField: CsvField.protein,
-    micronutrientKey: null,
-    isRequired: false,
   ),
-  ColumnMapping(
+  const ColumnMapping(
     columnIndex: 3,
     originalHeader: 'Carbs',
     proposedField: CsvField.carbs,
     selectedField: CsvField.carbs,
-    micronutrientKey: null,
-    isRequired: false,
   ),
-  ColumnMapping(
+  const ColumnMapping(
     columnIndex: 4,
     originalHeader: 'Fat',
     proposedField: CsvField.fat,
     selectedField: CsvField.fat,
-    micronutrientKey: null,
-    isRequired: false,
   ),
 ];
 

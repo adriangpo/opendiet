@@ -48,10 +48,7 @@ abstract final class CsvRowValidator {
         switch (field) {
           case CsvField.name:
             if (raw.isEmpty) {
-              return RejectedRow(
-                rowNumber: 0,
-                reason: 'name is blank',
-              );
+              return const RejectedRow(rowNumber: 0, reason: 'name is blank');
             }
             name = raw;
 
@@ -85,7 +82,7 @@ abstract final class CsvRowValidator {
                 );
               }
               if (parsed < 0) {
-                return RejectedRow(
+                return const RejectedRow(
                   rowNumber: 0,
                   reason: 'serving_size cannot be negative',
                 );
@@ -100,7 +97,7 @@ abstract final class CsvRowValidator {
 
           case CsvField.energyKcal:
             if (raw.isEmpty) {
-              return RejectedRow(
+              return const RejectedRow(
                 rowNumber: 0,
                 reason: 'energy (kcal) is missing',
               );
@@ -113,7 +110,7 @@ abstract final class CsvRowValidator {
               );
             }
             if (parsed < 0) {
-              return RejectedRow(
+              return const RejectedRow(
                 rowNumber: 0,
                 reason: 'energy cannot be negative',
               );
@@ -130,7 +127,7 @@ abstract final class CsvRowValidator {
                 );
               }
               if (parsed < 0) {
-                return RejectedRow(
+                return const RejectedRow(
                   rowNumber: 0,
                   reason: 'energy (kJ) cannot be negative',
                 );
@@ -173,7 +170,7 @@ abstract final class CsvRowValidator {
                 );
               }
               if (parsed < 0) {
-                return RejectedRow(
+                return const RejectedRow(
                   rowNumber: 0,
                   reason: 'salt cannot be negative',
                 );
@@ -191,7 +188,7 @@ abstract final class CsvRowValidator {
                 );
               }
               if (parsed < 0) {
-                return RejectedRow(
+                return const RejectedRow(
                   rowNumber: 0,
                   reason: 'sodium cannot be negative',
                 );
@@ -206,7 +203,8 @@ abstract final class CsvRowValidator {
                 return RejectedRow(
                   rowNumber: 0,
                   reason:
-                      '${mapping.micronutrientKey} "$raw" is not a valid number',
+                      '${mapping.micronutrientKey} "$raw" is not a '
+                      'valid number',
                 );
               }
               if (parsed < 0) {
@@ -236,7 +234,7 @@ abstract final class CsvRowValidator {
 
     // If both kcal and kJ are provided, use kcal; add kJ conversion.
     if (energyKcal == null && energyKj != null) {
-      energyKcal = EnergyConverter.kilojoulesToKilocalories(energyKj!);
+      energyKcal = EnergyConverter.kilojoulesToKilocalories(energyKj);
     }
 
     // Validate per_serving constraint.
@@ -274,14 +272,10 @@ abstract final class CsvRowValidator {
     if (raw.isEmpty) return null;
     final parsed = _parseDouble(raw);
     if (parsed == null) {
-      throw _ValidationException(
-        '$fieldName "$raw" is not a valid number',
-      );
+      throw _ValidationException('$fieldName "$raw" is not a valid number');
     }
     if (parsed < 0) {
-      throw _ValidationException(
-        '$fieldName cannot be negative',
-      );
+      throw _ValidationException('$fieldName cannot be negative');
     }
     return parsed;
   }

@@ -70,11 +70,7 @@ void main() {
     });
 
     test('returns mappings using the smart header mapper for unknown cols', () {
-      final headers = [
-        'Alimento',
-        'Energia (kcal)',
-        'Some Custom Column',
-      ];
+      final headers = ['Alimento', 'Energia (kcal)', 'Some Custom Column'];
 
       final mappings = TacoPreset.proposeMapping(headers);
       expect(mappings[0].proposedField, CsvField.name);

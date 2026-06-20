@@ -13,7 +13,7 @@ class SmartHeaderMapper {
   String normalizeHeader(String header) {
     var result = header.trim().toLowerCase();
     result = _removeDiacritics(result);
-    result = result.replaceAll(RegExp(r'[^a-z0-9]'), ' ');
+    result = result.replaceAll(RegExp('[^a-z0-9]'), ' ');
     result = result.replaceAll(RegExp(r'\s+'), ' ');
     return result.trim();
   }
@@ -23,9 +23,7 @@ class SmartHeaderMapper {
   /// Each mapping starts with `proposedField == selectedField`; the UI lets
   /// the user change `selectedField` before import.
   List<ColumnMapping> proposeMapping(List<String> headers) {
-    return [
-      for (var i = 0; i < headers.length; i++) _mapSingle(i, headers[i]),
-    ];
+    return [for (var i = 0; i < headers.length; i++) _mapSingle(i, headers[i])];
   }
 
   ColumnMapping _mapSingle(int index, String header) {
@@ -104,10 +102,11 @@ class SmartHeaderMapper {
   }
 
   static String _removeDiacritics(String text) {
+    var normalized = text;
     for (final entry in _accentMap.entries) {
-      text = text.replaceAll(entry.key, entry.value);
+      normalized = normalized.replaceAll(entry.key, entry.value);
     }
-    return text;
+    return normalized;
   }
 
   static const Map<String, String> _accentMap = {
@@ -141,7 +140,6 @@ class SmartHeaderMapper {
   static const _nutritionalUnits = {'g', 'mg', 'mcg', 'ml', 'kcal', 'kj'};
 
   // Coverage: linter line length for this large synonym table.
-  // ignore_for_file: lines_longer_than_80_chars
 
   // The synonym table keys are post-normalization. This is the ONLY place to
   // add new header aliases (see agent_docs/csv_import.md).

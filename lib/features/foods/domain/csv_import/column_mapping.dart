@@ -29,8 +29,6 @@ enum CsvField {
 }
 
 /// Maps a single CSV column to a canonical field.
-// ignore: avoid_equals_and_hash_code_on_mutable_classes
-// Mutable only because of [copyWith]; fields are [final].
 class ColumnMapping {
   const ColumnMapping({
     required this.columnIndex,
@@ -67,6 +65,8 @@ class ColumnMapping {
   }
 
   @override
+  // Fields are final; equality makes this mapping a testable value object.
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ColumnMapping &&
@@ -78,6 +78,8 @@ class ColumnMapping {
           isRequired == other.isRequired;
 
   @override
+  // Fields are final; equality makes this mapping a testable value object.
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   int get hashCode => Object.hash(
     columnIndex,
     originalHeader,

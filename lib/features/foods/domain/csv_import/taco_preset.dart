@@ -8,24 +8,15 @@ abstract final class TacoPreset {
   /// Maps [headers] using TACO-specific overrides on top of the generic
   /// smart header mapper. The user can still adjust the result before import.
   static List<ColumnMapping> proposeMapping(List<String> headers) {
-    final mapper = const SmartHeaderMapper();
+    const mapper = SmartHeaderMapper();
     final generic = mapper.proposeMapping(headers);
 
-    return [
-      for (final mapping in generic) _override(headers, mapping),
-    ];
+    return [for (final mapping in generic) _override(headers, mapping)];
   }
 
-  static ColumnMapping _override(
-    List<String> headers,
-    ColumnMapping mapping,
-  ) {
+  static ColumnMapping _override(List<String> headers, ColumnMapping mapping) {
     // TACO columns that should be ignored (not nutritional data).
-    const skip = {
-      'Umidade (g)',
-      'Cinzas (g)',
-      'Colesterol (mg)',
-    };
+    const skip = {'Umidade (g)', 'Cinzas (g)', 'Colesterol (mg)'};
 
     if (skip.contains(mapping.originalHeader)) {
       return mapping.copyWith(

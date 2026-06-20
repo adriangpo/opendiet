@@ -76,6 +76,23 @@ void main() {
     },
   );
 
+  test(
+    'allEntries returns every entry across all days ordered by id',
+    () async {
+      await repository.saveEntry(entry('e2', DateTime.utc(2026, 6, 20, 8)));
+      await repository.saveEntry(entry('e1', DateTime.utc(2026, 6, 19, 8)));
+      await repository.saveEntry(entry('e3', DateTime.utc(2026, 6, 21, 8)));
+
+      final entries = await repository.allEntries();
+
+      expect(entries.map((e) => e.id), ['e1', 'e2', 'e3']);
+    },
+  );
+
+  test('allEntries is empty when no entries exist', () async {
+    expect(await repository.allEntries(), isEmpty);
+  });
+
   test('deleteEntry removes the entry', () async {
     await repository.saveEntry(entry('e1', DateTime.utc(2026, 6, 19)));
 

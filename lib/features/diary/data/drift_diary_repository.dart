@@ -56,6 +56,14 @@ class DriftDiaryRepository implements DiaryRepository {
   }
 
   @override
+  Future<List<DiaryEntry>> allEntries() async {
+    final rows = await (_database.select(
+      _database.diaryEntries,
+    )..orderBy([(row) => OrderingTerm(expression: row.id)])).get();
+    return rows.map(_toDomain).toList();
+  }
+
+  @override
   Future<void> deleteEntry(String id) => (_database.delete(
     _database.diaryEntries,
   )..where((row) => row.id.equals(id))).go();

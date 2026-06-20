@@ -13,6 +13,9 @@ abstract interface class DiaryRepository {
   /// All entries on [day]'s calendar date, ordered by creation.
   Future<List<DiaryEntry>> entriesForDay(DateTime day);
 
+  /// Every diary entry across all days, ordered by id (FR-005).
+  Future<List<DiaryEntry>> allEntries();
+
   /// Removes the diary entry with [id].
   Future<void> deleteEntry(String id);
 }

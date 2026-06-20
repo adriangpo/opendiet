@@ -49,9 +49,26 @@ class DriftRecipeRepository implements RecipeRepository {
       _database.recipes,
     )..where((row) => row.id.equals(id))).getSingleOrNull();
     if (row == null) return null;
+    return _toDomain(row);
+  }
+
+  @override
+  Future<List<Recipe>> allRecipes() async {
+    final rows = await (_database.select(
+      _database.recipes,
+    )..orderBy([(row) => OrderingTerm(expression: row.id)])).get();
+    return Future.wait(rows.map(_toDomain));
+  }
+
+  @override
+  Future<void> deleteRecipe(String id) => (_database.delete(
+    _database.recipes,
+  )..where((row) => row.id.equals(id))).go();
+
+  Future<Recipe> _toDomain(RecipeRow row) async {
     final ingredientRows =
         await (_database.select(_database.recipeIngredients)
-              ..where((line) => line.recipeId.equals(id))
+              ..where((line) => line.recipeId.equals(row.id))
               ..orderBy([(line) => OrderingTerm(expression: line.position)]))
             .get();
     return Recipe(
@@ -73,9 +90,4 @@ class DriftRecipeRepository implements RecipeRepository {
           .toList(),
     );
   }
-
-  @override
-  Future<void> deleteRecipe(String id) => (_database.delete(
-    _database.recipes,
-  )..where((row) => row.id.equals(id))).go();
 }

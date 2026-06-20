@@ -82,6 +82,39 @@ void main() {
   });
 
   test(
+    'allRecipes returns every recipe with ingredients ordered by id',
+    () async {
+      await repository.saveRecipe(
+        recipe([
+          RecipeIngredient(foodId: 'flour', quantity: Quantity.grams(200)),
+          RecipeIngredient(foodId: 'sugar', quantity: Quantity.grams(100)),
+        ]),
+      );
+      await repository.saveRecipe(
+        Recipe(
+          id: 'r0',
+          name: 'Bread',
+          yieldServings: 4,
+          ingredients: [
+            RecipeIngredient(foodId: 'flour', quantity: Quantity.grams(500)),
+          ],
+          createdAt: DateTime.utc(2026, 6, 19),
+          updatedAt: DateTime.utc(2026, 6, 19),
+        ),
+      );
+
+      final recipes = await repository.allRecipes();
+
+      expect(recipes.map((r) => r.id), ['r0', 'r1']);
+      expect(recipes.last.ingredients, hasLength(2));
+    },
+  );
+
+  test('allRecipes is empty when no recipes exist', () async {
+    expect(await repository.allRecipes(), isEmpty);
+  });
+
+  test(
     'a recipe with an unknown ingredient food is rejected atomically',
     () async {
       final bad = recipe([

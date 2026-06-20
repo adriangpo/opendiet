@@ -83,5 +83,13 @@
   "@foodEnergyManualLabel": { "description": "Accessible label/tooltip for the energy field when the user owns the value; tapping reverts to auto." },
   "actionSave": "Save",
   "foodErrorNameRequired": "Enter a name",
-  "foodErrorInvalidValue": "Enter valid, non-negative numbers"
+  "foodErrorInvalidValue": "Enter valid, non-negative numbers",
+  "foodEnergyPer100": "{energy} kcal / 100 {unit}",
+  "@foodEnergyPer100": {
+    "description": "Per-100 energy shown on a food list tile, e.g. '180 kcal / 100 g'. The energy value is a pre-formatted number, or '--' when not informed; unit is the basis abbreviation (g or ml).",
+    "placeholders": {
+      "energy": { "type": "String" },
+      "unit": { "type": "String" }
+    }
+  }
 }

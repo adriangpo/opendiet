@@ -55,5 +55,6 @@
   "foodEnergyManualLabel": "Definido manualmente -- toque para recalcular",
   "actionSave": "Salvar",
   "foodErrorNameRequired": "Digite um nome",
-  "foodErrorInvalidValue": "Digite números válidos e não negativos"
+  "foodErrorInvalidValue": "Digite números válidos e não negativos",
+  "foodEnergyPer100": "{energy} kcal / 100 {unit}"
 }

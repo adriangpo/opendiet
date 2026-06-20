@@ -190,9 +190,7 @@ class _CustomFoodEditorState extends ConsumerState<CustomFoodEditor> {
               ? l10n.foodEditorNewTitle
               : l10n.foodEditorEditTitle,
         ),
-        actions: [
-          TextButton(onPressed: _save, child: Text(l10n.actionSave)),
-        ],
+        actions: [TextButton(onPressed: _save, child: Text(l10n.actionSave))],
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),

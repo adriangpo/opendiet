@@ -39,7 +39,7 @@ void main() {
 
     await pumpApp(
       tester,
-      RecipeDetailScreen(recipeId: 'r1'),
+      const RecipeDetailScreen(recipeId: 'r1'),
       overrides: baseOverrides(recipeRepo: recipeRepo, foodRepo: foodRepo),
     );
     await tester.pump();
@@ -61,7 +61,7 @@ void main() {
 
     await pumpApp(
       tester,
-      RecipeDetailScreen(recipeId: 'r1'),
+      const RecipeDetailScreen(recipeId: 'r1'),
       overrides: baseOverrides(recipeRepo: recipeRepo, foodRepo: foodRepo),
     );
     await tester.pump();
@@ -88,7 +88,7 @@ void main() {
 
     await pumpApp(
       tester,
-      RecipeDetailScreen(recipeId: 'r1'),
+      const RecipeDetailScreen(recipeId: 'r1'),
       overrides: baseOverrides(recipeRepo: recipeRepo, foodRepo: foodRepo),
     );
     await tester.pump();
@@ -111,10 +111,7 @@ void main() {
 
     await pumpApp(
       tester,
-      RecipeDetailScreen(
-        recipeId: 'r1',
-        onEdit: () => editCalled = true,
-      ),
+      RecipeDetailScreen(recipeId: 'r1', onEdit: () => editCalled = true),
       overrides: baseOverrides(recipeRepo: recipeRepo, foodRepo: foodRepo),
     );
     await tester.pump();
@@ -138,7 +135,7 @@ void main() {
 
     await pumpApp(
       tester,
-      RecipeDetailScreen(recipeId: 'r1'),
+      const RecipeDetailScreen(recipeId: 'r1'),
       overrides: baseOverrides(recipeRepo: recipeRepo, foodRepo: foodRepo),
     );
     await tester.pump();

@@ -33,7 +33,7 @@ void main() {
 
     await pumpApp(
       tester,
-      RecipeEditorScreen(),
+      const RecipeEditorScreen(),
       overrides: baseOverrides(recipeRepo: recipeRepo, foodRepo: foodRepo),
     );
 
@@ -53,7 +53,7 @@ void main() {
 
     await pumpApp(
       tester,
-      RecipeEditorScreen(),
+      const RecipeEditorScreen(),
       overrides: baseOverrides(recipeRepo: recipeRepo, foodRepo: foodRepo),
     );
 
@@ -70,7 +70,7 @@ void main() {
 
     await pumpApp(
       tester,
-      RecipeEditorScreen(),
+      const RecipeEditorScreen(),
       overrides: baseOverrides(recipeRepo: recipeRepo, foodRepo: foodRepo),
     );
 
@@ -91,7 +91,7 @@ void main() {
 
     await pumpApp(
       tester,
-      RecipeEditorScreen(),
+      const RecipeEditorScreen(),
       overrides: baseOverrides(recipeRepo: recipeRepo, foodRepo: foodRepo),
     );
 
@@ -119,7 +119,7 @@ void main() {
 
     await pumpApp(
       tester,
-      RecipeEditorScreen(),
+      const RecipeEditorScreen(),
       overrides: baseOverrides(recipeRepo: recipeRepo, foodRepo: foodRepo),
     );
 
@@ -164,17 +164,14 @@ void main() {
 
     await pumpApp(
       tester,
-      RecipeEditorScreen(recipeId: recipeId),
+      const RecipeEditorScreen(recipeId: recipeId),
       overrides: baseOverrides(recipeRepo: recipeRepo, foodRepo: foodRepo),
     );
     await tester.pump();
     await tester.pump();
 
     expect(find.text('Edit recipe'), findsOneWidget);
-    expect(
-      find.widgetWithText(TextField, 'Chicken curry'),
-      findsOneWidget,
-    );
+    expect(find.widgetWithText(TextField, 'Chicken curry'), findsOneWidget);
     expect(find.text('chicken'), findsOneWidget);
   });
 
@@ -188,7 +185,7 @@ void main() {
 
     await pumpApp(
       tester,
-      RecipeEditorScreen(),
+      const RecipeEditorScreen(),
       overrides: baseOverrides(recipeRepo: recipeRepo, foodRepo: foodRepo),
     );
 

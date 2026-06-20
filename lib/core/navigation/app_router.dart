@@ -77,9 +77,8 @@ GoRouter buildAppRouter({Clock clock = const SystemClock()}) => GoRouter(
               routes: [
                 GoRoute(
                   path: 'new',
-                  builder: (context, state) => RecipeEditorScreen(
-                    onSaved: () => context.pop(),
-                  ),
+                  builder: (context, state) =>
+                      RecipeEditorScreen(onSaved: () => context.pop()),
                 ),
                 GoRoute(
                   path: ':id',

@@ -18,7 +18,8 @@ import 'package:opendiet/l10n/app_localizations.dart';
 
 /// The recipe editor screen (S-09, FR-015/FR-016).
 ///
-/// [recipeId] is null for a new recipe, or the id of an existing recipe to edit.
+/// [recipeId] is null for a new recipe, or the id of an existing recipe to
+/// edit.
 class RecipeEditorScreen extends ConsumerStatefulWidget {
   /// Creates a recipe editor, optionally editing [recipeId].
   const RecipeEditorScreen({this.recipeId, this.onSaved, super.key});
@@ -79,10 +80,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
         final food = foodMap[ingredient.foodId];
         if (food != null) {
           _ingredients.add(
-            _IngredientRow(
-              food: food,
-              quantity: ingredient.quantity,
-            ),
+            _IngredientRow(food: food, quantity: ingredient.quantity),
           );
         }
       }
@@ -134,10 +132,8 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       yieldServings: yieldValue,
       ingredients: _ingredients
           .map(
-            (row) => RecipeIngredient(
-              foodId: row.foodId,
-              quantity: row.quantity,
-            ),
+            (row) =>
+                RecipeIngredient(foodId: row.foodId, quantity: row.quantity),
           )
           .toList(),
       createdAt: existing?.createdAt ?? now,
@@ -185,15 +181,16 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
       final yieldValue = double.tryParse(yieldText.replaceAll(',', '.'));
       final validYield =
           yieldValue != null && yieldValue.isFinite && yieldValue >= 1;
-      try {
-        final ingredients = _ingredients
-            .map(
-              (row) => RecipeIngredient(
-                foodId: row.foodId,
-                quantity: row.quantity,
-              ),
-            )
-            .toList();
+      final ingredients = _ingredients
+          .map(
+            (row) =>
+                RecipeIngredient(foodId: row.foodId, quantity: row.quantity),
+          )
+          .toList();
+      final hasAllFoods = ingredients.every((ingredient) {
+        return foodMap.containsKey(ingredient.foodId);
+      });
+      if (hasAllFoods) {
         final recipe = Recipe(
           id: '',
           name: _nameController.text.trim(),
@@ -206,8 +203,6 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
         if (validYield) {
           perServingNutrients = RecipeNutrition.perServing(recipe, foodMap);
         }
-      } on ArgumentError catch (_) {
-        // Missing food -- skip totals
       }
     }
 
@@ -373,9 +368,7 @@ class _NutritionPreview extends StatelessWidget {
           ),
           if (energyPerServing != null) ...[
             const SizedBox(height: 4),
-            Text(
-              '-> ${l10n.recipeEditorComputedPerServing(_formatKcal(energyPerServing))}',
-            ),
+            Text(_perServingText(l10n, energyPerServing)),
           ],
         ],
       ),
@@ -387,5 +380,10 @@ class _NutritionPreview extends StatelessWidget {
     return value == value.roundToDouble()
         ? value.toInt().toString()
         : value.toStringAsFixed(1);
+  }
+
+  String _perServingText(AppLocalizations l10n, double energyPerServing) {
+    final value = _formatKcal(energyPerServing);
+    return '-> ${l10n.recipeEditorComputedPerServing(value)}';
   }
 }

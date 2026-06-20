@@ -34,9 +34,7 @@ class DriftFoodRepository implements FoodRepository {
   Stream<List<Food>> watchAllFoods() {
     final query = _database.select(_database.foods)
       ..orderBy([(table) => OrderingTerm(expression: table.id)]);
-    return query.watch().map(
-      (rows) => rows.map(_toDomain).toList(),
-    );
+    return query.watch().map((rows) => rows.map(_toDomain).toList());
   }
 
   @override

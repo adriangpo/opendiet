@@ -39,11 +39,7 @@ class FoodListTile extends StatelessWidget {
     final brand = food.brand;
 
     return ListTile(
-      title: Text(
-        food.name,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
+      title: Text(food.name, maxLines: 1, overflow: TextOverflow.ellipsis),
       subtitle: brand == null ? null : Text(brand),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

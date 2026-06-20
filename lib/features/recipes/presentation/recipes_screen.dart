@@ -68,10 +68,11 @@ class _RecipeListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Nutrients? perServing;
-    try {
+    final hasAllFoods = recipe.ingredients.every((ingredient) {
+      return foodMap.containsKey(ingredient.foodId);
+    });
+    if (hasAllFoods) {
       perServing = RecipeNutrition.perServing(recipe, foodMap);
-    } on ArgumentError catch (_) {
-      // Missing food -- skip
     }
     final energyText = switch (perServing?.energyKcal) {
       null => '--',

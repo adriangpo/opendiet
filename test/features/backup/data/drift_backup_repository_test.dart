@@ -199,45 +199,39 @@ void main() {
     },
   );
 
-  test(
-    'a referential-integrity violation rolls back, preserving prior data '
-    '(NFR-004)',
-    () async {
-      // A structurally valid backup whose diary entry references a meal slot
-      // that the backup never defines.
-      final broken = BackupDocument(
-        version: BackupDocument.currentVersion,
-        foods: [_food('flour')],
-        recipes: const [],
-        mealSlots: const [],
-        diaryEntries: [
-          DiaryEntry(
-            id: 'orphan',
-            day: DateTime.utc(2026, 6, 19),
-            mealSlotId: 'ghost',
-            referenceKind: DiaryReferenceKind.quickAdd,
-            label: 'Orphan',
-            quantity: Quantity.servings(1),
-            nutrients: const Nutrients(energyKcal: 10),
-            loggedAt: DateTime.utc(2026, 6, 19),
-          ),
-        ],
-        settings: AppSettings.defaults,
-      );
+  test('a referential-integrity violation rolls back, preserving prior data '
+      '(NFR-004)', () async {
+    // A structurally valid backup whose diary entry references a meal slot
+    // that the backup never defines.
+    final broken = BackupDocument(
+      version: BackupDocument.currentVersion,
+      foods: [_food('flour')],
+      recipes: const [],
+      mealSlots: const [],
+      diaryEntries: [
+        DiaryEntry(
+          id: 'orphan',
+          day: DateTime.utc(2026, 6, 19),
+          mealSlotId: 'ghost',
+          referenceKind: DiaryReferenceKind.quickAdd,
+          label: 'Orphan',
+          quantity: Quantity.servings(1),
+          nutrients: const Nutrients(energyKcal: 10),
+          loggedAt: DateTime.utc(2026, 6, 19),
+        ),
+      ],
+      settings: AppSettings.defaults,
+    );
 
-      await expectLater(
-        source.backup.import(broken.toJson()),
-        throwsA(isA<Exception>()),
-      );
+    await expectLater(
+      source.backup.import(broken.toJson()),
+      throwsA(isA<Exception>()),
+    );
 
-      // The original seeded dataset is fully intact: the wipe rolled back too.
-      expect(await source.foods.allFoods(), hasLength(2));
-      expect(await source.recipes.allRecipes(), hasLength(1));
-      expect(await source.diary.allEntries(), hasLength(1));
-      expect(
-        (await source.mealSlots.allMealSlots()).single.id,
-        'breakfast',
-      );
-    },
-  );
+    // The original seeded dataset is fully intact: the wipe rolled back too.
+    expect(await source.foods.allFoods(), hasLength(2));
+    expect(await source.recipes.allRecipes(), hasLength(1));
+    expect(await source.diary.allEntries(), hasLength(1));
+    expect((await source.mealSlots.allMealSlots()).single.id, 'breakfast');
+  });
 }

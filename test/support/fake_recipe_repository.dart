@@ -1,7 +1,9 @@
 import 'package:opendiet/features/recipes/domain/recipe.dart';
 import 'package:opendiet/features/recipes/domain/recipe_repository.dart';
 
-/// An in-memory [RecipeRepository] for widget tests that records what was saved.
+/// An in-memory [RecipeRepository] for widget tests.
+///
+/// Records every recipe passed to [saveRecipe].
 class FakeRecipeRepository implements RecipeRepository {
   /// Every recipe passed to [saveRecipe], in order.
   final List<Recipe> _recipes = [];

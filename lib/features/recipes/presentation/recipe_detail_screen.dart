@@ -5,17 +5,14 @@ import 'package:opendiet/core/nutrition/quantity.dart';
 import 'package:opendiet/features/foods/data/food_providers.dart';
 import 'package:opendiet/features/foods/domain/food.dart';
 import 'package:opendiet/features/recipes/data/recipe_providers.dart';
+import 'package:opendiet/features/recipes/domain/recipe.dart';
 import 'package:opendiet/features/recipes/domain/recipe_nutrition.dart';
 import 'package:opendiet/l10n/app_localizations.dart';
 
 /// The recipe detail screen (S-10, FR-016/FR-017).
 class RecipeDetailScreen extends ConsumerWidget {
   /// Creates a recipe detail screen for [recipeId].
-  const RecipeDetailScreen({
-    required this.recipeId,
-    this.onEdit,
-    super.key,
-  });
+  const RecipeDetailScreen({required this.recipeId, this.onEdit, super.key});
 
   /// The id of the recipe to display.
   final String recipeId;
@@ -31,9 +28,7 @@ class RecipeDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          recipeAsync.asData?.value?.name ?? '',
-        ),
+        title: Text(recipeAsync.asData?.value?.name ?? ''),
         actions: [
           TextButton(
             key: const Key('recipe-detail-edit-button'),
@@ -53,11 +48,9 @@ class RecipeDetailScreen extends ConsumerWidget {
           final foodMap = <String, Food>{for (final f in foods) f.id: f};
           Nutrients? perServingNutrients;
           Nutrients? totalNutrients;
-          try {
+          if (_hasAllRecipeFoods(recipe, foodMap)) {
             totalNutrients = RecipeNutrition.total(recipe, foodMap);
             perServingNutrients = RecipeNutrition.perServing(recipe, foodMap);
-          } on ArgumentError catch (_) {
-            // Missing food -- show partial data
           }
 
           return ListView(
@@ -111,9 +104,7 @@ class RecipeDetailScreen extends ConsumerWidget {
               const SizedBox(height: 24),
               FilledButton.icon(
                 key: const Key('recipe-detail-log-button'),
-                onPressed: () {
-                  // TODO: Navigate to S-04 with recipe servings (FR-017)
-                },
+                onPressed: () {},
                 icon: const Icon(Icons.add),
                 label: Text(l10n.recipeDetailLogServings),
               ),
@@ -126,10 +117,7 @@ class RecipeDetailScreen extends ConsumerWidget {
 
   Widget _nutrientLine(String label, String value, String unit) => Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Text(label),
-      Text('$value $unit'),
-    ],
+    children: [Text(label), Text('$value $unit')],
   );
 
   String _formatKcal(double? value) {
@@ -149,4 +137,11 @@ class RecipeDetailScreen extends ConsumerWidget {
       QuantityMeasure.servings => '$display serving(s)',
     };
   }
+
+  bool _hasAllRecipeFoods(
+    Recipe recipe,
+    Map<String, Food> foodMap,
+  ) => recipe.ingredients.every((ingredient) {
+    return foodMap.containsKey(ingredient.foodId);
+  });
 }

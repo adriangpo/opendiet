@@ -5,20 +5,18 @@ import 'package:opendiet/core/nutrition/quantity.dart';
 import 'package:opendiet/features/diary/domain/diary_entry.dart';
 import 'package:opendiet/features/diary/domain/diary_totals.dart';
 
-DiaryEntry _entry({
-  required DateTime day,
-  required Nutrients nutrients,
-}) => DiaryEntry(
-  id: 'e-${day.toIso8601String()}-${nutrients.energyKcal}',
-  day: day,
-  mealSlotId: 'breakfast',
-  referenceKind: DiaryReferenceKind.food,
-  referenceId: 'food',
-  label: 'Food',
-  quantity: Quantity.servings(1),
-  nutrients: nutrients,
-  loggedAt: day,
-);
+DiaryEntry _entry({required DateTime day, required Nutrients nutrients}) =>
+    DiaryEntry(
+      id: 'e-${day.toIso8601String()}-${nutrients.energyKcal}',
+      day: day,
+      mealSlotId: 'breakfast',
+      referenceKind: DiaryReferenceKind.food,
+      referenceId: 'food',
+      label: 'Food',
+      quantity: Quantity.servings(1),
+      nutrients: nutrients,
+      loggedAt: day,
+    );
 
 void main() {
   group('DiaryTotals.forEntries (FR-004)', () {

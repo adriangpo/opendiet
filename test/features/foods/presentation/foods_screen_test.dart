@@ -33,12 +33,8 @@ void main() {
 
   testWidgets('displays saved foods in a list', (tester) async {
     final repository = FakeFoodRepository();
-    await repository.saveFood(
-      _food(name: 'Oats', energy: 180),
-    );
-    await repository.saveFood(
-      _food(name: 'Banana', energy: 89),
-    );
+    await repository.saveFood(_food(name: 'Oats', energy: 180));
+    await repository.saveFood(_food(name: 'Banana', energy: 89));
 
     await pumpAppShell(tester, overrides: baseOverrides(repository));
 
@@ -52,9 +48,7 @@ void main() {
 
   testWidgets('shows energy per 100g on food tiles', (tester) async {
     final repository = FakeFoodRepository();
-    await repository.saveFood(
-      _food(name: 'Oats', energy: 180),
-    );
+    await repository.saveFood(_food(name: 'Oats', energy: 180));
 
     await pumpAppShell(tester, overrides: baseOverrides(repository));
 
@@ -67,9 +61,7 @@ void main() {
 
   testWidgets('energy shows -- when not informed', (tester) async {
     final repository = FakeFoodRepository();
-    await repository.saveFood(
-      _food(name: 'Water'),
-    );
+    await repository.saveFood(_food(name: 'Water'));
 
     await pumpAppShell(tester, overrides: baseOverrides(repository));
 

@@ -92,9 +92,7 @@ class _FoodPickerDialogState extends ConsumerState<FoodPickerDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(
-            MaterialLocalizations.of(context).cancelButtonLabel,
-          ),
+          child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
         ),
       ],
     );

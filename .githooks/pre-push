@@ -3,6 +3,35 @@
 # Enable once with: git config core.hooksPath .githooks
 set -e
 
+# IDEs and git GUIs invoke hooks without sourcing the user's shell profile, so
+# tool dirs like the Flutter SDK are absent from PATH and dart/flutter fail to
+# resolve. Recover the SDK from common locations (override with FLUTTER_ROOT).
+if ! command -v flutter >/dev/null 2>&1; then
+  for candidate in \
+    "$FLUTTER_ROOT/bin" \
+    "$HOME/flutter/bin" \
+    "$HOME/fvm/default/bin" \
+    "$HOME/development/flutter/bin" \
+    "$HOME/.asdf/shims" \
+    "/opt/flutter/bin" \
+    "/usr/local/flutter/bin"; do
+    if [ -x "$candidate/flutter" ]; then
+      PATH="$candidate:$PATH"
+      export PATH
+      break
+    fi
+  done
+fi
+
+for tool in dart flutter; do
+  if ! command -v "$tool" >/dev/null 2>&1; then
+    echo "[pre-push] $tool not found on PATH." >&2
+    echo "[pre-push] Your launcher (likely an IDE/GUI) did not load your shell profile." >&2
+    echo "[pre-push] Set FLUTTER_ROOT to your Flutter SDK, or add it to the candidate list in .githooks/pre-push." >&2
+    exit 1
+  fi
+done
+
 echo "[pre-push] dart format --set-exit-if-changed ."
 dart format --output=none --set-exit-if-changed .
 

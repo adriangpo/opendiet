@@ -26,11 +26,16 @@ OpenDiet shall export the complete dataset to a single backup file that the user
 
 ## Implementation Notes
 
-<!-- Engineers add notes here during implementation -->
+- `BackupRepository.export()` (`lib/features/backup/`) serializes the full dataset
+  to a single JSON document: a versioned envelope around each entity collection.
+  Entity values use the entities' own `toJson`, so no field shape is restated.
+  Export reads through the existing feature repositories (foods, recipes, meal
+  slots, diary, settings), so it never touches the network.
 
 ## Test Cases
 
-<!-- QA adds test case references here -->
+- `test/features/backup/domain/backup_document_test.dart`
+- `test/features/backup/data/drift_backup_repository_test.dart`
 
 ---
 *Created: 2026-06-19*

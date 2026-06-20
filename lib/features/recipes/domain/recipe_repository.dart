@@ -10,6 +10,9 @@ abstract interface class RecipeRepository {
   /// The recipe with [id] and its ordered ingredients, or null when absent.
   Future<Recipe?> findRecipe(String id);
 
+  /// Every recipe with its ordered ingredients, ordered by id (FR-005).
+  Future<List<Recipe>> allRecipes();
+
   /// Removes the recipe with [id]; its ingredients cascade away.
   Future<void> deleteRecipe(String id);
 }

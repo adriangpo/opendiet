@@ -1,0 +1,9 @@
+# Build configuration for code generation. See agent_docs/dependencies.md.
+targets:
+  $default:
+    builders:
+      json_serializable:
+        options:
+          # Nested model objects (e.g. Food.nutrients) must be (de)serialized
+          # through their own toJson/fromJson, not left as live objects.
+          explicit_to_json: true

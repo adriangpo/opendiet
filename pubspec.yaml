@@ -32,7 +32,9 @@ dependencies:
   cupertino_icons: ^1.0.8
   drift: ^2.34.0
   drift_flutter: ^0.3.0
-  file_picker: ^11.0.2 # freed from the win32 cap via dependency_overrides below
+  # file_picker intentionally omitted until CSV import (FR-013) is built: its
+  # Windows impl is compiled even for mobile builds and is incompatible with
+  # win32 6. Re-add with a compatible combo then. See agent_docs/dependencies.md.
   flutter:
     sdk: flutter
   flutter_local_notifications: ^22.0.1
@@ -62,13 +64,6 @@ dev_dependencies:
   mocktail: ^1.0.5
   riverpod_generator: ^4.0.4
   very_good_analysis: ^10.3.0
-
-# win32 is a Windows-only plugin; we target iOS+Android only. share_plus 13.x needs
-# win32 ^6 while file_picker 8-11 declares ^5, so pub would otherwise drag file_picker
-# back to 3.0.4. Forcing win32 ^6 lets both use current versions; harmless until/unless
-# Windows is targeted. See agent_docs/dependencies.md.
-dependency_overrides:
-  win32: ^6.0.1
 
 flutter:
 

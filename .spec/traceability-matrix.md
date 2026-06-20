@@ -18,7 +18,7 @@
 | CP-006 Import existing data | CN-009 | FR-013, FR-014 |
 | CP-007 Recipe nutrition | CN-010 | FR-015, FR-016 |
 | CP-007 Recipe nutrition | CN-011 | FR-017 |
-| CP-008 Low-friction logging | CN-012 | FR-018 |
+| CP-008 Low-friction logging | CN-012 | FR-018, FR-031 |
 | CP-008 Low-friction logging | CN-013 | FR-019 |
 | CP-009 Remembering to log | CN-014 | FR-020, FR-021 |
 | CP-010 Trust / integrity | CN-015 | FR-004, FR-022 |

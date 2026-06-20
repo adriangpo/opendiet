@@ -48,12 +48,14 @@ The core loop. Conventions and shared components are in `design-system.md`.
 |  Banana                 89/100g  +|
 |  Chicken breast recipe   ...     +|
 |-----------------------------------|
+|  [ + Quick add (name + kcal) ]    |   -> ad-hoc entry, not saved (FR-031)
 |  [ + Create custom food ]         |   -> S-05
 +-----------------------------------+
 ```
 
-- **Components:** search field with barcode action, source segments (Recent / Favorites / Foods / Recipes / OFF results), `FoodListTile` list, create-custom action.
+- **Components:** search field with barcode action, source segments (Recent / Favorites / Foods / Recipes / OFF results), `FoodListTile` list, quick-add action, create-custom action.
 - **Interactions:** typing searches local first, OFF on submit (FR-009); barcode icon -> S-03; tapping a row -> S-04 (set amount); `+` quick-logs a default amount; recipes log via servings (FR-017).
+- **Quick add (FR-031):** a small form asking only a name and energy (kcal), with optional further nutrients; confirming writes a self-contained diary entry to the meal without saving any catalog food. The created entry offers "Save as food" -> opens S-05 prefilled to complete and save it.
 - **States:** *Recent/Favorites* default before typing (FR-018); *OFF results Loading/Error* are isolated and offline-tolerant (NFR-006) while local results remain; *Empty search* -> offer create custom or contribute.
 
 ---
@@ -128,5 +130,6 @@ The core loop. Conventions and shared components are in `design-system.md`.
 ```
 
 - **Components:** `NutrientForm`, basis selector, serving definition, add-micronutrient.
-- **Interactions:** Save validates (name + energy required; blanks allowed elsewhere) and returns the food for logging or to the catalog.
+- **Energy field (FR-008/028, auto-calc):** energy is editable normal text that auto-fills from the macros (carbs/protein/fat/fibre + alcohol) while automatic, with a trailing state icon. The icon reads "calculated" while automatic; the moment the user edits the value it switches to "manual" and stops recomputing; tapping the manual icon returns it to automatic and recomputes. Energy is never required to be typed -- a blank with no macros simply leaves it absent.
+- **Interactions:** Save validates (name required; blanks allowed elsewhere) and returns the food for logging or to the catalog.
 - **States:** *Edit* prefills; *Validation error* marks fields inline (runtime checks, never asserts — see `AGENTS.md`); inputs honor the unit system (FR-024).

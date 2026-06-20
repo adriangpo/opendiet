@@ -17,18 +17,13 @@ import 'package:opendiet/features/settings/domain/settings_repository.dart';
 class DriftBackupRepository implements BackupRepository {
   /// Creates a repository over [database] and the feature repositories.
   DriftBackupRepository({
-    required AppDatabase database,
-    required FoodRepository foods,
-    required RecipeRepository recipes,
-    required MealSlotRepository mealSlots,
-    required DiaryRepository diary,
-    required SettingsRepository settings,
-  }) : _database = database,
-       _foods = foods,
-       _recipes = recipes,
-       _mealSlots = mealSlots,
-       _diary = diary,
-       _settings = settings;
+    required AppDatabase this._database,
+    required FoodRepository this._foods,
+    required RecipeRepository this._recipes,
+    required MealSlotRepository this._mealSlots,
+    required DiaryRepository this._diary,
+    required SettingsRepository this._settings,
+  });
 
   final AppDatabase _database;
   final FoodRepository _foods;

@@ -9,6 +9,13 @@ Re-run after changing Drift tables, freezed models, or `@riverpod` providers:
 `dart run build_runner build --delete-conflicting-outputs`. Commit the generated
 `*.g.dart` / `*.freezed.dart`; they are excluded from the analyzer, not gitignored.
 
+## build.yaml — `explicit_to_json: true`
+`json_serializable` is configured (in `build.yaml`) with `explicit_to_json: true`
+so a model's `toJson` calls nested models' own `toJson` (e.g. `Food.nutrients`,
+`Recipe.ingredients`) instead of leaving live objects in the map. Without it,
+`fromJson(toJson())` round-trips fail at runtime. Backup fidelity (NFR-003)
+depends on these round-trips, so the option is load-bearing, not cosmetic.
+
 ## freezed is pinned to a prerelease (3.2.6-dev.1) — intentional
 Flutter 3.44.2 bundles **analyzer 12.x**. Stable `freezed 3.2.5` supports only
 `analyzer >=9 <11`, so no stable freezed resolves on this Flutter; the dev release is the

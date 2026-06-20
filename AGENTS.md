@@ -31,7 +31,8 @@ Writing code before a failing test, or tests and code together without seeing re
 - Test: `flutter test`   single: `flutter test test/path_test.dart --plain-name "<name>"`
 - Analyze: `flutter analyze`   Format: `dart format .`
 - **Done = a failing test was written first, docs updated, then codegen current + `dart format` clean + `flutter analyze` clean + `flutter test` green.** Never leave generated output stale.
-- **Pre-push gate (hard)**: `dart format --set-exit-if-changed .` + `flutter analyze` + `flutter test` must all pass before pushing. If a check can't run, say so — never claim it passed.
+- **Pre-commit hook**: `dart format .` + `flutter analyze` -- runs before every commit (`.githooks/pre-commit`). Auto-formats in place and stages formatting fixes; skips tests for speed. Pre-push covers the full gate.
+- **Pre-push gate (hard)**: `dart format --set-exit-if-changed .` + `flutter analyze` + `flutter test` must all pass before pushing (`.githooks/pre-push`). If a check can't run, say so — never claim it passed.
 
 ## Structure
 Feature-first: `lib/features/<feature>/{data,domain,presentation}` with shared code in `lib/core/`.
@@ -69,6 +70,7 @@ Feature-first: `lib/features/<feature>/{data,domain,presentation}` with shared c
 - **No AI attribution** in commits or PR bodies (no `Co-Authored-By: <model>`, no "Generated with" line); commit identity = the configured git user only. <!-- OPINIONATED -->
 - **Subagent work**: give a detailed prompt, then verify the actual diff — not the summary.
 - **No `TODO` without a linked issue.**
+- **Enable hooks** with `git config core.hooksPath .githooks` (already set for this repo). Both `pre-commit` (lint) and `pre-push` (format + analyze + test) are enforced locally.
 - Do not invent Open Food Facts endpoints, fields, or values — confirm against its API docs first.
 - **Never bundle or redistribute TACO/TBCA data** (restricted-use licence) — Brazilian foods enter only via the user's own imported file.
 - **Never hardcode %VD reference values or the ANVISA nutrient set in prose/comments** — hold each in one test-verified table citing the regulation (`agent_docs/brazilian_nutrition.md`).

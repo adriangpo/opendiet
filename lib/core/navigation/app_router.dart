@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:opendiet/core/widgets/app_scaffold.dart';
 import 'package:opendiet/features/diary/presentation/diary_screen.dart';
+import 'package:opendiet/features/diary/presentation/quick_add_screen.dart';
 import 'package:opendiet/features/foods/presentation/custom_food_editor.dart';
 import 'package:opendiet/features/foods/presentation/foods_screen.dart';
 import 'package:opendiet/features/recipes/presentation/recipes_screen.dart';
@@ -19,6 +20,15 @@ GoRouter goRouter(Ref ref) => buildAppRouter();
 GoRouter buildAppRouter() => GoRouter(
   initialLocation: '/diary',
   routes: [
+    GoRoute(
+      path: '/log',
+      builder: (context, state) {
+        final slot = state.uri.queryParameters['slot'] ?? '';
+        final dateStr = state.uri.queryParameters['date'];
+        final day = dateStr != null ? DateTime.parse(dateStr) : DateTime.now();
+        return QuickAddScreen(slotId: slot, day: day);
+      },
+    ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) =>
           AppScaffold(navigationShell: navigationShell),

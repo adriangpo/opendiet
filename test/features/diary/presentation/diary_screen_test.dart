@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:opendiet/features/diary/data/diary_providers.dart';
 import 'package:opendiet/features/diary/domain/meal_slot.dart';
@@ -62,5 +63,26 @@ void main() {
     );
 
     expect(find.text('+ Add to Breakfast'), findsOneWidget);
+  });
+
+  testWidgets('tapping add-to-slot navigates to /log (FR-017)', (tester) async {
+    await pumpAppShell(
+      tester,
+      overrides: [
+        ...baseOverrides(),
+        mealSlotsProvider.overrideWithValue(
+          const AsyncData([
+            MealSlot(id: 's1', name: 'Breakfast', position: 0),
+          ]),
+        ),
+      ],
+    );
+
+    await tester.tap(find.text('+ Add to Breakfast'));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.byKey(const Key('field-name')), findsOneWidget);
+    expect(find.text('Add to Breakfast'), findsOneWidget);
   });
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:opendiet/core/time/time_providers.dart';
 import 'package:opendiet/core/widgets/empty_state.dart';
 import 'package:opendiet/features/diary/data/diary_providers.dart';
 import 'package:opendiet/features/diary/domain/meal_slot.dart';
@@ -14,6 +16,7 @@ class DiaryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final slotsAsync = ref.watch(mealSlotsProvider);
+    final today = ref.read(clockProvider).now();
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.diaryTitle)),
@@ -32,6 +35,7 @@ class DiaryScreen extends ConsumerWidget {
             itemBuilder: (context, index) => _MealSlotSection(
               slot: slots[index],
               l10n: l10n,
+              today: today,
             ),
           );
         },
@@ -41,13 +45,19 @@ class DiaryScreen extends ConsumerWidget {
 }
 
 class _MealSlotSection extends StatelessWidget {
-  const _MealSlotSection({required this.slot, required this.l10n});
+  const _MealSlotSection({
+    required this.slot,
+    required this.l10n,
+    required this.today,
+  });
 
   final MealSlot slot;
   final AppLocalizations l10n;
+  final DateTime today;
 
   @override
   Widget build(BuildContext context) {
+    final dateStr = today.toIso8601String().split('T').first;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -61,7 +71,7 @@ class _MealSlotSection extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: TextButton.icon(
-            onPressed: () {},
+            onPressed: () => context.go('/log?slot=${slot.id}&date=$dateStr'),
             icon: const Icon(Icons.add, size: 18),
             label: Text(l10n.diaryAddToSlot(slot.name)),
           ),

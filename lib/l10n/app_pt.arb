@@ -72,5 +72,7 @@
   "nutrientTotalsOver": "{amount} acima",
   "foodEnergyPer100": "{energy} kcal / 100 {unit}",
   "foodEnergyPerServing": "{energy} / porção",
-  "diaryAddToSlot": "+ Adicionar ao {slotName}"
+  "diaryAddToSlot": "+ Adicionar ao {slotName}",
+  "logAddToSlot": "Adicionar ao {slotName}",
+  "logOptionalNutrients": "Nutrientes opcionais"
 }

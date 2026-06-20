@@ -201,6 +201,17 @@
       "slotName": { "type": "String", "example": "Breakfast" }
     }
   },
+  "logAddToSlot": "Add to {slotName}",
+  "@logAddToSlot": {
+    "description": "Title of the quick-add / log hub screen, indicating the target meal slot.",
+    "placeholders": {
+      "slotName": { "type": "String", "example": "Breakfast" }
+    }
+  },
+  "logOptionalNutrients": "Optional nutrients",
+  "@logOptionalNutrients": {
+    "description": "Section heading for optional nutrient fields on the quick-add form."
+  },
   "@foodEnergyPer100": {
     "description": "Per-100 energy shown on a food list tile, e.g. '180 kcal / 100 g'. The energy value is a pre-formatted number, or '--' when not informed; unit is the basis abbreviation (g or ml).",
     "placeholders": {

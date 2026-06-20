@@ -111,14 +111,77 @@ void main() {
     expect(_inRow('protein', find.textContaining('over')), findsNothing);
   });
 
-  testWidgets('renders empty totals as zero without a comparison', (
+  testWidgets('renders empty totals as not-informed when no nutrients set', (
     tester,
   ) async {
     await pumpApp(tester, const NutrientTotalsBar(totals: Nutrients.empty));
 
     expect(find.text('Energy'), findsOneWidget);
-    expect(find.textContaining('0'), findsWidgets);
+    // Absent nutrients show '--', not '0'.
+    expect(find.textContaining('0'), findsNothing);
+    expect(find.text('--'), findsWidgets);
     expect(find.textContaining('left'), findsNothing);
     expect(find.textContaining('over'), findsNothing);
+  });
+
+  testWidgets('shows warning icons for multiple nutrients over target', (
+    tester,
+  ) async {
+    await pumpApp(
+      tester,
+      const NutrientTotalsBar(
+        totals: Nutrients(energyKcal: 2100, totalFat: 70),
+        target: Nutrients(energyKcal: 2000, totalFat: 50),
+      ),
+    );
+
+    expect(
+      _inRow('energy', find.textContaining('100 kcal over')),
+      findsOneWidget,
+    );
+    expect(
+      _inRow('energy', find.byIcon(Icons.warning_amber_rounded)),
+      findsOneWidget,
+    );
+    expect(
+      _inRow('totalFat', find.textContaining('20 g over')),
+      findsOneWidget,
+    );
+    expect(
+      _inRow('totalFat', find.byIcon(Icons.warning_amber_rounded)),
+      findsOneWidget,
+    );
+    // Protein and carbohydrates have no target so no over state.
+    expect(
+      _inRow('protein', find.byIcon(Icons.warning_amber_rounded)),
+      findsNothing,
+    );
+    expect(
+      _inRow('carbohydrates', find.byIcon(Icons.warning_amber_rounded)),
+      findsNothing,
+    );
+  });
+
+  testWidgets('shows over state when target is zero and totals are positive', (
+    tester,
+  ) async {
+    await pumpApp(
+      tester,
+      const NutrientTotalsBar(
+        totals: Nutrients(energyKcal: 100),
+        target: Nutrients(energyKcal: 0),
+      ),
+    );
+
+    expect(
+      _inRow('energy', find.textContaining('100 kcal over')),
+      findsOneWidget,
+    );
+    expect(
+      _inRow('energy', find.byIcon(Icons.warning_amber_rounded)),
+      findsOneWidget,
+    );
+    // Other nutrients have no target, so only one warning icon appears.
+    expect(find.byIcon(Icons.warning_amber_rounded), findsOneWidget);
   });
 }

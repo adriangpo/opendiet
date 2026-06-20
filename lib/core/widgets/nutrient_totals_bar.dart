@@ -83,7 +83,9 @@ class _NutrientRow extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
     final unit = _unitLabel(l10n, nutrient.unit);
-    final consumed = totals.amountOf(nutrient) ?? 0;
+    final consumed = totals.amountOf(nutrient);
+    final isKnown = consumed != null;
+    final displayAmount = consumed ?? 0;
     final remaining = DailyTargetComparison.remaining(totals, target, nutrient);
 
     final valueStyle = isHeadline
@@ -98,8 +100,11 @@ class _NutrientRow extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(_nutrientLabel(l10n, nutrient), style: labelStyle),
-        Text('${_format(consumed)} $unit', style: valueStyle),
-        if (remaining != null)
+        Text(
+          isKnown ? '${_format(displayAmount)} $unit' : '--',
+          style: valueStyle,
+        ),
+        if (isKnown && remaining != null)
           _ComparisonChip(remaining: remaining, unit: unit),
       ],
     );

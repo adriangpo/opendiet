@@ -1,6 +1,6 @@
 # OpenDiet
 
-WHAT: Flutter (Dart) app for iOS + Android. Local-first — all user data on-device. Stack: Drift (on-device DB), Riverpod (code-gen) for state, freezed + json_serializable for models, go_router for navigation, official `openfoodfacts` SDK, very_good_analysis lints, build_runner for codegen. Not yet scaffolded (Flutter is not installed on this machine; `flutter create` is pending).
+WHAT: Flutter (Dart) app for iOS + Android. Local-first — all user data on-device. Stack: Drift (on-device DB), Riverpod (code-gen) for state, freezed + json_serializable for models, go_router for navigation, official `openfoodfacts` SDK, very_good_analysis lints, build_runner for codegen (Flutter 3.44.2, Dart 3.12.2).
 WHY: Privacy-first diet tracker — log food and track calories/macros/micronutrients against a target the user sets. Your data stays on your device. (Meal planning, shopping lists, and a goals/BMR engine are v2 — see `.spec/`.)
 
 Food/nutrition data comes from three sources: **Open Food Facts** (each user signs in with their own OFF account), an **imported CSV** (flexible header mapping), and **user-created foods and recipes**. The diary, foods, and recipes are all persisted locally.
@@ -24,15 +24,14 @@ Writing code before a failing test, or tests and code together without seeing re
 **Edge cases are mandatory — one happy-path test is never enough.** For each unit/flow cover, and only stop when each is tested or justified N/A: **happy path + boundaries** (zero, one, max, empty, exactly-at-limit); **invalid input** (wrong type, missing/null, malformed — e.g. a malformed CSV row, an OFF product with missing nutriment fields); **failure modes** (OFF request timeout/offline, empty search result); **state-dependent** behaviour; **lists** (first/last/empty/single, pagination, ordering). Then ask **"what did I miss?"**
 
 ## Commands
-<!-- Flutter defaults; not yet verified against a pubspec.yaml (project not scaffolded). -->
-- Install: `flutter pub get`
+- Install: `flutter pub get` (if Flutter reports SDK version `0.0.0-unknown`, check the Flutter SDK cache; hooks must clear Git's hook environment before invoking Flutter so app worktree metadata cannot poison `bin/cache/flutter.version.json`).
 - Codegen: `dart run build_runner build --delete-conflicting-outputs` (watch: `... watch`). Drift, Riverpod, freezed, and json_serializable all generate.
 - Run: `flutter run`
 - Test: `flutter test`   single: `flutter test test/path_test.dart --plain-name "<name>"`
 - Analyze: `flutter analyze`   Format: `dart format .`
 - **Done = a failing test was written first, docs updated, then codegen current + `dart format` clean + `flutter analyze` clean + `flutter test` green.** Never leave generated output stale.
-- **Pre-commit hook**: `dart format .` + `flutter analyze` -- runs before every commit (`.githooks/pre-commit`). Auto-formats in place and stages formatting fixes; skips tests for speed. Pre-push covers the full gate.
-- **Pre-push gate (hard)**: `dart format --set-exit-if-changed .` + `flutter analyze` + `flutter test` must all pass before pushing (`.githooks/pre-push`). If a check can't run, say so — never claim it passed.
+- **Pre-commit hook**: `dart format .` + `flutter analyze` -- runs before every commit (`.githooks/pre-commit`). Auto-formats in place and stages formatting fixes; skips tests for speed. It clears Git's hook-local environment before Flutter commands so multiple worktrees cannot corrupt Flutter SDK version detection. Pre-push covers the full gate.
+- **Pre-push gate (hard)**: `dart format --set-exit-if-changed .` + `flutter analyze` + `flutter test` must all pass before pushing (`.githooks/pre-push`). It uses the same Flutter environment cleanup as pre-commit. If a check can't run, say so — never claim it passed.
 
 ## Structure
 Feature-first: `lib/features/<feature>/{data,domain,presentation}` with shared code in `lib/core/`.
@@ -70,7 +69,7 @@ Feature-first: `lib/features/<feature>/{data,domain,presentation}` with shared c
 - **No AI attribution** in commits or PR bodies (no `Co-Authored-By: <model>`, no "Generated with" line); commit identity = the configured git user only. <!-- OPINIONATED -->
 - **Subagent work**: give a detailed prompt, then verify the actual diff — not the summary.
 - **No `TODO` without a linked issue.**
-- **Enable hooks** with `git config core.hooksPath .githooks` (already set for this repo). Both `pre-commit` (lint) and `pre-push` (format + analyze + test) are enforced locally.
+- **Enable hooks** with `git config core.hooksPath .githooks` (already set for this repo). Both `pre-commit` (lint) and `pre-push` (format + analyze + test) are enforced locally. Keep the Git environment cleanup in both hooks; Flutter is itself a Git checkout, and leaked worktree variables can make Pub see the SDK as `0.0.0-unknown`.
 - Do not invent Open Food Facts endpoints, fields, or values — confirm against its API docs first.
 - **Never bundle or redistribute TACO/TBCA data** (restricted-use licence) — Brazilian foods enter only via the user's own imported file.
 - **Never hardcode %VD reference values or the ANVISA nutrient set in prose/comments** — hold each in one test-verified table citing the regulation (`agent_docs/brazilian_nutrition.md`).

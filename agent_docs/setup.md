@@ -52,6 +52,10 @@ git config core.hooksPath .githooks
 ```
 Mirrors CI: `dart format` + `flutter analyze` + `flutter test`.
 
+The hooks clear Git's hook-local environment before running Flutter. Keep that
+cleanup in place: Flutter is itself a Git checkout, and leaked app worktree
+variables can make Pub resolve the SDK as `0.0.0-unknown`.
+
 ## 6. Verify
 ```
 dart format --output=none --set-exit-if-changed .

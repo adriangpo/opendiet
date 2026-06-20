@@ -23,6 +23,24 @@ if ! command -v flutter >/dev/null 2>&1 || ! command -v dart >/dev/null 2>&1; th
   done
 fi
 
+# Resolve FLUTTER_ROOT after PATH discovery so non-interactive hooks can read
+# the SDK version from bin/cache/flutter.version.json.
+if [ -z "$FLUTTER_ROOT" ]; then
+  resolved_flutter="$(command -v flutter)" && [ -n "$resolved_flutter" ] && {
+    FLUTTER_ROOT="$(dirname "$(dirname "$resolved_flutter")")"
+    export FLUTTER_ROOT
+  }
+fi
+
+run_without_git_environment() {
+  git_environment_variables="$(git rev-parse --local-env-vars 2>/dev/null || :)"
+  for variable in $git_environment_variables; do
+    unset "$variable"
+  done
+
+  "$@"
+}
+
 for tool in dart flutter; do
   if ! command -v "$tool" >/dev/null 2>&1; then
     echo "[pre-push] $tool not found on PATH." >&2
@@ -36,9 +54,9 @@ echo "[pre-push] dart format --set-exit-if-changed ."
 dart format --output=none --set-exit-if-changed .
 
 echo "[pre-push] flutter analyze"
-flutter analyze
+run_without_git_environment flutter analyze
 
 echo "[pre-push] flutter test"
-flutter test
+run_without_git_environment flutter test
 
 echo "[pre-push] OK"

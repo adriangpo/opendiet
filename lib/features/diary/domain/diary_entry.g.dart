@@ -14,8 +14,8 @@ _DiaryEntry _$DiaryEntryFromJson(Map<String, dynamic> json) => _DiaryEntry(
     _$DiaryReferenceKindEnumMap,
     json['referenceKind'],
   ),
-  referenceId: json['referenceId'] as String,
   label: json['label'] as String,
+  referenceId: json['referenceId'] as String?,
   quantity: Quantity.fromJson(json['quantity'] as Map<String, dynamic>),
   nutrients: Nutrients.fromJson(json['nutrients'] as Map<String, dynamic>),
   loggedAt: DateTime.parse(json['loggedAt'] as String),
@@ -27,8 +27,8 @@ Map<String, dynamic> _$DiaryEntryToJson(_DiaryEntry instance) =>
       'day': instance.day.toIso8601String(),
       'mealSlotId': instance.mealSlotId,
       'referenceKind': _$DiaryReferenceKindEnumMap[instance.referenceKind]!,
-      'referenceId': instance.referenceId,
       'label': instance.label,
+      'referenceId': instance.referenceId,
       'quantity': instance.quantity.toJson(),
       'nutrients': instance.nutrients.toJson(),
       'loggedAt': instance.loggedAt.toIso8601String(),
@@ -37,4 +37,5 @@ Map<String, dynamic> _$DiaryEntryToJson(_DiaryEntry instance) =>
 const _$DiaryReferenceKindEnumMap = {
   DiaryReferenceKind.food: 'food',
   DiaryReferenceKind.recipe: 'recipe',
+  DiaryReferenceKind.quickAdd: 'quickAdd',
 };

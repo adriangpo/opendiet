@@ -1,7 +1,7 @@
 # Functional Requirements — Index
 
 **Project:** OpenDiet | **Version:** 1.0 | **Created:** 2026-06-19
-**Total FRs:** 30
+**Total FRs:** 31
 
 | FR | Title | Traces to CN | Priority |
 |----|-------|--------------|----------|
@@ -35,6 +35,7 @@
 | [FR-028](FR-028-anvisa-format-entry.md) | ANVISA-format food entry | CN-018 | Must |
 | [FR-029](FR-029-ptbr-localization.md) | Brazilian Portuguese localization | CN-020 | Must |
 | [FR-030](FR-030-taco-import.md) | TACO import | CN-021 | Should |
+| [FR-031](FR-031-quick-add-food.md) | Quick-add food | CN-012 | Should |
 
 ## CN → FR coverage
 
@@ -51,7 +52,7 @@
 | CN-009 | FR-013, FR-014 |
 | CN-010 | FR-015, FR-016 |
 | CN-011 | FR-017 |
-| CN-012 | FR-018 |
+| CN-012 | FR-018, FR-031 |
 | CN-013 | FR-019 |
 | CN-014 | FR-020, FR-021 |
 | CN-015 | FR-004, FR-022 |

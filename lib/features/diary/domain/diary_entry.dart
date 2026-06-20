@@ -5,8 +5,11 @@ import 'package:opendiet/core/nutrition/quantity.dart';
 part 'diary_entry.freezed.dart';
 part 'diary_entry.g.dart';
 
-/// Whether a diary entry references a food or a recipe.
-enum DiaryReferenceKind { food, recipe }
+/// What a diary entry was logged from.
+///
+/// [quickAdd] is an ad-hoc entry with no catalog reference (FR-031); it is
+/// self-contained via its own [DiaryEntry.label] and [DiaryEntry.nutrients].
+enum DiaryReferenceKind { food, recipe, quickAdd }
 
 /// A single logged item in the diary (FR-002, FR-003).
 ///
@@ -22,11 +25,11 @@ abstract class DiaryEntry with _$DiaryEntry {
     required DateTime day,
     required String mealSlotId,
     required DiaryReferenceKind referenceKind,
-    required String referenceId,
     required String label,
     required Quantity quantity,
     required Nutrients nutrients,
     required DateTime loggedAt,
+    String? referenceId,
   }) = _DiaryEntry;
 
   /// Builds a diary entry from its JSON form.

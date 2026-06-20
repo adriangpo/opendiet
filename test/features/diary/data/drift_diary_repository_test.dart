@@ -54,6 +54,28 @@ void main() {
     expect(entries.map((e) => e.id), unorderedEquals(['e1', 'e2']));
   });
 
+  test(
+    'round-trips a quick-add entry with no catalog reference (FR-031)',
+    () async {
+      final quick = DiaryEntry(
+        id: 'q1',
+        day: DateTime.utc(2026, 6, 19),
+        mealSlotId: 'breakfast',
+        referenceKind: DiaryReferenceKind.quickAdd,
+        label: 'Pastel',
+        quantity: Quantity.servings(1),
+        nutrients: const Nutrients(energyKcal: 250),
+        loggedAt: DateTime.utc(2026, 6, 19, 12),
+      );
+
+      await repository.saveEntry(quick);
+
+      final restored = await repository.findEntry('q1');
+      expect(restored, quick);
+      expect(restored!.referenceId, isNull);
+    },
+  );
+
   test('deleteEntry removes the entry', () async {
     await repository.saveEntry(entry('e1', DateTime.utc(2026, 6, 19)));
 

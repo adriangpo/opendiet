@@ -78,7 +78,7 @@ class DiaryEntries extends Table {
   TextColumn get mealSlotId =>
       text().references(MealSlots, #id, onDelete: KeyAction.restrict)();
   IntColumn get referenceKind => intEnum<DiaryReferenceKind>()();
-  TextColumn get referenceId => text()();
+  TextColumn get referenceId => text().nullable()();
   TextColumn get label => text()();
   RealColumn get quantityAmount => real()();
   IntColumn get quantityMeasure => intEnum<QuantityMeasure>()();

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DiaryEntry {
 
- String get id; DateTime get day; String get mealSlotId; DiaryReferenceKind get referenceKind; String get referenceId; String get label; Quantity get quantity; Nutrients get nutrients; DateTime get loggedAt;
+ String get id; DateTime get day; String get mealSlotId; DiaryReferenceKind get referenceKind; String get label; String? get referenceId; Quantity get quantity; Nutrients get nutrients; DateTime get loggedAt;
 /// Create a copy of DiaryEntry
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $DiaryEntryCopyWith<DiaryEntry> get copyWith => _$DiaryEntryCopyWithImpl<DiaryEn
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DiaryEntry&&(identical(other.id, id) || other.id == id)&&(identical(other.day, day) || other.day == day)&&(identical(other.mealSlotId, mealSlotId) || other.mealSlotId == mealSlotId)&&(identical(other.referenceKind, referenceKind) || other.referenceKind == referenceKind)&&(identical(other.referenceId, referenceId) || other.referenceId == referenceId)&&(identical(other.label, label) || other.label == label)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.nutrients, nutrients) || other.nutrients == nutrients)&&(identical(other.loggedAt, loggedAt) || other.loggedAt == loggedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DiaryEntry&&(identical(other.id, id) || other.id == id)&&(identical(other.day, day) || other.day == day)&&(identical(other.mealSlotId, mealSlotId) || other.mealSlotId == mealSlotId)&&(identical(other.referenceKind, referenceKind) || other.referenceKind == referenceKind)&&(identical(other.label, label) || other.label == label)&&(identical(other.referenceId, referenceId) || other.referenceId == referenceId)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.nutrients, nutrients) || other.nutrients == nutrients)&&(identical(other.loggedAt, loggedAt) || other.loggedAt == loggedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,day,mealSlotId,referenceKind,referenceId,label,quantity,nutrients,loggedAt);
+int get hashCode => Object.hash(runtimeType,id,day,mealSlotId,referenceKind,label,referenceId,quantity,nutrients,loggedAt);
 
 @override
 String toString() {
-  return 'DiaryEntry(id: $id, day: $day, mealSlotId: $mealSlotId, referenceKind: $referenceKind, referenceId: $referenceId, label: $label, quantity: $quantity, nutrients: $nutrients, loggedAt: $loggedAt)';
+  return 'DiaryEntry(id: $id, day: $day, mealSlotId: $mealSlotId, referenceKind: $referenceKind, label: $label, referenceId: $referenceId, quantity: $quantity, nutrients: $nutrients, loggedAt: $loggedAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $DiaryEntryCopyWith<$Res>  {
   factory $DiaryEntryCopyWith(DiaryEntry value, $Res Function(DiaryEntry) _then) = _$DiaryEntryCopyWithImpl;
 @useResult
 $Res call({
- String id, DateTime day, String mealSlotId, DiaryReferenceKind referenceKind, String referenceId, String label, Quantity quantity, Nutrients nutrients, DateTime loggedAt
+ String id, DateTime day, String mealSlotId, DiaryReferenceKind referenceKind, String label, String? referenceId, Quantity quantity, Nutrients nutrients, DateTime loggedAt
 });
 
 
@@ -65,15 +65,15 @@ class _$DiaryEntryCopyWithImpl<$Res>
 
 /// Create a copy of DiaryEntry
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? day = null,Object? mealSlotId = null,Object? referenceKind = null,Object? referenceId = null,Object? label = null,Object? quantity = null,Object? nutrients = null,Object? loggedAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? day = null,Object? mealSlotId = null,Object? referenceKind = null,Object? label = null,Object? referenceId = freezed,Object? quantity = null,Object? nutrients = null,Object? loggedAt = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,day: null == day ? _self.day : day // ignore: cast_nullable_to_non_nullable
 as DateTime,mealSlotId: null == mealSlotId ? _self.mealSlotId : mealSlotId // ignore: cast_nullable_to_non_nullable
 as String,referenceKind: null == referenceKind ? _self.referenceKind : referenceKind // ignore: cast_nullable_to_non_nullable
-as DiaryReferenceKind,referenceId: null == referenceId ? _self.referenceId : referenceId // ignore: cast_nullable_to_non_nullable
-as String,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
-as String,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
+as DiaryReferenceKind,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
+as String,referenceId: freezed == referenceId ? _self.referenceId : referenceId // ignore: cast_nullable_to_non_nullable
+as String?,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
 as Quantity,nutrients: null == nutrients ? _self.nutrients : nutrients // ignore: cast_nullable_to_non_nullable
 as Nutrients,loggedAt: null == loggedAt ? _self.loggedAt : loggedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,
@@ -179,10 +179,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  DateTime day,  String mealSlotId,  DiaryReferenceKind referenceKind,  String referenceId,  String label,  Quantity quantity,  Nutrients nutrients,  DateTime loggedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  DateTime day,  String mealSlotId,  DiaryReferenceKind referenceKind,  String label,  String? referenceId,  Quantity quantity,  Nutrients nutrients,  DateTime loggedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DiaryEntry() when $default != null:
-return $default(_that.id,_that.day,_that.mealSlotId,_that.referenceKind,_that.referenceId,_that.label,_that.quantity,_that.nutrients,_that.loggedAt);case _:
+return $default(_that.id,_that.day,_that.mealSlotId,_that.referenceKind,_that.label,_that.referenceId,_that.quantity,_that.nutrients,_that.loggedAt);case _:
   return orElse();
 
 }
@@ -200,10 +200,10 @@ return $default(_that.id,_that.day,_that.mealSlotId,_that.referenceKind,_that.re
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  DateTime day,  String mealSlotId,  DiaryReferenceKind referenceKind,  String referenceId,  String label,  Quantity quantity,  Nutrients nutrients,  DateTime loggedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  DateTime day,  String mealSlotId,  DiaryReferenceKind referenceKind,  String label,  String? referenceId,  Quantity quantity,  Nutrients nutrients,  DateTime loggedAt)  $default,) {final _that = this;
 switch (_that) {
 case _DiaryEntry():
-return $default(_that.id,_that.day,_that.mealSlotId,_that.referenceKind,_that.referenceId,_that.label,_that.quantity,_that.nutrients,_that.loggedAt);case _:
+return $default(_that.id,_that.day,_that.mealSlotId,_that.referenceKind,_that.label,_that.referenceId,_that.quantity,_that.nutrients,_that.loggedAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -220,10 +220,10 @@ return $default(_that.id,_that.day,_that.mealSlotId,_that.referenceKind,_that.re
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  DateTime day,  String mealSlotId,  DiaryReferenceKind referenceKind,  String referenceId,  String label,  Quantity quantity,  Nutrients nutrients,  DateTime loggedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  DateTime day,  String mealSlotId,  DiaryReferenceKind referenceKind,  String label,  String? referenceId,  Quantity quantity,  Nutrients nutrients,  DateTime loggedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _DiaryEntry() when $default != null:
-return $default(_that.id,_that.day,_that.mealSlotId,_that.referenceKind,_that.referenceId,_that.label,_that.quantity,_that.nutrients,_that.loggedAt);case _:
+return $default(_that.id,_that.day,_that.mealSlotId,_that.referenceKind,_that.label,_that.referenceId,_that.quantity,_that.nutrients,_that.loggedAt);case _:
   return null;
 
 }
@@ -235,15 +235,15 @@ return $default(_that.id,_that.day,_that.mealSlotId,_that.referenceKind,_that.re
 @JsonSerializable()
 
 class _DiaryEntry implements DiaryEntry {
-  const _DiaryEntry({required this.id, required this.day, required this.mealSlotId, required this.referenceKind, required this.referenceId, required this.label, required this.quantity, required this.nutrients, required this.loggedAt});
+  const _DiaryEntry({required this.id, required this.day, required this.mealSlotId, required this.referenceKind, required this.label, this.referenceId, required this.quantity, required this.nutrients, required this.loggedAt});
   factory _DiaryEntry.fromJson(Map<String, dynamic> json) => _$DiaryEntryFromJson(json);
 
 @override final  String id;
 @override final  DateTime day;
 @override final  String mealSlotId;
 @override final  DiaryReferenceKind referenceKind;
-@override final  String referenceId;
 @override final  String label;
+@override final  String? referenceId;
 @override final  Quantity quantity;
 @override final  Nutrients nutrients;
 @override final  DateTime loggedAt;
@@ -261,16 +261,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DiaryEntry&&(identical(other.id, id) || other.id == id)&&(identical(other.day, day) || other.day == day)&&(identical(other.mealSlotId, mealSlotId) || other.mealSlotId == mealSlotId)&&(identical(other.referenceKind, referenceKind) || other.referenceKind == referenceKind)&&(identical(other.referenceId, referenceId) || other.referenceId == referenceId)&&(identical(other.label, label) || other.label == label)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.nutrients, nutrients) || other.nutrients == nutrients)&&(identical(other.loggedAt, loggedAt) || other.loggedAt == loggedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DiaryEntry&&(identical(other.id, id) || other.id == id)&&(identical(other.day, day) || other.day == day)&&(identical(other.mealSlotId, mealSlotId) || other.mealSlotId == mealSlotId)&&(identical(other.referenceKind, referenceKind) || other.referenceKind == referenceKind)&&(identical(other.label, label) || other.label == label)&&(identical(other.referenceId, referenceId) || other.referenceId == referenceId)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.nutrients, nutrients) || other.nutrients == nutrients)&&(identical(other.loggedAt, loggedAt) || other.loggedAt == loggedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,day,mealSlotId,referenceKind,referenceId,label,quantity,nutrients,loggedAt);
+int get hashCode => Object.hash(runtimeType,id,day,mealSlotId,referenceKind,label,referenceId,quantity,nutrients,loggedAt);
 
 @override
 String toString() {
-  return 'DiaryEntry(id: $id, day: $day, mealSlotId: $mealSlotId, referenceKind: $referenceKind, referenceId: $referenceId, label: $label, quantity: $quantity, nutrients: $nutrients, loggedAt: $loggedAt)';
+  return 'DiaryEntry(id: $id, day: $day, mealSlotId: $mealSlotId, referenceKind: $referenceKind, label: $label, referenceId: $referenceId, quantity: $quantity, nutrients: $nutrients, loggedAt: $loggedAt)';
 }
 
 
@@ -281,7 +281,7 @@ abstract mixin class _$DiaryEntryCopyWith<$Res> implements $DiaryEntryCopyWith<$
   factory _$DiaryEntryCopyWith(_DiaryEntry value, $Res Function(_DiaryEntry) _then) = __$DiaryEntryCopyWithImpl;
 @override @useResult
 $Res call({
- String id, DateTime day, String mealSlotId, DiaryReferenceKind referenceKind, String referenceId, String label, Quantity quantity, Nutrients nutrients, DateTime loggedAt
+ String id, DateTime day, String mealSlotId, DiaryReferenceKind referenceKind, String label, String? referenceId, Quantity quantity, Nutrients nutrients, DateTime loggedAt
 });
 
 
@@ -298,15 +298,15 @@ class __$DiaryEntryCopyWithImpl<$Res>
 
 /// Create a copy of DiaryEntry
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? day = null,Object? mealSlotId = null,Object? referenceKind = null,Object? referenceId = null,Object? label = null,Object? quantity = null,Object? nutrients = null,Object? loggedAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? day = null,Object? mealSlotId = null,Object? referenceKind = null,Object? label = null,Object? referenceId = freezed,Object? quantity = null,Object? nutrients = null,Object? loggedAt = null,}) {
   return _then(_DiaryEntry(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,day: null == day ? _self.day : day // ignore: cast_nullable_to_non_nullable
 as DateTime,mealSlotId: null == mealSlotId ? _self.mealSlotId : mealSlotId // ignore: cast_nullable_to_non_nullable
 as String,referenceKind: null == referenceKind ? _self.referenceKind : referenceKind // ignore: cast_nullable_to_non_nullable
-as DiaryReferenceKind,referenceId: null == referenceId ? _self.referenceId : referenceId // ignore: cast_nullable_to_non_nullable
-as String,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
-as String,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
+as DiaryReferenceKind,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
+as String,referenceId: freezed == referenceId ? _self.referenceId : referenceId // ignore: cast_nullable_to_non_nullable
+as String?,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
 as Quantity,nutrients: null == nutrients ? _self.nutrients : nutrients // ignore: cast_nullable_to_non_nullable
 as Nutrients,loggedAt: null == loggedAt ? _self.loggedAt : loggedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,

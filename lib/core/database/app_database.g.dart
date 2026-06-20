@@ -1907,9 +1907,9 @@ class $DiaryEntriesTable extends DiaryEntries
   late final GeneratedColumn<String> referenceId = GeneratedColumn<String>(
     'reference_id',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _labelMeta = const VerificationMeta('label');
   @override
@@ -2010,8 +2010,6 @@ class $DiaryEntriesTable extends DiaryEntries
           _referenceIdMeta,
         ),
       );
-    } else if (isInserting) {
-      context.missing(_referenceIdMeta);
     }
     if (data.containsKey('label')) {
       context.handle(
@@ -2064,7 +2062,7 @@ class $DiaryEntriesTable extends DiaryEntries
       referenceId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}reference_id'],
-      )!,
+      ),
       label: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}label'],
@@ -2120,7 +2118,7 @@ class DiaryEntryRow extends DataClass implements Insertable<DiaryEntryRow> {
   final DateTime day;
   final String mealSlotId;
   final DiaryReferenceKind referenceKind;
-  final String referenceId;
+  final String? referenceId;
   final String label;
   final double quantityAmount;
   final QuantityMeasure quantityMeasure;
@@ -2131,7 +2129,7 @@ class DiaryEntryRow extends DataClass implements Insertable<DiaryEntryRow> {
     required this.day,
     required this.mealSlotId,
     required this.referenceKind,
-    required this.referenceId,
+    this.referenceId,
     required this.label,
     required this.quantityAmount,
     required this.quantityMeasure,
@@ -2151,7 +2149,9 @@ class DiaryEntryRow extends DataClass implements Insertable<DiaryEntryRow> {
         $DiaryEntriesTable.$converterreferenceKind.toSql(referenceKind),
       );
     }
-    map['reference_id'] = Variable<String>(referenceId);
+    if (!nullToAbsent || referenceId != null) {
+      map['reference_id'] = Variable<String>(referenceId);
+    }
     map['label'] = Variable<String>(label);
     map['quantity_amount'] = Variable<double>(quantityAmount);
     {
@@ -2178,7 +2178,9 @@ class DiaryEntryRow extends DataClass implements Insertable<DiaryEntryRow> {
       day: Value(day),
       mealSlotId: Value(mealSlotId),
       referenceKind: Value(referenceKind),
-      referenceId: Value(referenceId),
+      referenceId: referenceId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(referenceId),
       label: Value(label),
       quantityAmount: Value(quantityAmount),
       quantityMeasure: Value(quantityMeasure),
@@ -2199,7 +2201,7 @@ class DiaryEntryRow extends DataClass implements Insertable<DiaryEntryRow> {
       referenceKind: $DiaryEntriesTable.$converterreferenceKind.fromJson(
         serializer.fromJson<int>(json['referenceKind']),
       ),
-      referenceId: serializer.fromJson<String>(json['referenceId']),
+      referenceId: serializer.fromJson<String?>(json['referenceId']),
       label: serializer.fromJson<String>(json['label']),
       quantityAmount: serializer.fromJson<double>(json['quantityAmount']),
       quantityMeasure: $DiaryEntriesTable.$converterquantityMeasure.fromJson(
@@ -2219,7 +2221,7 @@ class DiaryEntryRow extends DataClass implements Insertable<DiaryEntryRow> {
       'referenceKind': serializer.toJson<int>(
         $DiaryEntriesTable.$converterreferenceKind.toJson(referenceKind),
       ),
-      'referenceId': serializer.toJson<String>(referenceId),
+      'referenceId': serializer.toJson<String?>(referenceId),
       'label': serializer.toJson<String>(label),
       'quantityAmount': serializer.toJson<double>(quantityAmount),
       'quantityMeasure': serializer.toJson<int>(
@@ -2235,7 +2237,7 @@ class DiaryEntryRow extends DataClass implements Insertable<DiaryEntryRow> {
     DateTime? day,
     String? mealSlotId,
     DiaryReferenceKind? referenceKind,
-    String? referenceId,
+    Value<String?> referenceId = const Value.absent(),
     String? label,
     double? quantityAmount,
     QuantityMeasure? quantityMeasure,
@@ -2246,7 +2248,7 @@ class DiaryEntryRow extends DataClass implements Insertable<DiaryEntryRow> {
     day: day ?? this.day,
     mealSlotId: mealSlotId ?? this.mealSlotId,
     referenceKind: referenceKind ?? this.referenceKind,
-    referenceId: referenceId ?? this.referenceId,
+    referenceId: referenceId.present ? referenceId.value : this.referenceId,
     label: label ?? this.label,
     quantityAmount: quantityAmount ?? this.quantityAmount,
     quantityMeasure: quantityMeasure ?? this.quantityMeasure,
@@ -2329,7 +2331,7 @@ class DiaryEntriesCompanion extends UpdateCompanion<DiaryEntryRow> {
   final Value<DateTime> day;
   final Value<String> mealSlotId;
   final Value<DiaryReferenceKind> referenceKind;
-  final Value<String> referenceId;
+  final Value<String?> referenceId;
   final Value<String> label;
   final Value<double> quantityAmount;
   final Value<QuantityMeasure> quantityMeasure;
@@ -2354,7 +2356,7 @@ class DiaryEntriesCompanion extends UpdateCompanion<DiaryEntryRow> {
     required DateTime day,
     required String mealSlotId,
     required DiaryReferenceKind referenceKind,
-    required String referenceId,
+    this.referenceId = const Value.absent(),
     required String label,
     required double quantityAmount,
     required QuantityMeasure quantityMeasure,
@@ -2365,7 +2367,6 @@ class DiaryEntriesCompanion extends UpdateCompanion<DiaryEntryRow> {
        day = Value(day),
        mealSlotId = Value(mealSlotId),
        referenceKind = Value(referenceKind),
-       referenceId = Value(referenceId),
        label = Value(label),
        quantityAmount = Value(quantityAmount),
        quantityMeasure = Value(quantityMeasure),
@@ -2404,7 +2405,7 @@ class DiaryEntriesCompanion extends UpdateCompanion<DiaryEntryRow> {
     Value<DateTime>? day,
     Value<String>? mealSlotId,
     Value<DiaryReferenceKind>? referenceKind,
-    Value<String>? referenceId,
+    Value<String?>? referenceId,
     Value<String>? label,
     Value<double>? quantityAmount,
     Value<QuantityMeasure>? quantityMeasure,
@@ -4394,7 +4395,7 @@ typedef $$DiaryEntriesTableCreateCompanionBuilder =
       required DateTime day,
       required String mealSlotId,
       required DiaryReferenceKind referenceKind,
-      required String referenceId,
+      Value<String?> referenceId,
       required String label,
       required double quantityAmount,
       required QuantityMeasure quantityMeasure,
@@ -4408,7 +4409,7 @@ typedef $$DiaryEntriesTableUpdateCompanionBuilder =
       Value<DateTime> day,
       Value<String> mealSlotId,
       Value<DiaryReferenceKind> referenceKind,
-      Value<String> referenceId,
+      Value<String?> referenceId,
       Value<String> label,
       Value<double> quantityAmount,
       Value<QuantityMeasure> quantityMeasure,
@@ -4702,7 +4703,7 @@ class $$DiaryEntriesTableTableManager
                 Value<DateTime> day = const Value.absent(),
                 Value<String> mealSlotId = const Value.absent(),
                 Value<DiaryReferenceKind> referenceKind = const Value.absent(),
-                Value<String> referenceId = const Value.absent(),
+                Value<String?> referenceId = const Value.absent(),
                 Value<String> label = const Value.absent(),
                 Value<double> quantityAmount = const Value.absent(),
                 Value<QuantityMeasure> quantityMeasure = const Value.absent(),
@@ -4728,7 +4729,7 @@ class $$DiaryEntriesTableTableManager
                 required DateTime day,
                 required String mealSlotId,
                 required DiaryReferenceKind referenceKind,
-                required String referenceId,
+                Value<String?> referenceId = const Value.absent(),
                 required String label,
                 required double quantityAmount,
                 required QuantityMeasure quantityMeasure,

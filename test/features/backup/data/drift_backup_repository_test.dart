@@ -128,7 +128,10 @@ void main() {
       );
       expect(await fresh.diary.allEntries(), await source.diary.allEntries());
       expect(await fresh.settings.load(), await source.settings.load());
-      // The re-exported document is byte-for-byte identical.
+      // The re-exported JSON map is deeply equal (Map.== compares recursively
+      // in Dart). This assertion uses integer-only test data so floating-point
+      // round-trip precision is not a concern here -- if real doubles were
+      // involved a tolerance-aware matcher would be needed.
       expect(await fresh.backup.export(), exported);
     },
   );
@@ -169,11 +172,28 @@ void main() {
   test(
     'rejects a malformed document and leaves the store untouched (FR-006)',
     () async {
-      expect(
-        () => source.backup.import({'version': 'not-a-number'}),
+      await expectLater(
+        source.backup.import({'version': 'not-a-number'}),
         throwsA(isA<BackupFormatException>()),
       );
 
+      expect(await source.foods.allFoods(), hasLength(2));
+      expect(await source.diary.allEntries(), hasLength(1));
+    },
+  );
+
+  test(
+    'synchronous parse errors are rejected as the Future, not thrown',
+    () async {
+      // After the async fix, BackupFormatException from fromJson surfaces as a
+      // Future rejection, not a synchronous throw -- this enables .catchError()
+      // chaining and uniform error handling for all callers.
+      var caught = false;
+      await source.backup.import({'version': 999}).catchError((_) {
+        caught = true;
+      });
+      expect(caught, isTrue);
+      // The store was never touched (FR-006).
       expect(await source.foods.allFoods(), hasLength(2));
       expect(await source.diary.allEntries(), hasLength(1));
     },

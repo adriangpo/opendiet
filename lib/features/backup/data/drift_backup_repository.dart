@@ -51,11 +51,11 @@ class DriftBackupRepository implements BackupRepository {
   }
 
   @override
-  Future<void> import(Map<String, dynamic> json) {
+  Future<void> import(Map<String, dynamic> json) async {
     // Parse and validate the whole document before touching the store, so a
     // malformed backup is rejected without any write (FR-006).
     final document = BackupDocument.fromJson(json);
-    return _database.transaction(() async {
+    await _database.transaction(() async {
       await _wipe();
       // Insert in dependency order: a recipe ingredient references a food and a
       // diary entry references a meal slot, so parents land before children.

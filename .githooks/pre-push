@@ -6,7 +6,7 @@ set -e
 # IDEs and git GUIs invoke hooks without sourcing the user's shell profile, so
 # tool dirs like the Flutter SDK are absent from PATH and dart/flutter fail to
 # resolve. Recover the SDK from common locations (override with FLUTTER_ROOT).
-if ! command -v flutter >/dev/null 2>&1; then
+if ! command -v flutter >/dev/null 2>&1 || ! command -v dart >/dev/null 2>&1; then
   for candidate in \
     "$FLUTTER_ROOT/bin" \
     "$HOME/flutter/bin" \

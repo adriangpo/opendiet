@@ -65,7 +65,5 @@
   "foodErrorInvalidValue": "Digite números válidos e não negativos",
   "quantityFieldAmount": "Quantidade",
   "quantityUnitServings": "porções",
-  "unitMilliliter": "ml",
-  "unitOunce": "oz",
-  "unitFluidOunce": "fl oz"
+  "unitMilliliter": "ml"
 }

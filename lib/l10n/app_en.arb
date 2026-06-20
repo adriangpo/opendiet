@@ -173,9 +173,5 @@
   "quantityUnitServings": "servings",
   "@quantityUnitServings": { "description": "Quantity-field unit toggle option for counting the food's own servings (FR-003)." },
   "unitMilliliter": "ml",
-  "@unitMilliliter": { "description": "Abbreviation for the milliliter, the metric volume display unit." },
-  "unitOunce": "oz",
-  "@unitOunce": { "description": "Abbreviation for the avoirdupois ounce, the imperial mass display unit." },
-  "unitFluidOunce": "fl oz",
-  "@unitFluidOunce": { "description": "Abbreviation for the US fluid ounce, the imperial volume display unit." }
+  "@unitMilliliter": { "description": "Abbreviation for the milliliter, the metric volume display unit." }
 }

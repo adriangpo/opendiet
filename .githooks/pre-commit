@@ -1,0 +1,56 @@
+#!/usr/bin/env sh
+# OpenDiet pre-commit lint gate. Auto-formats, then analyzes; pre-push adds tests.
+set -e
+
+if ! command -v flutter >/dev/null 2>&1 || ! command -v dart >/dev/null 2>&1; then
+  for candidate in \
+    "$FLUTTER_ROOT/bin" \
+    "$HOME/flutter/bin" \
+    "$HOME/fvm/default/bin" \
+    "$HOME/development/flutter/bin" \
+    "$HOME/.asdf/shims" \
+    "/opt/flutter/bin" \
+    "/usr/local/flutter/bin"; do
+    if [ -x "$candidate/flutter" ]; then
+      PATH="$candidate:$PATH"
+      export PATH
+      break
+    fi
+  done
+fi
+
+# Resolve the Flutter SDK root after PATH discovery, so non-interactive hooks
+# can read the SDK version from bin/cache/flutter.version.json.
+if [ -z "$FLUTTER_ROOT" ]; then
+  resolved_flutter="$(command -v flutter)" && [ -n "$resolved_flutter" ] && {
+    FLUTTER_ROOT="$(dirname "$(dirname "$resolved_flutter")")"
+    export FLUTTER_ROOT
+  }
+fi
+
+run_without_git_environment() {
+  git_environment_variables="$(git rev-parse --local-env-vars 2>/dev/null || :)"
+  for variable in $git_environment_variables; do
+    unset "$variable"
+  done
+
+  "$@"
+}
+
+for tool in dart flutter; do
+  if ! command -v "$tool" >/dev/null 2>&1; then
+    echo "[pre-commit] $tool not found on PATH." >&2
+    exit 1
+  fi
+done
+
+echo "[pre-commit] dart format ."
+dart format --output=none .
+
+echo "[pre-commit] git add -u (stage formatting fixes)"
+git add -u
+
+echo "[pre-commit] flutter analyze"
+run_without_git_environment flutter analyze
+
+echo "[pre-commit] OK"

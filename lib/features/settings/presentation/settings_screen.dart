@@ -50,6 +50,12 @@ class _SettingsList extends ConsumerWidget {
           onTap: () => context.push('/settings/target'),
         ),
         ListTile(
+          title: Text(l10n.settingsReminders),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => context.push('/settings/reminders'),
+        ),
+        const Divider(),
+        ListTile(
           title: Text(l10n.settingsUnitSystem),
           subtitle: SegmentedButton<UnitSystem>(
             segments: [

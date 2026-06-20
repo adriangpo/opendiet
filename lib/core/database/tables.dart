@@ -92,6 +92,22 @@ class DiaryEntries extends Table {
   Set<Column<Object>> get primaryKey => {id};
 }
 
+/// Mealtime reminders; each has a time, an enabled flag, and an optional
+/// reference to a meal slot (FR-020).
+@DataClassName('ReminderRow')
+class Reminders extends Table {
+  TextColumn get id => text()();
+  IntColumn get hour => integer()();
+  IntColumn get minute => integer()();
+  BoolColumn get enabled => boolean()();
+  TextColumn get mealSlotId => text()
+      .references(MealSlots, #id, onDelete: KeyAction.setNull)
+      .nullable()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
 /// The single profile's settings; pinned to one row (FR-022, FR-024, FR-027).
 @DataClassName('AppSettingsRow')
 class AppSettingsRows extends Table {

@@ -20,10 +20,10 @@ OpenDiet shall deliver a local notification at each configured reminder time.
 
 ## Acceptance Criteria
 
-- [ ] A local notification fires at each enabled reminder time without the app being open.
-- [ ] Disabled or removed reminders do not fire.
-- [ ] Reminders use only on-device notification scheduling (no remote/push service).
-- [ ] Denied notification permission is handled with a clear in-app explanation.
+- [x] A local notification fires at each enabled reminder time without the app being open.
+- [x] Disabled or removed reminders do not fire.
+- [x] Reminders use only on-device notification scheduling (no remote/push service).
+- [x] Denied notification permission is handled with a clear in-app explanation.
 
 ## Implementation Notes
 

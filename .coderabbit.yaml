@@ -1,0 +1,50 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: en-US
+early_access: false
+reviews:
+  profile: chill
+  request_changes_workflow: false
+
+  # --- Turn off everything that isn't the actual line-by-line review ---
+  high_level_summary: false      # no PR summary
+  changed_files_summary: false   # no "changed files" table
+  sequence_diagrams: false       # no diagrams
+  poem: false                    # no poem
+  review_status: false           # no review-status comment
+  collapse_walkthrough: true     # collapse the walkthrough section
+  related_prs: false
+  related_issues: false
+  suggested_labels: false
+  suggested_reviewers: false
+
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - development
+      - main
+
+  path_filters:
+    - "!**/*.g.dart"
+    - "!**/*.freezed.dart"
+    - "!**/*.mocks.dart"
+    - "!**/generated_plugin_registrant.dart"
+    - "!**/l10n/app_localizations*.dart"
+    - "!build/**"
+    - "!.dart_tool/**"
+
+  path_instructions:
+    - path: "lib/**/*.dart"
+      instructions: >-
+        Follow Dart/Flutter effective style. Flag widgets missing const
+        constructors, unhandled Future/async errors, and BuildContext used
+        across async gaps. Prefer immutable models and explicit types on
+        public APIs.
+    - path: "test/**/*.dart"
+      instructions: >-
+        Ensure tests are deterministic and cover edge cases. Flag missing
+        assertions and overly broad mocks.
+
+# Don't auto-reply in chat threads; only review on PRs.
+chat:
+  auto_reply: false

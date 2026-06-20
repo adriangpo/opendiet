@@ -19,9 +19,7 @@ class OpenDietApp extends StatelessWidget {
       title: 'OpenDiet',
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: _seed),
-      ),
+      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: _seed)),
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: _seed,
@@ -45,9 +43,7 @@ class HomePage extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(title: const Text('OpenDiet')),
-      body: Center(
-        child: Text(l10n.appTagline),
-      ),
+      body: Center(child: Text(l10n.appTagline)),
     );
   }
 }

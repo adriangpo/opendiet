@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:opendiet/features/diary/domain/meal_slot.dart' show MealSlot;
 
 part 'reminder.freezed.dart';
 part 'reminder.g.dart';

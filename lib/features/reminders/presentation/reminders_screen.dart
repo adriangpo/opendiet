@@ -20,9 +20,7 @@ class RemindersScreen extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.remindersTitle)),
       body: remindersAsync.when(
         data: (reminders) => _RemindersBody(reminders: reminders),
-        error: (error, stack) => Center(
-          child: Text(l10n.remindersLoadError),
-        ),
+        error: (error, stack) => Center(child: Text(l10n.remindersLoadError)),
         loading: () => const Center(child: CircularProgressIndicator()),
       ),
     );
@@ -150,8 +148,9 @@ class _ReminderList extends ConsumerWidget {
       itemCount: reminders.length,
       itemBuilder: (context, index) {
         final reminder = reminders[index];
-        final timeText =
-            '${reminder.hour.toString().padLeft(2, '0')}:${reminder.minute.toString().padLeft(2, '0')}';
+        final hour = reminder.hour.toString().padLeft(2, '0');
+        final minute = reminder.minute.toString().padLeft(2, '0');
+        final timeText = '$hour:$minute';
 
         return ListTile(
           leading: Icon(

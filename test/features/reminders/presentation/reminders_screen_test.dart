@@ -26,10 +26,10 @@ Future<void> pumpRemindersScreen(
         reminderRepositoryProvider.overrideWithValue(repo),
         notificationServiceProvider.overrideWithValue(notif),
       ],
-      child: MaterialApp(
+      child: const MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: const RemindersScreen(),
+        home: RemindersScreen(),
       ),
     ),
   );
@@ -86,34 +86,33 @@ void main() {
       expect(find.text('+ Add reminder'), findsOneWidget);
     });
 
-    testWidgets(
-      'removing a reminder shows confirmation then deletes',
-      (tester) async {
-        final repository = FakeReminderRepository();
-        await repository.saveReminder(
-          const Reminder(id: '1', hour: 8, minute: 0, enabled: true),
-        );
-        await repository.saveReminder(
-          const Reminder(id: '2', hour: 13, minute: 0, enabled: true),
-        );
+    testWidgets('removing a reminder shows confirmation then deletes', (
+      tester,
+    ) async {
+      final repository = FakeReminderRepository();
+      await repository.saveReminder(
+        const Reminder(id: '1', hour: 8, minute: 0, enabled: true),
+      );
+      await repository.saveReminder(
+        const Reminder(id: '2', hour: 13, minute: 0, enabled: true),
+      );
 
-        await pumpRemindersScreen(tester, repository: repository);
+      await pumpRemindersScreen(tester, repository: repository);
 
-        final deleteButtons = find.byIcon(Icons.delete);
-        expect(deleteButtons, findsNWidgets(2));
+      final deleteButtons = find.byIcon(Icons.delete);
+      expect(deleteButtons, findsNWidgets(2));
 
-        await tester.tap(deleteButtons.first);
-        await tester.pump();
-        await tester.pump();
+      await tester.tap(deleteButtons.first);
+      await tester.pump();
+      await tester.pump();
 
-        expect(find.text('Remove reminder?'), findsOneWidget);
-        await tester.tap(find.text('Remove'));
-        await tester.pump();
-        await tester.pump();
+      expect(find.text('Remove reminder?'), findsOneWidget);
+      await tester.tap(find.text('Remove'));
+      await tester.pump();
+      await tester.pump();
 
-        final reminders = await repository.allReminders();
-        expect(reminders, hasLength(1));
-      },
-    );
+      final reminders = await repository.allReminders();
+      expect(reminders, hasLength(1));
+    });
   });
 }

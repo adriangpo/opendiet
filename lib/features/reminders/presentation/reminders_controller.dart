@@ -30,7 +30,7 @@ class RemindersController extends _$RemindersController {
     await _schedule(reminder);
   }
 
-  /// Toggles the [enabled] state of the reminder identified by [id].
+  /// Toggles the enabled state of the reminder identified by [id].
   Future<void> toggleReminder(String id) async {
     final reminders = await future;
     final index = reminders.indexWhere((r) => r.id == id);
@@ -52,9 +52,7 @@ class RemindersController extends _$RemindersController {
     final notificationService = ref.read(notificationServiceProvider);
     await repository.deleteReminder(id);
     await notificationService.cancelNotification(id);
-    state = AsyncData(
-      (await repository.allReminders()).toList(),
-    );
+    state = AsyncData((await repository.allReminders()).toList());
   }
 
   Future<void> _save(Reminder reminder) async {

@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:drift/native.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:opendiet/core/database/app_database.dart';
 import 'package:opendiet/features/reminders/data/drift_reminder_repository.dart';
 import 'package:opendiet/features/reminders/domain/reminder.dart';
@@ -32,7 +32,7 @@ void main() {
     });
 
     test('saves and retrieves a reminder', () async {
-      final reminder = const Reminder(
+      const reminder = Reminder(
         id: 'test-1',
         hour: 8,
         minute: 0,

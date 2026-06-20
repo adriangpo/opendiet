@@ -4,12 +4,7 @@ import 'package:opendiet/features/reminders/domain/reminder.dart';
 void main() {
   group('Reminder entity', () {
     test('creates with all required fields', () {
-      const reminder = Reminder(
-        id: 'id-1',
-        hour: 8,
-        minute: 0,
-        enabled: true,
-      );
+      const reminder = Reminder(id: 'id-1', hour: 8, minute: 0, enabled: true);
 
       expect(reminder.id, 'id-1');
       expect(reminder.hour, 8);

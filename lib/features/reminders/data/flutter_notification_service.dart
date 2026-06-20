@@ -1,8 +1,8 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:opendiet/features/reminders/domain/notification_service.dart';
 import 'package:opendiet/features/reminders/domain/reminder.dart';
-import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz_data;
+import 'package:timezone/timezone.dart' as tz;
 
 /// A [NotificationService] that uses [FlutterLocalNotificationsPlugin] to
 /// schedule on-device reminders (FR-021).
@@ -58,7 +58,6 @@ class FlutterNotificationService implements NotificationService {
     if (ios != null) {
       final result = await ios.requestPermissions(
         alert: true,
-        badge: false,
         sound: true,
       );
       return result ?? false;
@@ -104,8 +103,6 @@ class FlutterNotificationService implements NotificationService {
       _channelId,
       _channelName,
       channelDescription: _channelDescription,
-      importance: Importance.defaultImportance,
-      priority: Priority.defaultPriority,
     );
     const iosDetails = DarwinNotificationDetails();
     const details = NotificationDetails(

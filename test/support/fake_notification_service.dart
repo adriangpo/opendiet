@@ -5,19 +5,14 @@ import 'package:opendiet/features/reminders/domain/reminder.dart';
 class FakeNotificationService implements NotificationService {
   final List<String> scheduledIds = [];
   final List<String> cancelledIds = [];
-  bool _permissionGranted = true;
 
-  bool get permissionGranted => _permissionGranted;
-
-  set permissionGranted(bool granted) {
-    _permissionGranted = granted;
-  }
+  bool permissionGranted = true;
 
   @override
-  Future<bool> requestPermissions() async => _permissionGranted;
+  Future<bool> requestPermissions() async => permissionGranted;
 
   @override
-  Future<bool> checkPermissions() async => _permissionGranted;
+  Future<bool> checkPermissions() async => permissionGranted;
 
   @override
   Future<void> scheduleNotification(Reminder reminder) async {

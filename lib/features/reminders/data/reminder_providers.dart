@@ -17,6 +17,6 @@ ReminderRepository reminderRepository(Ref ref) =>
 @Riverpod(keepAlive: true)
 NotificationService notificationService(Ref ref) {
   final service = FlutterNotificationService(FlutterLocalNotificationsPlugin());
-  ref.onDispose(() => service.cancelAll());
+  ref.onDispose(service.cancelAll);
   return service;
 }

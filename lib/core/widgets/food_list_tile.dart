@@ -69,11 +69,19 @@ class FoodListTile extends StatelessWidget {
   /// An absent value reads blank (a dash), never zero (FR-026 keeps
   /// "not informed" distinct from a real zero).
   String _energyLabel() {
-    final energy = FoodNutrition.per100(food).energyKcal;
-    if (energy == null) return '--';
-    return energy == energy.roundToDouble()
-        ? energy.toInt().toString()
-        : energy.toStringAsFixed(1);
+    if (food.basis == NutrientBasis.perServing) {
+      final size = food.servingSizeMetric;
+      if (size == null || size <= 0) return '--';
+    }
+    try {
+      final energy = FoodNutrition.per100(food).energyKcal;
+      if (energy == null) return '--';
+      return energy == energy.roundToDouble()
+          ? energy.toInt().toString()
+          : energy.toStringAsFixed(1);
+    } on ArgumentError {
+      return '--';
+    }
   }
 
   /// The g/ml abbreviation the per-100 value is expressed in.

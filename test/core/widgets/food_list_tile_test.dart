@@ -115,6 +115,42 @@ void main() {
     expect(find.text('180 kcal / 100 g'), findsOneWidget);
   });
 
+  testWidgets('a per-serving food with milliliter unit shows ml basis', (
+    tester,
+  ) async {
+    await _pumpTile(
+      tester,
+      FoodListTile(
+        food: _food(
+          basis: NutrientBasis.perServing,
+          nutrients: const Nutrients(energyKcal: 90),
+          servingSizeMetric: 50,
+          servingUnit: ServingUnit.milliliter,
+        ),
+        onAction: () {},
+      ),
+    );
+
+    expect(find.text('180 kcal / 100 ml'), findsOneWidget);
+  });
+
+  testWidgets('a per-serving food without serving size shows --', (
+    tester,
+  ) async {
+    await _pumpTile(
+      tester,
+      FoodListTile(
+        food: _food(
+          basis: NutrientBasis.perServing,
+          nutrients: const Nutrients(energyKcal: 90),
+        ),
+        onAction: () {},
+      ),
+    );
+
+    expect(find.text('-- kcal / 100 g'), findsOneWidget);
+  });
+
   testWidgets('a non-integer energy keeps one decimal place', (tester) async {
     await _pumpTile(
       tester,

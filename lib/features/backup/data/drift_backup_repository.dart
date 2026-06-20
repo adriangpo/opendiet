@@ -15,14 +15,14 @@ import 'package:opendiet/features/settings/domain/settings_repository.dart';
 /// restore back -- the wipe included -- and previously committed data survives
 /// (FR-006, NFR-004).
 class DriftBackupRepository implements BackupRepository {
-  /// Creates a repository over [database] and the feature repositories.
+  /// Creates a repository over database and the feature repositories.
   DriftBackupRepository({
-    required AppDatabase this._database,
-    required FoodRepository this._foods,
-    required RecipeRepository this._recipes,
-    required MealSlotRepository this._mealSlots,
-    required DiaryRepository this._diary,
-    required SettingsRepository this._settings,
+    required this._database,
+    required this._foods,
+    required this._recipes,
+    required this._mealSlots,
+    required this._diary,
+    required this._settings,
   });
 
   final AppDatabase _database;

@@ -5,51 +5,97 @@
     "description": "Short tagline shown on the landing screen. The brand name OpenDiet is not translated."
   },
   "navDiary": "Diary",
-  "@navDiary": { "description": "Bottom navigation label for the diary tab." },
+  "@navDiary": {
+    "description": "Bottom navigation label for the diary tab."
+  },
   "navFoods": "Foods",
-  "@navFoods": { "description": "Bottom navigation label for the foods tab." },
+  "@navFoods": {
+    "description": "Bottom navigation label for the foods tab."
+  },
   "navRecipes": "Recipes",
-  "@navRecipes": { "description": "Bottom navigation label for the recipes tab." },
+  "@navRecipes": {
+    "description": "Bottom navigation label for the recipes tab."
+  },
   "navSettings": "Settings",
-  "@navSettings": { "description": "Bottom navigation label for the settings tab." },
+  "@navSettings": {
+    "description": "Bottom navigation label for the settings tab."
+  },
   "diaryTitle": "Diary",
-  "@diaryTitle": { "description": "Title of the diary screen." },
+  "@diaryTitle": {
+    "description": "Title of the diary screen."
+  },
   "diaryEmptyMessage": "No entries yet. Log a food to start your day.",
-  "@diaryEmptyMessage": { "description": "Empty state on the diary when a day has no entries." },
+  "@diaryEmptyMessage": {
+    "description": "Empty state on the diary when a day has no entries."
+  },
   "foodsTitle": "Foods",
-  "@foodsTitle": { "description": "Title of the foods catalog screen." },
+  "@foodsTitle": {
+    "description": "Title of the foods catalog screen."
+  },
   "foodsEmptyMessage": "No foods yet. Create a custom food or import a list.",
-  "@foodsEmptyMessage": { "description": "Empty state on the foods catalog." },
+  "@foodsEmptyMessage": {
+    "description": "Empty state on the foods catalog."
+  },
   "recipesTitle": "Recipes",
-  "@recipesTitle": { "description": "Title of the recipes screen." },
+  "@recipesTitle": {
+    "description": "Title of the recipes screen."
+  },
   "recipesEmptyMessage": "No recipes yet. Build one from your foods.",
-  "@recipesEmptyMessage": { "description": "Empty state on the recipes list." },
+  "@recipesEmptyMessage": {
+    "description": "Empty state on the recipes list."
+  },
   "settingsTitle": "Settings",
-  "@settingsTitle": { "description": "Title of the settings screen." },
+  "@settingsTitle": {
+    "description": "Title of the settings screen."
+  },
   "settingsUnitSystem": "Unit system",
-  "@settingsUnitSystem": { "description": "Label for the metric/imperial unit-system setting." },
+  "@settingsUnitSystem": {
+    "description": "Label for the metric/imperial unit-system setting."
+  },
   "unitSystemMetric": "Metric",
-  "@unitSystemMetric": { "description": "Metric unit system option (grams, milliliters)." },
+  "@unitSystemMetric": {
+    "description": "Metric unit system option (grams, milliliters)."
+  },
   "unitSystemImperial": "Imperial",
-  "@unitSystemImperial": { "description": "Imperial unit system option (ounces, fluid ounces)." },
+  "@unitSystemImperial": {
+    "description": "Imperial unit system option (ounces, fluid ounces)."
+  },
   "settingsVdRegion": "%VD reference",
-  "@settingsVdRegion": { "description": "Label for the percent-daily-value reference region setting." },
+  "@settingsVdRegion": {
+    "description": "Label for the percent-daily-value reference region setting."
+  },
   "vdRegionBrazil": "Brazil",
-  "@vdRegionBrazil": { "description": "Brazil %VD reference region (ANVISA)." },
+  "@vdRegionBrazil": {
+    "description": "Brazil %VD reference region (ANVISA)."
+  },
   "vdRegionUnitedStates": "United States",
-  "@vdRegionUnitedStates": { "description": "United States %VD reference region (FDA)." },
+  "@vdRegionUnitedStates": {
+    "description": "United States %VD reference region (FDA)."
+  },
   "vdRegionEuropeanUnion": "European Union",
-  "@vdRegionEuropeanUnion": { "description": "European Union %VD reference region." },
+  "@vdRegionEuropeanUnion": {
+    "description": "European Union %VD reference region."
+  },
   "settingsLoadError": "Could not load settings.",
-  "@settingsLoadError": { "description": "Shown when settings fail to load." },
+  "@settingsLoadError": {
+    "description": "Shown when settings fail to load."
+  },
   "mealBreakfast": "Breakfast",
-  "@mealBreakfast": { "description": "Default meal-slot name for the morning meal." },
+  "@mealBreakfast": {
+    "description": "Default meal-slot name for the morning meal."
+  },
   "mealLunch": "Lunch",
-  "@mealLunch": { "description": "Default meal-slot name for the midday meal." },
+  "@mealLunch": {
+    "description": "Default meal-slot name for the midday meal."
+  },
   "mealDinner": "Dinner",
-  "@mealDinner": { "description": "Default meal-slot name for the evening meal." },
+  "@mealDinner": {
+    "description": "Default meal-slot name for the evening meal."
+  },
   "mealSnacks": "Snacks",
-  "@mealSnacks": { "description": "Default meal-slot name for foods eaten outside meal times." },
+  "@mealSnacks": {
+    "description": "Default meal-slot name for foods eaten outside meal times."
+  },
   "foodEditorNewTitle": "New food",
   "foodEditorEditTitle": "Edit food",
   "foodFieldName": "Name",
@@ -78,26 +124,47 @@
   "unitGram": "g",
   "unitMilligram": "mg",
   "unitOunce": "oz",
-  "@unitOunce": { "description": "Abbreviation for the avoirdupois ounce, shown for imperial serving sizes." },
+  "@unitOunce": {
+    "description": "Abbreviation for the avoirdupois ounce, shown for imperial serving sizes."
+  },
   "unitFluidOunce": "fl oz",
-  "@unitFluidOunce": { "description": "Abbreviation for the US fluid ounce, shown for imperial liquid serving sizes." },
+  "@unitFluidOunce": {
+    "description": "Abbreviation for the US fluid ounce, shown for imperial liquid serving sizes."
+  },
   "nutritionTableTitle": "Nutrition facts",
-  "@nutritionTableTitle": { "description": "Heading of the ANVISA nutrition table (FR-026)." },
+  "@nutritionTableTitle": {
+    "description": "Heading of the ANVISA nutrition table (FR-026)."
+  },
   "nutritionTableHeaderPer100": "Per 100 {unit}",
   "@nutritionTableHeaderPer100": {
     "description": "Header of the per-100 column in the nutrition table; unit is g or ml.",
-    "placeholders": { "unit": { "type": "String", "example": "g" } }
+    "placeholders": {
+      "unit": {
+        "type": "String",
+        "example": "g"
+      }
+    }
   },
   "nutritionTableHeaderServing": "Per serving",
-  "@nutritionTableHeaderServing": { "description": "Header of the per-serving (porcao) column in the nutrition table." },
+  "@nutritionTableHeaderServing": {
+    "description": "Header of the per-serving (porcao) column in the nutrition table."
+  },
   "nutritionTablePercentVd": "%DV",
-  "@nutritionTablePercentVd": { "description": "Header of the percent-daily-value column in the nutrition table (%VD in pt-BR)." },
+  "@nutritionTablePercentVd": {
+    "description": "Header of the percent-daily-value column in the nutrition table (%VD in pt-BR)."
+  },
   "nutritionTableNotInformed": "Not informed",
-  "@nutritionTableNotInformed": { "description": "Shown for a nutrient the source did not provide; never rendered as zero." },
+  "@nutritionTableNotInformed": {
+    "description": "Shown for a nutrient the source did not provide; never rendered as zero."
+  },
   "foodEnergyAutoLabel": "Calculated from macros",
-  "@foodEnergyAutoLabel": { "description": "Accessible label/tooltip for the energy field when it is auto-calculated." },
+  "@foodEnergyAutoLabel": {
+    "description": "Accessible label/tooltip for the energy field when it is auto-calculated."
+  },
   "foodEnergyManualLabel": "Set manually -- tap to recalculate",
-  "@foodEnergyManualLabel": { "description": "Accessible label/tooltip for the energy field when the user owns the value; tapping reverts to auto." },
+  "@foodEnergyManualLabel": {
+    "description": "Accessible label/tooltip for the energy field when the user owns the value; tapping reverts to auto."
+  },
   "actionSave": "Save",
   "foodErrorNameRequired": "Enter a name",
   "foodErrorInvalidValue": "Enter valid, non-negative numbers"

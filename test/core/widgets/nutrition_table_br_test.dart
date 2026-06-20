@@ -9,12 +9,12 @@ import 'package:opendiet/features/foods/domain/food.dart';
 
 import '../../support/test_app.dart';
 
-/// A per-100 g food mirroring the S-07 wireframe; absent fields stay absent.
 Food _oats({
   double? servingSizeMetric = 25,
   String? householdMeasure = '2 colheres',
   NutrientBasis basis = NutrientBasis.per100g,
   Nutrients? nutrients,
+  ServingUnit servingUnit = ServingUnit.gram,
 }) {
   final fixedTime = DateTime.utc(2026);
   return Food(
@@ -36,14 +36,13 @@ Food _oats({
           sodiumMilligrams: 5,
         ),
     servingSizeMetric: servingSizeMetric,
-    servingUnit: ServingUnit.gram,
+    servingUnit: servingUnit,
     householdMeasure: householdMeasure,
     createdAt: fixedTime,
     updatedAt: fixedTime,
   );
 }
 
-/// Pumps [table] inside a scroll view, as the food-detail screen (S-07) does.
 Future<void> _pumpTable(WidgetTester tester, NutritionTableBR table) => pumpApp(
   tester,
   Scaffold(
@@ -70,7 +69,6 @@ void main() {
           unitSystem: UnitSystem.metric,
         ),
       );
-
       expect(find.text('Nutrition facts'), findsOneWidget);
       expect(find.text('Per 100 g'), findsOneWidget);
       expect(find.text('Per serving'), findsOneWidget);
@@ -88,11 +86,8 @@ void main() {
           unitSystem: UnitSystem.metric,
         ),
       );
-
       expect(_cell(tester, 'carbohydrates', 'per100'), '60 g');
-      // 60 g per 100 g scaled to a 25 g serving = 15 g.
       expect(_cell(tester, 'carbohydrates', 'perServing'), '15 g');
-      // 15 g / 300 g reference x 100 = 5%.
       expect(_cell(tester, 'carbohydrates', 'vd'), '5%');
     });
 
@@ -107,7 +102,6 @@ void main() {
           unitSystem: UnitSystem.metric,
         ),
       );
-
       expect(find.textContaining('2 colheres'), findsOneWidget);
     });
 
@@ -120,9 +114,7 @@ void main() {
           unitSystem: UnitSystem.metric,
         ),
       );
-
       expect(_cell(tester, 'transFat', 'per100'), '0.5 g');
-      // No region defines a trans-fat reference, so %VD is a dash, not 0%.
       expect(_cell(tester, 'transFat', 'vd'), '-');
     });
 
@@ -137,8 +129,6 @@ void main() {
           unitSystem: UnitSystem.metric,
         ),
       );
-
-      // Added sugars was never set on the fixture.
       expect(_cell(tester, 'addedSugars', 'per100'), 'Not informed');
       expect(_cell(tester, 'addedSugars', 'perServing'), 'Not informed');
       expect(_cell(tester, 'addedSugars', 'vd'), '-');
@@ -147,7 +137,6 @@ void main() {
     testWidgets('the %VD reference set follows the selected region', (
       tester,
     ) async {
-      // Brazil defines no total-sugars reference; the EU set does.
       await _pumpTable(
         tester,
         NutritionTableBR.forFood(
@@ -157,7 +146,6 @@ void main() {
         ),
       );
       expect(_cell(tester, 'totalSugars', 'vd'), '-');
-
       await _pumpTable(
         tester,
         NutritionTableBR.forFood(
@@ -166,7 +154,6 @@ void main() {
           unitSystem: UnitSystem.metric,
         ),
       );
-      // 0.25 g per serving / 90 g EU reference rounds to 0%.
       expect(_cell(tester, 'totalSugars', 'vd'), '0%');
     });
 
@@ -181,7 +168,6 @@ void main() {
           unitSystem: UnitSystem.metric,
         ),
       );
-
       expect(_cell(tester, 'carbohydrates', 'per100'), '60 g');
       expect(_cell(tester, 'carbohydrates', 'perServing'), 'Not informed');
       expect(_cell(tester, 'carbohydrates', 'vd'), '-');
@@ -201,8 +187,6 @@ void main() {
           unitSystem: UnitSystem.metric,
         ),
       );
-
-      // 15 g per 25 g serving scales up to 60 g per 100 g.
       expect(_cell(tester, 'carbohydrates', 'per100'), '60 g');
       expect(_cell(tester, 'carbohydrates', 'perServing'), '15 g');
     });
@@ -218,9 +202,60 @@ void main() {
           unitSystem: UnitSystem.imperial,
         ),
       );
-
-      // 25 g is about 0.9 oz; nutrient amounts stay in grams.
       expect(find.textContaining('0.9 oz'), findsOneWidget);
+    });
+
+    testWidgets('a per-serving liquid food shows ml basis', (tester) async {
+      await _pumpTable(
+        tester,
+        NutritionTableBR.forFood(
+          food: _oats(
+            basis: NutrientBasis.perServing,
+            servingUnit: ServingUnit.milliliter,
+            nutrients: const Nutrients(energyKcal: 100),
+          ),
+          vdRegion: VdRegion.brazil,
+          unitSystem: UnitSystem.metric,
+        ),
+      );
+      expect(find.text('Per 100 ml'), findsOneWidget);
+    });
+
+    testWidgets('US region uses different dietaryFiber reference than Brazil', (
+      tester,
+    ) async {
+      await _pumpTable(
+        tester,
+        NutritionTableBR.forFood(
+          food: _oats(),
+          vdRegion: VdRegion.unitedStates,
+          unitSystem: UnitSystem.metric,
+        ),
+      );
+      expect(_cell(tester, 'dietaryFiber', 'vd'), '9%');
+    });
+
+    testWidgets('addedSugars %VD present for Brazil and US but absent for EU', (
+      tester,
+    ) async {
+      await _pumpTable(
+        tester,
+        NutritionTableBR.forFood(
+          food: _oats(nutrients: const Nutrients(addedSugars: 20)),
+          vdRegion: VdRegion.brazil,
+          unitSystem: UnitSystem.metric,
+        ),
+      );
+      expect(_cell(tester, 'addedSugars', 'vd'), '10%');
+      await _pumpTable(
+        tester,
+        NutritionTableBR.forFood(
+          food: _oats(nutrients: const Nutrients(addedSugars: 20)),
+          vdRegion: VdRegion.europeanUnion,
+          unitSystem: UnitSystem.metric,
+        ),
+      );
+      expect(_cell(tester, 'addedSugars', 'vd'), '-');
     });
   });
 }

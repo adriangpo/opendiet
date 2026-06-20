@@ -16,9 +16,7 @@ void main() {
     }) => pumpApp(
       tester,
       const DailyTargetScreen(),
-      overrides: [
-        settingsRepositoryProvider.overrideWithValue(repository),
-      ],
+      overrides: [settingsRepositoryProvider.overrideWithValue(repository)],
     );
 
     testWidgets('renders energy, protein, carbs, fat fields', (tester) async {
@@ -26,10 +24,7 @@ void main() {
 
       expect(find.byKey(const Key('field-energy')), findsOneWidget);
       expect(find.byKey(const Key('field-protein')), findsOneWidget);
-      expect(
-        find.byKey(const Key('field-carbohydrates')),
-        findsOneWidget,
-      );
+      expect(find.byKey(const Key('field-carbohydrates')), findsOneWidget);
       expect(find.byKey(const Key('field-totalFat')), findsOneWidget);
       expect(find.byKey(const Key('field-sodium')), findsOneWidget);
       expect(find.byKey(const Key('field-dietaryFiber')), findsOneWidget);
@@ -86,22 +81,13 @@ void main() {
       final repository = FakeSettingsRepository();
       await pumpScreen(tester, repository: repository);
 
-      await tester.enterText(
-        find.byKey(const Key('field-energy')),
-        '1800',
-      );
-      await tester.enterText(
-        find.byKey(const Key('field-protein')),
-        '100',
-      );
+      await tester.enterText(find.byKey(const Key('field-energy')), '1800');
+      await tester.enterText(find.byKey(const Key('field-protein')), '100');
       await tester.enterText(
         find.byKey(const Key('field-carbohydrates')),
         '200',
       );
-      await tester.enterText(
-        find.byKey(const Key('field-totalFat')),
-        '60',
-      );
+      await tester.enterText(find.byKey(const Key('field-totalFat')), '60');
       await tester.tap(find.text('Save'));
       await tester.pumpAndSettle();
 
@@ -130,10 +116,7 @@ void main() {
       final repository = FakeSettingsRepository();
       await pumpScreen(tester, repository: repository);
 
-      await tester.enterText(
-        find.byKey(const Key('field-energy')),
-        '-100',
-      );
+      await tester.enterText(find.byKey(const Key('field-energy')), '-100');
       await tester.tap(find.text('Save'));
       await tester.pump();
 

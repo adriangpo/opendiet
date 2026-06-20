@@ -45,9 +45,7 @@ class _SettingsList extends ConsumerWidget {
       children: [
         ListTile(
           title: Text(l10n.settingsDailyTarget),
-          subtitle: Text(
-            _dailyTargetSubtitle(l10n, settings.dailyTarget),
-          ),
+          subtitle: Text(_dailyTargetSubtitle(l10n, settings.dailyTarget)),
           trailing: const Icon(Icons.chevron_right),
           onTap: () => context.push('/settings/target'),
         ),
@@ -97,10 +95,7 @@ class _SettingsList extends ConsumerWidget {
     );
   }
 
-  String _dailyTargetSubtitle(
-    AppLocalizations l10n,
-    Nutrients? target,
-  ) {
+  String _dailyTargetSubtitle(AppLocalizations l10n, Nutrients? target) {
     if (target == null) return l10n.settingsDailyTargetNone;
     final parts = <String>[];
     if (target.energyKcal != null) {

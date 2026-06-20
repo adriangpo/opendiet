@@ -76,6 +76,18 @@
   "@settingsDailyTargetNone": {
     "description": "Shown in the settings hub when no daily target is set."
   },
+  "vdRegionBrazil": "Brazil",
+  "@vdRegionBrazil": {
+    "description": "Percent-daily-value reference region option for Brazil."
+  },
+  "vdRegionUnitedStates": "United States",
+  "@vdRegionUnitedStates": {
+    "description": "Percent-daily-value reference region option for the United States."
+  },
+  "vdRegionEuropeanUnion": "European Union",
+  "@vdRegionEuropeanUnion": {
+    "description": "Percent-daily-value reference region option for the European Union."
+  },
   "settingsLoadError": "Could not load settings.",
   "foodsLoadError": "Could not load foods.",
   "diaryLoadError": "Could not load diary.",

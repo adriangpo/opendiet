@@ -102,10 +102,8 @@ class _DailyTargetScreenState extends ConsumerState<DailyTargetScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.dailyTargetTitle),
-        actions: [
-          TextButton(onPressed: _save, child: Text(l10n.actionSave)),
-        ],
+        title: Text(l10n.settingsDailyTarget),
+        actions: [TextButton(onPressed: _save, child: Text(l10n.actionSave))],
       ),
       body: switch (settings) {
         AsyncData() => _buildForm(l10n),
@@ -147,7 +145,7 @@ class _DailyTargetScreenState extends ConsumerState<DailyTargetScreen> {
           key: const Key('clear-target'),
           onPressed: _clear,
           icon: const Icon(Icons.delete_outline),
-          label: Text(l10n.dailyTargetClear),
+          label: Text(l10n.settingsClearTarget),
         ),
       ],
     );

@@ -33,12 +33,20 @@ the Riverpod lint plugins cannot be added in stable form on any Flutter right no
 is covered by `very_good_analysis` + the strict analyzer modes. Add `riverpod_lint`/
 `custom_lint` back once the ecosystem realigns on a single analyzer major.
 
-## win32 dependency_override
-`share_plus 13.x` needs `win32 ^6`; `file_picker 8-11` declares `win32 ^5`. Without
-intervention pub silently drops `file_picker` to **3.0.4** (years old). `win32` is a
-**Windows-only** plugin and we target **iOS + Android only**, so we override `win32: ^6.0.1`
-to let both libraries use current versions. Harmless here; revisit if Windows is ever a
-target (file_picker's Windows code would then need a win32-6-compatible release).
+## file_picker removed; no win32 override (was: win32 ^6 override)
+We initially added `file_picker ^11` and forced `win32: ^6.0.1` (so `share_plus 13.x`,
+which needs `win32 ^6`, and `file_picker` could coexist). That override was **not**
+harmless: `file_picker 11`'s Windows implementation (`file_picker_windows.dart`) is
+compiled even for an **Android** build, and it targets the `win32 5.x` API
+(`COINIT.*`, `COMObject`, positional `CoInitializeEx`), so it fails to compile against
+`win32 6` -- breaking `flutter run` on a phone with a `kernel_snapshot` error.
+
+`file_picker` is only needed for CSV import (FR-013) / backup file selection, which is
+**not built yet**, so we removed it and the `win32` override. `win32` now resolves to 6
+for `share_plus` (whose Windows code is properly conditionally compiled and does not
+break the mobile build). When CSV import lands, re-add a file-picking dependency that is
+compatible with `win32 6` (a newer `file_picker`, or an alternative), and verify a device
+build before relying on it.
 
 ## Pinning & lockfile
 This is an app: **commit `pubspec.lock`**. Verify latest stable before bumping (AGENTS.md).

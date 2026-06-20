@@ -7,6 +7,8 @@ import 'package:opendiet/features/diary/presentation/diary_screen.dart';
 import 'package:opendiet/features/diary/presentation/quick_add_screen.dart';
 import 'package:opendiet/features/foods/presentation/custom_food_editor.dart';
 import 'package:opendiet/features/foods/presentation/foods_screen.dart';
+import 'package:opendiet/features/recipes/presentation/recipe_detail_screen.dart';
+import 'package:opendiet/features/recipes/presentation/recipe_editor_screen.dart';
 import 'package:opendiet/features/recipes/presentation/recipes_screen.dart';
 import 'package:opendiet/features/settings/presentation/settings_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -72,6 +74,32 @@ GoRouter buildAppRouter({Clock clock = const SystemClock()}) => GoRouter(
             GoRoute(
               path: '/recipes',
               builder: (context, state) => const RecipesScreen(),
+              routes: [
+                GoRoute(
+                  path: 'new',
+                  builder: (context, state) => RecipeEditorScreen(
+                    onSaved: () => context.pop(),
+                  ),
+                ),
+                GoRoute(
+                  path: ':id',
+                  builder: (context, state) => RecipeDetailScreen(
+                    recipeId: state.pathParameters['id']!,
+                    onEdit: () => context.push(
+                      '/recipes/${state.pathParameters['id']}/edit',
+                    ),
+                  ),
+                  routes: [
+                    GoRoute(
+                      path: 'edit',
+                      builder: (context, state) => RecipeEditorScreen(
+                        recipeId: state.pathParameters['id'],
+                        onSaved: () => context.pop(),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),

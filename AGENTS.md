@@ -57,6 +57,8 @@ Feature-first: `lib/features/<feature>/{data,domain,presentation}` with shared c
 - **All user-facing strings via gen-l10n** — English is the base/template locale (`lib/l10n/app_en.arb`); pt-BR is a translation. No hardcoded UI strings; adding a language = adding an ARB. The brand name "OpenDiet" is a proper noun and is not translated.
 - **ASCII-only** in tracked non-`.md` files and in commit/PR text (use `-`, `"`, `'`, `...`, `->`). **Exception:** user-facing string *values* in localization files (`lib/l10n/*.arb`) may use the target language's letters where the language requires them (accented vowels, `ç`, etc.) -- this covers letters only; typographic punctuation (em/en dashes, smart quotes, the ellipsis character, arrows) stays ASCII even there, and ARB keys/`@`-metadata stay ASCII. Tracked `.md` files exempt. <!-- OPINIONATED -->
 - **No backticks in non-`.md` files** — they render as nothing. Exception: Dart `///` dartdoc comments (which render Markdown) and Dart string interpolation, both allowed. <!-- OPINIONATED -->
+- **Commit messages follow the [Conventional Commits](https://www.conventionalcommits.org/) format**: `type(scope): description (#PR)`. Types: `feat`, `fix`, `refactor`, `chore`, `test`, `docs`, `revert`. The PR number is always the last element. Squash-merge titles follow the same rule. <!-- OPINIONATED -->
+- **Branch names use the `feature/` prefix** — never `feat/`. For example, `feature/quantity-field`, not `feat/quantity-field`. <!-- OPINIONATED -->
 
 ## Guardrails
 - **Verify latest stable** before adding/upgrading any dependency — never trust versions from memory.

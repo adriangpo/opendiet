@@ -41,4 +41,15 @@ void main() {
 
     expect(repository.current.vdRegion, VdRegion.unitedStates);
   });
+
+  testWidgets('shows the Daily target row (FR-022)', (tester) async {
+    final repository = FakeSettingsRepository();
+    await pumpApp(
+      tester,
+      const SettingsScreen(),
+      overrides: [settingsRepositoryProvider.overrideWithValue(repository)],
+    );
+
+    expect(find.text('Daily target'), findsOneWidget);
+  });
 }

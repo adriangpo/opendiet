@@ -1,3 +1,4 @@
+import 'package:opendiet/core/nutrition/nutrients.dart';
 import 'package:opendiet/core/nutrition/vd_reference.dart';
 import 'package:opendiet/core/units/unit_system.dart';
 import 'package:opendiet/features/settings/data/settings_providers.dart';
@@ -19,6 +20,10 @@ class SettingsController extends _$SettingsController {
   /// Switches the %VD reference region (FR-027).
   Future<void> setVdRegion(VdRegion region) =>
       _update((settings) => settings.copyWith(vdRegion: region));
+
+  /// Sets (or clears) the daily nutrition target (FR-022).
+  Future<void> setDailyTarget(Nutrients? target) =>
+      _update((settings) => settings.copyWith(dailyTarget: target));
 
   Future<void> _update(AppSettings Function(AppSettings current) change) async {
     final repository = ref.read(settingsRepositoryProvider);

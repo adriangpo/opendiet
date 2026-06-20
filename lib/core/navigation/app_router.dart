@@ -11,6 +11,7 @@ import 'package:opendiet/features/foods/presentation/foods_screen.dart';
 import 'package:opendiet/features/recipes/presentation/recipe_detail_screen.dart';
 import 'package:opendiet/features/recipes/presentation/recipe_editor_screen.dart';
 import 'package:opendiet/features/recipes/presentation/recipes_screen.dart';
+import 'package:opendiet/features/settings/presentation/daily_target_screen.dart';
 import 'package:opendiet/features/settings/presentation/settings_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -112,6 +113,12 @@ GoRouter buildAppRouter({Clock clock = const SystemClock()}) => GoRouter(
             GoRoute(
               path: '/settings',
               builder: (context, state) => const SettingsScreen(),
+              routes: [
+                GoRoute(
+                  path: 'target',
+                  builder: (context, state) => const DailyTargetScreen(),
+                ),
+              ],
             ),
           ],
         ),

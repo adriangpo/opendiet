@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:opendiet/core/navigation/app_router.dart';
 import 'package:opendiet/l10n/app_localizations.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -40,24 +41,34 @@ List<Override> shellOverrides() => [
 /// Pumps the full application shell (bottom navigation + routed branches) with
 /// the given [overrides].
 ///
-/// Tests that use the shell should spread [shellOverrides] (or equivalent) into
-/// their overrides to avoid real database timeouts.
+/// If [initialRoute] is provided, the app starts at that route instead of the
+/// default ("/diary"). Tests that use the shell should spread [shellOverrides]
+/// (or equivalent) into their overrides to avoid real database timeouts.
 Future<void> pumpAppShell(
   WidgetTester tester, {
   List<Override> overrides = const [],
+  String? initialRoute,
 }) async {
+  GoRouter? router;
   await tester.pumpWidget(
     ProviderScope(
       overrides: overrides,
       child: Consumer(
-        builder: (context, ref, child) => MaterialApp.router(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          routerConfig: ref.watch(goRouterProvider),
-        ),
+        builder: (context, ref, child) {
+          router = ref.watch(goRouterProvider);
+          return MaterialApp.router(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            routerConfig: router,
+          );
+        },
       ),
     ),
   );
+  if (initialRoute != null) {
+    router!.go(initialRoute);
+    await tester.pump();
+  }
   // Two pumps let async work (e.g. FutureProvider) resolve without hanging
   // on animated loading indicators.
   await tester.pump();

@@ -47,4 +47,22 @@ class FakeFoodRepository implements FoodRepository {
     savedFoods.removeWhere((food) => food.id == id);
     _controller.add(List.of(savedFoods));
   }
+
+  @override
+  Future<void> toggleFavorite(String id) async {
+    final index = savedFoods.indexWhere((f) => f.id == id);
+    if (index < 0) return;
+    savedFoods[index] = savedFoods[index].copyWith(
+      isFavorite: !savedFoods[index].isFavorite,
+    );
+    _controller.add(List.of(savedFoods));
+  }
+
+  @override
+  Future<void> markLastLoggedAt(String id, DateTime at) async {
+    final index = savedFoods.indexWhere((f) => f.id == id);
+    if (index < 0) return;
+    savedFoods[index] = savedFoods[index].copyWith(lastLoggedAt: at);
+    _controller.add(List.of(savedFoods));
+  }
 }

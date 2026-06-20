@@ -121,6 +121,30 @@ class $FoodsTable extends Foods with TableInfo<$FoodsTable, FoodRow> {
     defaultValue: const Constant(false),
   );
   @override
+  late final GeneratedColumnWithTypeConverter<DateTime?, int> lastLoggedAt =
+      GeneratedColumn<int>(
+        'last_logged_at',
+        aliasedName,
+        true,
+        type: DriftSqlType.int,
+        requiredDuringInsert: false,
+      ).withConverter<DateTime?>($FoodsTable.$converterlastLoggedAtn);
+  static const VerificationMeta _isFavoriteMeta = const VerificationMeta(
+    'isFavorite',
+  );
+  @override
+  late final GeneratedColumn<bool> isFavorite = GeneratedColumn<bool>(
+    'is_favorite',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_favorite" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  @override
   late final GeneratedColumnWithTypeConverter<DateTime, int> createdAt =
       GeneratedColumn<int>(
         'created_at',
@@ -151,6 +175,8 @@ class $FoodsTable extends Foods with TableInfo<$FoodsTable, FoodRow> {
     servingUnit,
     householdMeasure,
     energyIsManual,
+    lastLoggedAt,
+    isFavorite,
     createdAt,
     updatedAt,
   ];
@@ -218,6 +244,12 @@ class $FoodsTable extends Foods with TableInfo<$FoodsTable, FoodRow> {
         ),
       );
     }
+    if (data.containsKey('is_favorite')) {
+      context.handle(
+        _isFavoriteMeta,
+        isFavorite.isAcceptableOrUnknown(data['is_favorite']!, _isFavoriteMeta),
+      );
+    }
     return context;
   }
 
@@ -279,6 +311,16 @@ class $FoodsTable extends Foods with TableInfo<$FoodsTable, FoodRow> {
         DriftSqlType.bool,
         data['${effectivePrefix}energy_is_manual'],
       )!,
+      lastLoggedAt: $FoodsTable.$converterlastLoggedAtn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}last_logged_at'],
+        ),
+      ),
+      isFavorite: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_favorite'],
+      )!,
       createdAt: $FoodsTable.$convertercreatedAt.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.int,
@@ -309,6 +351,10 @@ class $FoodsTable extends Foods with TableInfo<$FoodsTable, FoodRow> {
       const EnumIndexConverter<ServingUnit>(ServingUnit.values);
   static JsonTypeConverter2<ServingUnit?, int?, int?> $converterservingUnitn =
       JsonTypeConverter2.asNullable($converterservingUnit);
+  static TypeConverter<DateTime, int> $converterlastLoggedAt =
+      const DateTimeMillisConverter();
+  static TypeConverter<DateTime?, int?> $converterlastLoggedAtn =
+      NullAwareTypeConverter.wrap($converterlastLoggedAt);
   static TypeConverter<DateTime, int> $convertercreatedAt =
       const DateTimeMillisConverter();
   static TypeConverter<DateTime, int> $converterupdatedAt =
@@ -327,6 +373,8 @@ class FoodRow extends DataClass implements Insertable<FoodRow> {
   final ServingUnit? servingUnit;
   final String? householdMeasure;
   final bool energyIsManual;
+  final DateTime? lastLoggedAt;
+  final bool isFavorite;
   final DateTime createdAt;
   final DateTime updatedAt;
   const FoodRow({
@@ -341,6 +389,8 @@ class FoodRow extends DataClass implements Insertable<FoodRow> {
     this.servingUnit,
     this.householdMeasure,
     required this.energyIsManual,
+    this.lastLoggedAt,
+    required this.isFavorite,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -378,6 +428,12 @@ class FoodRow extends DataClass implements Insertable<FoodRow> {
       map['household_measure'] = Variable<String>(householdMeasure);
     }
     map['energy_is_manual'] = Variable<bool>(energyIsManual);
+    if (!nullToAbsent || lastLoggedAt != null) {
+      map['last_logged_at'] = Variable<int>(
+        $FoodsTable.$converterlastLoggedAtn.toSql(lastLoggedAt),
+      );
+    }
+    map['is_favorite'] = Variable<bool>(isFavorite);
     {
       map['created_at'] = Variable<int>(
         $FoodsTable.$convertercreatedAt.toSql(createdAt),
@@ -414,6 +470,10 @@ class FoodRow extends DataClass implements Insertable<FoodRow> {
           ? const Value.absent()
           : Value(householdMeasure),
       energyIsManual: Value(energyIsManual),
+      lastLoggedAt: lastLoggedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastLoggedAt),
+      isFavorite: Value(isFavorite),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
     );
@@ -444,6 +504,8 @@ class FoodRow extends DataClass implements Insertable<FoodRow> {
       ),
       householdMeasure: serializer.fromJson<String?>(json['householdMeasure']),
       energyIsManual: serializer.fromJson<bool>(json['energyIsManual']),
+      lastLoggedAt: serializer.fromJson<DateTime?>(json['lastLoggedAt']),
+      isFavorite: serializer.fromJson<bool>(json['isFavorite']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
@@ -469,6 +531,8 @@ class FoodRow extends DataClass implements Insertable<FoodRow> {
       ),
       'householdMeasure': serializer.toJson<String?>(householdMeasure),
       'energyIsManual': serializer.toJson<bool>(energyIsManual),
+      'lastLoggedAt': serializer.toJson<DateTime?>(lastLoggedAt),
+      'isFavorite': serializer.toJson<bool>(isFavorite),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
@@ -486,6 +550,8 @@ class FoodRow extends DataClass implements Insertable<FoodRow> {
     Value<ServingUnit?> servingUnit = const Value.absent(),
     Value<String?> householdMeasure = const Value.absent(),
     bool? energyIsManual,
+    Value<DateTime?> lastLoggedAt = const Value.absent(),
+    bool? isFavorite,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) => FoodRow(
@@ -504,6 +570,8 @@ class FoodRow extends DataClass implements Insertable<FoodRow> {
         ? householdMeasure.value
         : this.householdMeasure,
     energyIsManual: energyIsManual ?? this.energyIsManual,
+    lastLoggedAt: lastLoggedAt.present ? lastLoggedAt.value : this.lastLoggedAt,
+    isFavorite: isFavorite ?? this.isFavorite,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
   );
@@ -528,6 +596,12 @@ class FoodRow extends DataClass implements Insertable<FoodRow> {
       energyIsManual: data.energyIsManual.present
           ? data.energyIsManual.value
           : this.energyIsManual,
+      lastLoggedAt: data.lastLoggedAt.present
+          ? data.lastLoggedAt.value
+          : this.lastLoggedAt,
+      isFavorite: data.isFavorite.present
+          ? data.isFavorite.value
+          : this.isFavorite,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
@@ -547,6 +621,8 @@ class FoodRow extends DataClass implements Insertable<FoodRow> {
           ..write('servingUnit: $servingUnit, ')
           ..write('householdMeasure: $householdMeasure, ')
           ..write('energyIsManual: $energyIsManual, ')
+          ..write('lastLoggedAt: $lastLoggedAt, ')
+          ..write('isFavorite: $isFavorite, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -566,6 +642,8 @@ class FoodRow extends DataClass implements Insertable<FoodRow> {
     servingUnit,
     householdMeasure,
     energyIsManual,
+    lastLoggedAt,
+    isFavorite,
     createdAt,
     updatedAt,
   );
@@ -584,6 +662,8 @@ class FoodRow extends DataClass implements Insertable<FoodRow> {
           other.servingUnit == this.servingUnit &&
           other.householdMeasure == this.householdMeasure &&
           other.energyIsManual == this.energyIsManual &&
+          other.lastLoggedAt == this.lastLoggedAt &&
+          other.isFavorite == this.isFavorite &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
 }
@@ -600,6 +680,8 @@ class FoodsCompanion extends UpdateCompanion<FoodRow> {
   final Value<ServingUnit?> servingUnit;
   final Value<String?> householdMeasure;
   final Value<bool> energyIsManual;
+  final Value<DateTime?> lastLoggedAt;
+  final Value<bool> isFavorite;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<int> rowid;
@@ -615,6 +697,8 @@ class FoodsCompanion extends UpdateCompanion<FoodRow> {
     this.servingUnit = const Value.absent(),
     this.householdMeasure = const Value.absent(),
     this.energyIsManual = const Value.absent(),
+    this.lastLoggedAt = const Value.absent(),
+    this.isFavorite = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -631,6 +715,8 @@ class FoodsCompanion extends UpdateCompanion<FoodRow> {
     this.servingUnit = const Value.absent(),
     this.householdMeasure = const Value.absent(),
     this.energyIsManual = const Value.absent(),
+    this.lastLoggedAt = const Value.absent(),
+    this.isFavorite = const Value.absent(),
     required DateTime createdAt,
     required DateTime updatedAt,
     this.rowid = const Value.absent(),
@@ -653,6 +739,8 @@ class FoodsCompanion extends UpdateCompanion<FoodRow> {
     Expression<int>? servingUnit,
     Expression<String>? householdMeasure,
     Expression<bool>? energyIsManual,
+    Expression<int>? lastLoggedAt,
+    Expression<bool>? isFavorite,
     Expression<int>? createdAt,
     Expression<int>? updatedAt,
     Expression<int>? rowid,
@@ -669,6 +757,8 @@ class FoodsCompanion extends UpdateCompanion<FoodRow> {
       if (servingUnit != null) 'serving_unit': servingUnit,
       if (householdMeasure != null) 'household_measure': householdMeasure,
       if (energyIsManual != null) 'energy_is_manual': energyIsManual,
+      if (lastLoggedAt != null) 'last_logged_at': lastLoggedAt,
+      if (isFavorite != null) 'is_favorite': isFavorite,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
@@ -687,6 +777,8 @@ class FoodsCompanion extends UpdateCompanion<FoodRow> {
     Value<ServingUnit?>? servingUnit,
     Value<String?>? householdMeasure,
     Value<bool>? energyIsManual,
+    Value<DateTime?>? lastLoggedAt,
+    Value<bool>? isFavorite,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
     Value<int>? rowid,
@@ -703,6 +795,8 @@ class FoodsCompanion extends UpdateCompanion<FoodRow> {
       servingUnit: servingUnit ?? this.servingUnit,
       householdMeasure: householdMeasure ?? this.householdMeasure,
       energyIsManual: energyIsManual ?? this.energyIsManual,
+      lastLoggedAt: lastLoggedAt ?? this.lastLoggedAt,
+      isFavorite: isFavorite ?? this.isFavorite,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
@@ -753,6 +847,14 @@ class FoodsCompanion extends UpdateCompanion<FoodRow> {
     if (energyIsManual.present) {
       map['energy_is_manual'] = Variable<bool>(energyIsManual.value);
     }
+    if (lastLoggedAt.present) {
+      map['last_logged_at'] = Variable<int>(
+        $FoodsTable.$converterlastLoggedAtn.toSql(lastLoggedAt.value),
+      );
+    }
+    if (isFavorite.present) {
+      map['is_favorite'] = Variable<bool>(isFavorite.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<int>(
         $FoodsTable.$convertercreatedAt.toSql(createdAt.value),
@@ -783,6 +885,8 @@ class FoodsCompanion extends UpdateCompanion<FoodRow> {
           ..write('servingUnit: $servingUnit, ')
           ..write('householdMeasure: $householdMeasure, ')
           ..write('energyIsManual: $energyIsManual, ')
+          ..write('lastLoggedAt: $lastLoggedAt, ')
+          ..write('isFavorite: $isFavorite, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
@@ -2919,6 +3023,8 @@ typedef $$FoodsTableCreateCompanionBuilder =
       Value<ServingUnit?> servingUnit,
       Value<String?> householdMeasure,
       Value<bool> energyIsManual,
+      Value<DateTime?> lastLoggedAt,
+      Value<bool> isFavorite,
       required DateTime createdAt,
       required DateTime updatedAt,
       Value<int> rowid,
@@ -2936,6 +3042,8 @@ typedef $$FoodsTableUpdateCompanionBuilder =
       Value<ServingUnit?> servingUnit,
       Value<String?> householdMeasure,
       Value<bool> energyIsManual,
+      Value<DateTime?> lastLoggedAt,
+      Value<bool> isFavorite,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<int> rowid,
@@ -3031,6 +3139,17 @@ class $$FoodsTableFilterComposer extends Composer<_$AppDatabase, $FoodsTable> {
 
   ColumnFilters<bool> get energyIsManual => $composableBuilder(
     column: $table.energyIsManual,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime?, DateTime, int> get lastLoggedAt =>
+      $composableBuilder(
+        column: $table.lastLoggedAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnFilters<bool> get isFavorite => $composableBuilder(
+    column: $table.isFavorite,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3136,6 +3255,16 @@ class $$FoodsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get lastLoggedAt => $composableBuilder(
+    column: $table.lastLoggedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isFavorite => $composableBuilder(
+    column: $table.isFavorite,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get createdAt => $composableBuilder(
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
@@ -3195,6 +3324,17 @@ class $$FoodsTableAnnotationComposer
 
   GeneratedColumn<bool> get energyIsManual => $composableBuilder(
     column: $table.energyIsManual,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<DateTime?, int> get lastLoggedAt =>
+      $composableBuilder(
+        column: $table.lastLoggedAt,
+        builder: (column) => column,
+      );
+
+  GeneratedColumn<bool> get isFavorite => $composableBuilder(
+    column: $table.isFavorite,
     builder: (column) => column,
   );
 
@@ -3270,6 +3410,8 @@ class $$FoodsTableTableManager
                 Value<ServingUnit?> servingUnit = const Value.absent(),
                 Value<String?> householdMeasure = const Value.absent(),
                 Value<bool> energyIsManual = const Value.absent(),
+                Value<DateTime?> lastLoggedAt = const Value.absent(),
+                Value<bool> isFavorite = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -3285,6 +3427,8 @@ class $$FoodsTableTableManager
                 servingUnit: servingUnit,
                 householdMeasure: householdMeasure,
                 energyIsManual: energyIsManual,
+                lastLoggedAt: lastLoggedAt,
+                isFavorite: isFavorite,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 rowid: rowid,
@@ -3302,6 +3446,8 @@ class $$FoodsTableTableManager
                 Value<ServingUnit?> servingUnit = const Value.absent(),
                 Value<String?> householdMeasure = const Value.absent(),
                 Value<bool> energyIsManual = const Value.absent(),
+                Value<DateTime?> lastLoggedAt = const Value.absent(),
+                Value<bool> isFavorite = const Value.absent(),
                 required DateTime createdAt,
                 required DateTime updatedAt,
                 Value<int> rowid = const Value.absent(),
@@ -3317,6 +3463,8 @@ class $$FoodsTableTableManager
                 servingUnit: servingUnit,
                 householdMeasure: householdMeasure,
                 energyIsManual: energyIsManual,
+                lastLoggedAt: lastLoggedAt,
+                isFavorite: isFavorite,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 rowid: rowid,

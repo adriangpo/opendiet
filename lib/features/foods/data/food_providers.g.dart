@@ -96,3 +96,89 @@ final class FoodListProvider
 }
 
 String _$foodListHash() => r'5c7f5fc9822e4b834a8280682fc928bdef473326';
+
+/// Foods sorted by [Food.lastLoggedAt] descending, limited to 20 (FR-018).
+
+@ProviderFor(recentFoods)
+final recentFoodsProvider = RecentFoodsProvider._();
+
+/// Foods sorted by [Food.lastLoggedAt] descending, limited to 20 (FR-018).
+
+final class RecentFoodsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Food>>,
+          List<Food>,
+          Stream<List<Food>>
+        >
+    with $FutureModifier<List<Food>>, $StreamProvider<List<Food>> {
+  /// Foods sorted by [Food.lastLoggedAt] descending, limited to 20 (FR-018).
+  RecentFoodsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'recentFoodsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$recentFoodsHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<List<Food>> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<Food>> create(Ref ref) {
+    return recentFoods(ref);
+  }
+}
+
+String _$recentFoodsHash() => r'e68ccbeffe0a77c000b85b0343463e94eb65bb97';
+
+/// Foods where [Food.isFavorite] is true (FR-018).
+
+@ProviderFor(favoriteFoods)
+final favoriteFoodsProvider = FavoriteFoodsProvider._();
+
+/// Foods where [Food.isFavorite] is true (FR-018).
+
+final class FavoriteFoodsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Food>>,
+          List<Food>,
+          Stream<List<Food>>
+        >
+    with $FutureModifier<List<Food>>, $StreamProvider<List<Food>> {
+  /// Foods where [Food.isFavorite] is true (FR-018).
+  FavoriteFoodsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'favoriteFoodsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$favoriteFoodsHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<List<Food>> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<Food>> create(Ref ref) {
+    return favoriteFoods(ref);
+  }
+}
+
+String _$favoriteFoodsHash() => r'4f3abb8e0c758c26313730e54c54a7580f2f7fb4';

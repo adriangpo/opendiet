@@ -15,3 +15,23 @@ FoodRepository foodRepository(Ref ref) =>
 @riverpod
 Stream<List<Food>> foodList(Ref ref) =>
     ref.watch(foodRepositoryProvider).watchAllFoods();
+
+/// Foods sorted by [Food.lastLoggedAt] descending, limited to 20 (FR-018).
+@riverpod
+Stream<List<Food>> recentFoods(Ref ref) {
+  final repo = ref.watch(foodRepositoryProvider);
+  return repo.watchAllFoods().map(
+    (foods) =>
+        foods.where((f) => f.lastLoggedAt != null).toList()
+          ..sort((a, b) => b.lastLoggedAt!.compareTo(a.lastLoggedAt!)),
+  );
+}
+
+/// Foods where [Food.isFavorite] is true (FR-018).
+@riverpod
+Stream<List<Food>> favoriteFoods(Ref ref) {
+  final repo = ref.watch(foodRepositoryProvider);
+  return repo.watchAllFoods().map(
+    (foods) => foods.where((f) => f.isFavorite).toList(),
+  );
+}

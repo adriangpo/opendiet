@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:opendiet/core/time/clock.dart';
 import 'package:opendiet/core/time/time_providers.dart';
 import 'package:opendiet/core/widgets/app_scaffold.dart';
+import 'package:opendiet/features/add_food/presentation/add_log_hub_screen.dart';
 import 'package:opendiet/features/diary/presentation/diary_screen.dart';
 import 'package:opendiet/features/diary/presentation/quick_add_screen.dart';
 import 'package:opendiet/features/foods/presentation/custom_food_editor.dart';
@@ -40,6 +41,14 @@ GoRouter buildAppRouter({Clock clock = const SystemClock()}) => GoRouter(
             GoRoute(
               path: '/diary',
               builder: (context, state) => const DiaryScreen(),
+              routes: [
+                GoRoute(
+                  path: 'add/:mealSlotId',
+                  builder: (context, state) => AddLogHubScreen(
+                    mealSlotId: state.pathParameters['mealSlotId']!,
+                  ),
+                ),
+              ],
             ),
           ],
         ),

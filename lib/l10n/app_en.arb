@@ -218,5 +218,53 @@
       "energy": { "type": "String" },
       "unit": { "type": "String" }
     }
+  },
+  "addLogHubTitle": "Add Food",
+  "@addLogHubTitle": {
+    "description": "Title of the add/log hub screen."
+  },
+  "addLogSearchHint": "Search foods...",
+  "@addLogSearchHint": {
+    "description": "Hint text in the search field of the add/log hub."
+  },
+  "addLogSegmentRecent": "Recent",
+  "@addLogSegmentRecent": {
+    "description": "Label for the recents segment chip (FR-018)."
+  },
+  "addLogSegmentFavorites": "Favorites",
+  "@addLogSegmentFavorites": {
+    "description": "Label for the favorites segment chip (FR-018)."
+  },
+  "addLogSegmentFoods": "Foods",
+  "@addLogSegmentFoods": {
+    "description": "Label for the foods segment chip."
+  },
+  "addLogRecentsEmpty": "No recently logged foods yet.",
+  "@addLogRecentsEmpty": {
+    "description": "Empty state when no recents exist (FR-018)."
+  },
+  "addLogFavoritesEmpty": "No favorite foods yet. Tap the heart on a food to add it.",
+  "@addLogFavoritesEmpty": {
+    "description": "Empty state when no favorites exist (FR-018)."
+  },
+  "addLogQuickLogTooltip": "Log 1 serving",
+  "@addLogQuickLogTooltip": {
+    "description": "Tooltip for the quick-log button that logs one serving directly."
+  },
+  "addLogCreateCustom": "Create custom food",
+  "@addLogCreateCustom": {
+    "description": "Button to navigate to the custom food editor."
+  },
+  "diaryPreviousDay": "Previous day",
+  "@diaryPreviousDay": {
+    "description": "Tooltip for the previous-day arrow on the diary date stepper."
+  },
+  "diaryNextDay": "Next day",
+  "@diaryNextDay": {
+    "description": "Tooltip for the next-day arrow on the diary date stepper."
+  },
+  "diaryToday": "Today",
+  "@diaryToday": {
+    "description": "Label for the Today button on the diary date stepper."
   }
 }

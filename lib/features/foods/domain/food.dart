@@ -23,6 +23,10 @@ enum NutrientBasis { per100g, per100ml, perServing }
 /// [energyIsManual] records whether the user owns the energy value: while
 /// false, energy is derived from the macros (see FoodEnergy); once the user
 /// types an energy value it becomes true and is no longer recomputed.
+///
+/// [lastLoggedAt] is set when a diary entry references this food; it drives the
+/// recents list (FR-018). [isFavorite] lets the user mark foods for quick
+/// access (FR-018).
 @freezed
 abstract class Food with _$Food {
   /// Creates a food.
@@ -40,6 +44,8 @@ abstract class Food with _$Food {
     ServingUnit? servingUnit,
     String? householdMeasure,
     @Default(false) bool energyIsManual,
+    DateTime? lastLoggedAt,
+    @Default(false) bool isFavorite,
   }) = _Food;
 
   const Food._();

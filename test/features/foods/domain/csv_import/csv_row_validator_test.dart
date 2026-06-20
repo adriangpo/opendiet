@@ -196,18 +196,24 @@ void main() {
     test('includes micronutrients in parsed row', () {
       final microMappings = [
         ColumnMapping(
-          columnIndex: 0, originalHeader: 'Name',
-          proposedField: CsvField.name, selectedField: CsvField.name,
-          micronutrientKey: null, isRequired: true,
+          columnIndex: 0,
+          originalHeader: 'Name',
+          proposedField: CsvField.name,
+          selectedField: CsvField.name,
+          micronutrientKey: null,
+          isRequired: true,
         ),
         ColumnMapping(
-          columnIndex: 1, originalHeader: 'Energy',
+          columnIndex: 1,
+          originalHeader: 'Energy',
           proposedField: CsvField.energyKcal,
           selectedField: CsvField.energyKcal,
-          micronutrientKey: null, isRequired: true,
+          micronutrientKey: null,
+          isRequired: true,
         ),
         ColumnMapping(
-          columnIndex: 2, originalHeader: 'Calcium (mg)',
+          columnIndex: 2,
+          originalHeader: 'Calcium (mg)',
           proposedField: CsvField.micronutrient,
           selectedField: CsvField.micronutrient,
           micronutrientKey: 'calcium_mg',

@@ -183,5 +183,13 @@
   "@nutrientTotalsOver": {
     "description": "Amount by which a nutrient has exceeded the daily target. The amount already carries its unit (e.g. 100 kcal).",
     "placeholders": { "amount": { "type": "String", "example": "100 kcal" } }
+  },
+  "foodEnergyPer100": "{energy} kcal / 100 {unit}",
+  "@foodEnergyPer100": {
+    "description": "Per-100 energy shown on a food list tile, e.g. '180 kcal / 100 g'. The energy value is a pre-formatted number, or '--' when not informed; unit is the basis abbreviation (g or ml).",
+    "placeholders": {
+      "energy": { "type": "String" },
+      "unit": { "type": "String" }
+    }
   }
 }

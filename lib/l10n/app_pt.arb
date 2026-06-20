@@ -19,5 +19,9 @@
   "vdRegionBrazil": "Brasil",
   "vdRegionUnitedStates": "Estados Unidos",
   "vdRegionEuropeanUnion": "União Europeia",
-  "settingsLoadError": "Não foi possível carregar os ajustes."
+  "settingsLoadError": "Não foi possível carregar os ajustes.",
+  "mealBreakfast": "Café da manhã",
+  "mealLunch": "Almoço",
+  "mealDinner": "Jantar",
+  "mealSnacks": "Lanches"
 }

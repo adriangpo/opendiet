@@ -41,5 +41,13 @@
   "vdRegionEuropeanUnion": "European Union",
   "@vdRegionEuropeanUnion": { "description": "European Union %VD reference region." },
   "settingsLoadError": "Could not load settings.",
-  "@settingsLoadError": { "description": "Shown when settings fail to load." }
+  "@settingsLoadError": { "description": "Shown when settings fail to load." },
+  "mealBreakfast": "Breakfast",
+  "@mealBreakfast": { "description": "Default meal-slot name for the morning meal." },
+  "mealLunch": "Lunch",
+  "@mealLunch": { "description": "Default meal-slot name for the midday meal." },
+  "mealDinner": "Dinner",
+  "@mealDinner": { "description": "Default meal-slot name for the evening meal." },
+  "mealSnacks": "Snacks",
+  "@mealSnacks": { "description": "Default meal-slot name for foods eaten outside meal times." }
 }

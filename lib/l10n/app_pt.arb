@@ -67,5 +67,6 @@
   "quantityUnitServings": "porções",
   "unitMilliliter": "ml",
   "nutrientTotalsRemaining": "{amount} restante",
-  "nutrientTotalsOver": "{amount} acima"
+  "nutrientTotalsOver": "{amount} acima",
+  "foodEnergyPer100": "{energy} kcal / 100 {unit}"
 }

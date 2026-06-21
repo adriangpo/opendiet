@@ -37,7 +37,7 @@ final class RemindersControllerProvider
 }
 
 String _$remindersControllerHash() =>
-    r'72936cd0a445bbd2cd85c6e6083fb2120bde421a';
+    r'2347b517dc09f5160e808704176620293db32c61';
 
 /// Exposes the reminders list and handles CRUD + notification scheduling.
 

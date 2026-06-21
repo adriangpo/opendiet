@@ -3,8 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:opendiet/core/navigation/app_router.dart';
 import 'package:opendiet/core/theme/app_theme.dart';
 import 'package:opendiet/l10n/app_localizations.dart';
+import 'package:openfoodfacts/openfoodfacts.dart' as off;
 
 void main() {
+  off.OpenFoodAPIConfiguration.userAgent = off.UserAgent(
+    name: 'OpenDiet',
+    url: 'https://github.com/anomalyco/opendiet',
+  );
+  off.OpenFoodAPIConfiguration.globalLanguages = [
+    off.OpenFoodFactsLanguage.ENGLISH,
+    off.OpenFoodFactsLanguage.PORTUGUESE,
+  ];
+  off.OpenFoodAPIConfiguration.globalCountry = off.OpenFoodFactsCountry.BRAZIL;
   runApp(const ProviderScope(child: OpenDietApp()));
 }
 

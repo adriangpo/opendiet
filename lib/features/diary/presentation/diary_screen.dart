@@ -93,6 +93,7 @@ class _DateStepper extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         IconButton(
+          visualDensity: VisualDensity.compact,
           icon: const Icon(Icons.chevron_left),
           onPressed: onPrevious,
           tooltip: l10n.diaryPreviousDay,
@@ -116,12 +117,16 @@ class _DateStepper extends StatelessWidget {
           ),
         ),
         IconButton(
+          visualDensity: VisualDensity.compact,
           icon: const Icon(Icons.chevron_right),
           onPressed: onNext,
           tooltip: l10n.diaryNextDay,
         ),
-        const SizedBox(width: 4),
         TextButton(
+          style: TextButton.styleFrom(
+            visualDensity: VisualDensity.compact,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+          ),
           onPressed: onToday,
           child: Text(l10n.diaryToday),
         ),

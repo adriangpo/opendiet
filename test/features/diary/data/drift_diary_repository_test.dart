@@ -28,9 +28,7 @@ void main() {
   setUp(() async {
     database = AppDatabase(NativeDatabase.memory());
     repository = DriftDiaryRepository(database);
-    await DriftMealSlotRepository(
-      database,
-    ).saveMealSlot(
+    await DriftMealSlotRepository(database).saveMealSlot(
       const MealSlot(id: 'breakfast', name: 'Breakfast', position: 0),
     );
   });
@@ -107,9 +105,6 @@ void main() {
       DateTime.utc(2026, 6, 19),
     ).copyWith(mealSlotId: 'ghost');
 
-    await expectLater(
-      repository.saveEntry(orphan),
-      throwsA(isA<Exception>()),
-    );
+    await expectLater(repository.saveEntry(orphan), throwsA(isA<Exception>()));
   });
 }

@@ -207,10 +207,7 @@ void main() {
   testWidgets(
     'starts empty for a servings initialValue with hasServingSize false',
     (tester) async {
-      await pumpField(
-        tester,
-        initialValue: Quantity.servings(3),
-      );
+      await pumpField(tester, initialValue: Quantity.servings(3));
 
       expect(fieldText(tester), '');
       expect(find.text('servings'), findsNothing);

@@ -44,10 +44,8 @@ class DiaryScreen extends ConsumerWidget {
           }
           return ListView.builder(
             itemCount: slots.length,
-            itemBuilder: (context, index) => _MealSlotSection(
-              slot: slots[index],
-              l10n: l10n,
-            ),
+            itemBuilder: (context, index) =>
+                _MealSlotSection(slot: slots[index], l10n: l10n),
           );
         },
       ),

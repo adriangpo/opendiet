@@ -266,5 +266,113 @@
   "diaryToday": "Today",
   "@diaryToday": {
     "description": "Label for the Today button on the diary date stepper."
+  },
+  "recipeEditorNewTitle": "New recipe",
+  "@recipeEditorNewTitle": {
+    "description": "Title of the new-recipe editor (S-09)."
+  },
+  "recipeEditorEditTitle": "Edit recipe",
+  "@recipeEditorEditTitle": {
+    "description": "Title of the edit-recipe screen (S-09)."
+  },
+  "recipeFieldName": "Name",
+  "@recipeFieldName": {
+    "description": "Label for the recipe name field (S-09)."
+  },
+  "recipeFieldYield": "Yield",
+  "@recipeFieldYield": {
+    "description": "Label for the recipe yield/servings field (S-09)."
+  },
+  "recipeFieldYieldSuffix": "servings",
+  "@recipeFieldYieldSuffix": {
+    "description": "Suffix after the yield number indicating servings (S-09)."
+  },
+  "recipeIngredients": "Ingredients",
+  "@recipeIngredients": {
+    "description": "Section heading for the ingredient list (S-09)."
+  },
+  "recipeAddIngredient": "Add ingredient",
+  "@recipeAddIngredient": {
+    "description": "Button to add an ingredient to a recipe (S-09)."
+  },
+  "recipeDeleteIngredient": "Remove ingredient",
+  "@recipeDeleteIngredient": {
+    "description": "Accessible label for the ingredient delete button (S-09)."
+  },
+  "recipeEditorErrorNameRequired": "Enter a recipe name",
+  "@recipeEditorErrorNameRequired": {
+    "description": "Validation error when recipe name is empty (S-09)."
+  },
+  "recipeEditorErrorYield": "Yield must be at least 1",
+  "@recipeEditorErrorYield": {
+    "description": "Validation error when yield is less than 1 (S-09)."
+  },
+  "recipeEditorErrorIngredients": "Add at least one ingredient",
+  "@recipeEditorErrorIngredients": {
+    "description": "Validation error when no ingredients are added (S-09)."
+  },
+  "recipeEditorComputedTotal": "Total {kcal} kcal",
+  "@recipeEditorComputedTotal": {
+    "description": "Live total energy shown in the editor panel. {kcal} is a pre-formatted number.",
+    "placeholders": {
+      "kcal": { "type": "String", "example": "2080" }
+    }
+  },
+  "recipeEditorComputedPerServing": "{kcal} / serving",
+  "@recipeEditorComputedPerServing": {
+    "description": "Live per-serving energy shown in the editor panel. {kcal} is a pre-formatted number.",
+    "placeholders": {
+      "kcal": { "type": "String", "example": "520" }
+    }
+  },
+  "recipeServes": "Serves {count}",
+  "@recipeServes": {
+    "description": "Recipe tile subtitle showing serving count. {count} is a number.",
+    "placeholders": {
+      "count": { "type": "String", "example": "4" }
+    }
+  },
+  "recipeEnergyPerServing": "{kcal} kcal / serving",
+  "@recipeEnergyPerServing": {
+    "description": "Recipe list tile showing energy per serving. {kcal} is a pre-formatted number.",
+    "placeholders": {
+      "kcal": { "type": "String", "example": "520" }
+    }
+  },
+  "recipeSearchHint": "Search recipes",
+  "@recipeSearchHint": {
+    "description": "Hint text for the recipe search field (S-08)."
+  },
+  "recipeDetailPerServingTitle": "Per serving",
+  "@recipeDetailPerServingTitle": {
+    "description": "Heading for the per-serving nutrition section (S-10)."
+  },
+  "recipeDetailTotalTitle": "Whole recipe",
+  "@recipeDetailTotalTitle": {
+    "description": "Heading for the whole-recipe nutrition section (S-10)."
+  },
+  "recipeDetailIngredients": "Ingredients",
+  "@recipeDetailIngredients": {
+    "description": "Read-only ingredient list heading (S-10)."
+  },
+  "recipeDetailLogServings": "Log servings",
+  "@recipeDetailLogServings": {
+    "description": "Button to log servings of a recipe (S-10, FR-017)."
+  },
+  "recipeDetailEdit": "Edit",
+  "@recipeDetailEdit": {
+    "description": "Button to edit the recipe (S-10)."
+  },
+  "foodPickerTitle": "Select a food",
+  "@foodPickerTitle": {
+    "description": "Title of the food picker dialog (S-09 ingredient selection)."
+  },
+  "foodPickerSearchHint": "Search foods",
+  "@foodPickerSearchHint": {
+    "description": "Hint text for the food picker search field."
+  },
+  "foodPickerEmpty": "No foods found. Create one first.",
+  "@foodPickerEmpty": {
+    "description": "Empty state in the food picker when no foods match."
   }
 }

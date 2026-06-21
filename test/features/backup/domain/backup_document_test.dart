@@ -26,9 +26,7 @@ void main() {
     id: 'r1',
     name: 'Porridge',
     yieldServings: 2,
-    ingredients: [
-      RecipeIngredient(foodId: 'f1', quantity: Quantity.grams(80)),
-    ],
+    ingredients: [RecipeIngredient(foodId: 'f1', quantity: Quantity.grams(80))],
     createdAt: DateTime.utc(2026, 6, 19),
     updatedAt: DateTime.utc(2026, 6, 19),
   );

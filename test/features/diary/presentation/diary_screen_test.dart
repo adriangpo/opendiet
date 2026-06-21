@@ -62,9 +62,7 @@ void main() {
       overrides: [
         ...baseOverrides(),
         mealSlotsProvider.overrideWithValue(
-          const AsyncData([
-            MealSlot(id: 's1', name: 'Breakfast', position: 0),
-          ]),
+          const AsyncData([MealSlot(id: 's1', name: 'Breakfast', position: 0)]),
         ),
       ],
     );

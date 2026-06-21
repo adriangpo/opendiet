@@ -80,10 +80,7 @@ void main() {
 
     test('rejects a non-finite factor', () {
       expect(() => Nutrients.empty.scale(double.nan), throwsArgumentError);
-      expect(
-        () => Nutrients.empty.scale(double.infinity),
-        throwsArgumentError,
-      );
+      expect(() => Nutrients.empty.scale(double.infinity), throwsArgumentError);
     });
   });
 

@@ -42,10 +42,7 @@ void main() {
     });
 
     test('rejects a blank name (FR-023)', () {
-      expect(
-        () => _entry(name: '   '),
-        throwsArgumentError,
-      );
+      expect(() => _entry(name: '   '), throwsArgumentError);
     });
 
     test('rejects a negative or non-finite energy (FR-023)', () {

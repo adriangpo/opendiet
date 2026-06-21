@@ -44,6 +44,32 @@ void main() {
       expect(food.barcode, isNull);
       expect(food.servingSizeMetric, isNull);
       expect(food.householdMeasure, isNull);
+      expect(food.lastLoggedAt, isNull);
+      expect(food.isFavorite, isFalse);
+    });
+
+    test('lastLoggedAt and isFavorite survive json round-trip', () {
+      final food = _sampleFood().copyWith(
+        lastLoggedAt: DateTime.utc(2026, 6, 20, 10),
+        isFavorite: true,
+      );
+
+      final restored = Food.fromJson(food.toJson());
+
+      expect(restored.lastLoggedAt, DateTime.utc(2026, 6, 20, 10));
+      expect(restored.isFavorite, isTrue);
+    });
+
+    test('isFavorite is false by default', () {
+      final food = _sampleFood();
+
+      expect(food.isFavorite, isFalse);
+    });
+
+    test('lastLoggedAt is null by default', () {
+      final food = _sampleFood();
+
+      expect(food.lastLoggedAt, isNull);
     });
   });
 }

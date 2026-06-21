@@ -15,9 +15,12 @@ import '../../../support/fake_settings_repository.dart';
 import '../../../support/test_app.dart';
 
 void main() {
-  List<Override> baseOverrides() => [
+  List<Override> baseOverrides({Clock? clock}) => [
     foodRepositoryProvider.overrideWithValue(FakeFoodRepository()),
     settingsRepositoryProvider.overrideWithValue(FakeSettingsRepository()),
+    clockProvider.overrideWithValue(
+      clock ?? FixedClock(DateTime.utc(2026, 6, 20)),
+    ),
   ];
 
   testWidgets('shows empty state when no meal slots exist', (tester) async {
@@ -69,7 +72,50 @@ void main() {
     expect(find.text('+ Add to Breakfast'), findsOneWidget);
   });
 
-  testWidgets('tapping add-to-slot navigates to /log (FR-017)', (tester) async {
+  testWidgets('date stepper shows today with day and weekday', (tester) async {
+    await pumpAppShell(
+      tester,
+      overrides: [
+        ...baseOverrides(),
+        mealSlotsProvider.overrideWithValue(const AsyncData([])),
+      ],
+    );
+
+    expect(find.text('Sat'), findsOneWidget);
+    expect(find.text('Jun 20'), findsOneWidget);
+  });
+
+  testWidgets('date stepper shows Today button', (tester) async {
+    await pumpAppShell(
+      tester,
+      overrides: [
+        ...baseOverrides(),
+        mealSlotsProvider.overrideWithValue(const AsyncData([])),
+      ],
+    );
+
+    expect(find.text('Today'), findsOneWidget);
+  });
+
+  testWidgets('shows FAB with Add Food tooltip when slots exist', (
+    tester,
+  ) async {
+    await pumpAppShell(
+      tester,
+      overrides: [
+        ...baseOverrides(),
+        mealSlotsProvider.overrideWithValue(
+          const AsyncData([
+            MealSlot(id: 's1', name: 'Breakfast', position: 0),
+          ]),
+        ),
+      ],
+    );
+
+    expect(find.byTooltip('Add Food'), findsOneWidget);
+  });
+
+  testWidgets('tapping add-to-slot opens the add food hub', (tester) async {
     await pumpAppShell(
       tester,
       overrides: [
@@ -86,8 +132,7 @@ void main() {
     await tester.pump();
     await tester.pump();
 
-    expect(find.byKey(const Key('field-name')), findsOneWidget);
-    expect(find.text('Add to Breakfast'), findsOneWidget);
+    expect(find.text('Add Food'), findsOneWidget);
   });
 
   testWidgets('/log without date uses the injected clock day', (tester) async {
@@ -95,9 +140,8 @@ void main() {
     await pumpAppShell(
       tester,
       overrides: [
-        ...baseOverrides(),
-        clockProvider.overrideWithValue(
-          FixedClock(DateTime.utc(2030, 1, 2, 10, 30)),
+        ...baseOverrides(
+          clock: FixedClock(DateTime.utc(2030, 1, 2, 10, 30)),
         ),
         diaryRepositoryProvider.overrideWithValue(repository),
         mealSlotsProvider.overrideWithValue(

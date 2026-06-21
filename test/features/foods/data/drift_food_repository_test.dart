@@ -79,6 +79,45 @@ void main() {
     expect(await repository.findFood('a'), isNull);
   });
 
+  test('toggleFavorite flips isFavorite from false to true', () async {
+    await repository.saveFood(_food('a'));
+
+    await repository.toggleFavorite('a');
+
+    expect((await repository.findFood('a'))!.isFavorite, isTrue);
+  });
+
+  test('toggleFavorite flips isFavorite from true to false', () async {
+    await repository.saveFood(_food('a').copyWith(isFavorite: true));
+
+    await repository.toggleFavorite('a');
+
+    expect((await repository.findFood('a'))!.isFavorite, isFalse);
+  });
+
+  test('toggleFavorite does nothing for a non-existent food', () async {
+    await repository.toggleFavorite('nope');
+
+    // No exception should be thrown.
+    expect(true, isTrue);
+  });
+
+  test('markLastLoggedAt sets the timestamp', () async {
+    final now = DateTime.utc(2026, 6, 20, 15);
+    await repository.saveFood(_food('a'));
+
+    await repository.markLastLoggedAt('a', now);
+
+    expect((await repository.findFood('a'))!.lastLoggedAt, now);
+  });
+
+  test('markLastLoggedAt does nothing for a non-existent food', () async {
+    await repository.markLastLoggedAt('nope', DateTime.utc(2026));
+
+    // No exception should be thrown.
+    expect(true, isTrue);
+  });
+
   group('Persistence across reopen (FR-001)', () {
     // The same file is opened twice, sequentially, after closing the first.
     setUp(() => driftRuntimeOptions.dontWarnAboutMultipleDatabases = true);

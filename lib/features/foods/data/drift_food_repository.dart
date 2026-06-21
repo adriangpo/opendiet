@@ -44,6 +44,20 @@ class DriftFoodRepository implements FoodRepository {
     _database.foods,
   )..where((row) => row.id.equals(id))).go();
 
+  @override
+  Future<void> toggleFavorite(String id) async {
+    final food = await findFood(id);
+    if (food == null) return;
+    await saveFood(food.copyWith(isFavorite: !food.isFavorite));
+  }
+
+  @override
+  Future<void> markLastLoggedAt(String id, DateTime at) async {
+    final food = await findFood(id);
+    if (food == null) return;
+    await saveFood(food.copyWith(lastLoggedAt: at));
+  }
+
   FoodsCompanion _toCompanion(Food food) => FoodsCompanion(
     id: Value(food.id),
     name: Value(food.name),
@@ -56,6 +70,8 @@ class DriftFoodRepository implements FoodRepository {
     servingUnit: Value(food.servingUnit),
     householdMeasure: Value(food.householdMeasure),
     energyIsManual: Value(food.energyIsManual),
+    lastLoggedAt: Value(food.lastLoggedAt),
+    isFavorite: Value(food.isFavorite),
     createdAt: Value(food.createdAt),
     updatedAt: Value(food.updatedAt),
   );
@@ -72,6 +88,8 @@ class DriftFoodRepository implements FoodRepository {
     servingUnit: row.servingUnit,
     householdMeasure: row.householdMeasure,
     energyIsManual: row.energyIsManual,
+    lastLoggedAt: row.lastLoggedAt,
+    isFavorite: row.isFavorite,
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   );

@@ -20,4 +20,14 @@ abstract interface class FoodRepository {
 
   /// Removes the food with [id].
   Future<void> deleteFood(String id);
+
+  /// Toggles [Food.isFavorite] for the food with [id].
+  ///
+  /// Does nothing if the food does not exist.
+  Future<void> toggleFavorite(String id);
+
+  /// Sets [Food.lastLoggedAt] to [at] for the food with [id].
+  ///
+  /// Does nothing if the food does not exist.
+  Future<void> markLastLoggedAt(String id, DateTime at);
 }

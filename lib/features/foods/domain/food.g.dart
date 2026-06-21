@@ -20,6 +20,10 @@ _Food _$FoodFromJson(Map<String, dynamic> json) => _Food(
   servingUnit: $enumDecodeNullable(_$ServingUnitEnumMap, json['servingUnit']),
   householdMeasure: json['householdMeasure'] as String?,
   energyIsManual: json['energyIsManual'] as bool? ?? false,
+  lastLoggedAt: json['lastLoggedAt'] == null
+      ? null
+      : DateTime.parse(json['lastLoggedAt'] as String),
+  isFavorite: json['isFavorite'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$FoodToJson(_Food instance) => <String, dynamic>{
@@ -36,6 +40,8 @@ Map<String, dynamic> _$FoodToJson(_Food instance) => <String, dynamic>{
   'servingUnit': _$ServingUnitEnumMap[instance.servingUnit],
   'householdMeasure': instance.householdMeasure,
   'energyIsManual': instance.energyIsManual,
+  'lastLoggedAt': instance.lastLoggedAt?.toIso8601String(),
+  'isFavorite': instance.isFavorite,
 };
 
 const _$FoodSourceEnumMap = {

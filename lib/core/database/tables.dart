@@ -25,6 +25,9 @@ class Foods extends Table {
   TextColumn get householdMeasure => text().nullable()();
   BoolColumn get energyIsManual =>
       boolean().withDefault(const Constant(false))();
+  IntColumn get lastLoggedAt =>
+      integer().map(const DateTimeMillisConverter()).nullable()();
+  BoolColumn get isFavorite => boolean().withDefault(const Constant(false))();
   IntColumn get createdAt => integer().map(const DateTimeMillisConverter())();
   IntColumn get updatedAt => integer().map(const DateTimeMillisConverter())();
 

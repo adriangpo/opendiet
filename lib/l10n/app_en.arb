@@ -194,6 +194,43 @@
       "energy": { "type": "String" }
     }
   },
+  "actionNext": "Next",
+  "actionBack": "Back",
+  "actionDone": "Done",
+  "csvImportStepPickFile": "Pick a file",
+  "csvImportStepMapColumns": "Map columns",
+  "csvImportStepPreview": "Preview",
+  "csvImportStepResult": "Import result",
+  "csvImportChooseFile": "Choose CSV",
+  "csvImportRequiredUnmapped": "Required fields unmapped: {fields}",
+  "@csvImportRequiredUnmapped": {
+    "description": "Error shown when required fields are not mapped to any CSV column.",
+    "placeholders": { "fields": { "type": "String", "example": "Name, Energy" } }
+  },
+  "csvImportTacoPreset": "TACO preset",
+  "csvImportPreviewDescription": "Showing {shown} of {total} rows. Verify the mapping before importing.",
+  "@csvImportPreviewDescription": {
+    "description": "Description of the preview step showing sample rows.",
+    "placeholders": {
+      "shown": { "type": "int", "example": "3" },
+      "total": { "type": "int", "example": "100" }
+    }
+  },
+  "csvImportActionImport": "Import",
+  "csvImportResultSummary": "Imported {imported} / {rejected} rejected",
+  "@csvImportResultSummary": {
+    "description": "Summary of import showing imported and rejected counts.",
+    "placeholders": {
+      "imported": { "type": "int", "example": "50" },
+      "rejected": { "type": "int", "example": "2" }
+    }
+  },
+  "csvImportRowLabel": "Row",
+  "csvImportFieldServingUnit": "Serving unit",
+  "csvImportFieldEnergy": "Energy",
+  "csvImportFieldSalt": "Salt",
+  "csvImportFieldMicronutrient": "Micronutrient",
+  "csvImportFieldIgnore": "Ignore",
   "diaryAddToSlot": "+ Add to {slotName}",
   "@diaryAddToSlot": {
     "description": "Button to add a food to a named meal slot." ,

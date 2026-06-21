@@ -5,6 +5,7 @@ import 'package:opendiet/core/widgets/app_scaffold.dart';
 import 'package:opendiet/features/add_food/presentation/add_log_hub_screen.dart';
 import 'package:opendiet/features/diary/presentation/diary_screen.dart';
 import 'package:opendiet/features/diary/presentation/quick_add_screen.dart';
+import 'package:opendiet/features/foods/presentation/csv_import/csv_import_screen.dart';
 import 'package:opendiet/features/foods/presentation/custom_food_editor.dart';
 import 'package:opendiet/features/foods/presentation/foods_screen.dart';
 import 'package:opendiet/features/recipes/presentation/recipe_detail_screen.dart';
@@ -64,6 +65,10 @@ GoRouter buildAppRouter({Clock clock = const SystemClock()}) => GoRouter(
                   path: 'new',
                   builder: (context, state) =>
                       CustomFoodEditor(onSaved: (food) => context.pop()),
+                ),
+                GoRoute(
+                  path: 'import',
+                  builder: (context, state) => const CsvImportScreen(),
                 ),
               ],
             ),

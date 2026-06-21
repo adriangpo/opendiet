@@ -76,6 +76,84 @@
   "@settingsDailyTargetNone": {
     "description": "Shown in the settings hub when no daily target is set."
   },
+  "settingsOpenFoodFactsAccount": "Open Food Facts account",
+  "@settingsOpenFoodFactsAccount": {
+    "description": "Settings hub row that opens the Open Food Facts account screen."
+  },
+  "offAccountTitle": "Open Food Facts",
+  "@offAccountTitle": {
+    "description": "Title of the Open Food Facts account screen."
+  },
+  "offAccountSignedOutStatus": "Status: not signed in",
+  "@offAccountSignedOutStatus": {
+    "description": "Open Food Facts account status shown when no account is signed in."
+  },
+  "offAccountSignInHelp": "Sign in to contribute products.",
+  "@offAccountSignInHelp": {
+    "description": "Explains why the user can sign in to Open Food Facts."
+  },
+  "offAccountUsername": "Username",
+  "@offAccountUsername": {
+    "description": "Open Food Facts username field label."
+  },
+  "offAccountPassword": "Password",
+  "@offAccountPassword": {
+    "description": "Open Food Facts password field label."
+  },
+  "offAccountSignInAction": "Sign in",
+  "@offAccountSignInAction": {
+    "description": "Button that signs into Open Food Facts."
+  },
+  "offAccountSignOutAction": "Sign out",
+  "@offAccountSignOutAction": {
+    "description": "Button that signs out of Open Food Facts."
+  },
+  "offAccountSignedIn": "Signed in: {userId}",
+  "@offAccountSignedIn": {
+    "description": "Open Food Facts account status shown when signed in.",
+    "placeholders": {
+      "userId": {
+        "type": "String",
+        "example": "alice"
+      }
+    }
+  },
+  "offAccountSignInFailed": "Could not sign in. Check the account and try again.",
+  "@offAccountSignInFailed": {
+    "description": "Error shown when Open Food Facts rejects sign-in."
+  },
+  "offAccountLoadError": "Could not load Open Food Facts account.",
+  "@offAccountLoadError": {
+    "description": "Error shown when saved Open Food Facts account state cannot load."
+  },
+  "offContributionAddProduct": "Add a product",
+  "@offContributionAddProduct": {
+    "description": "Action to submit a new Open Food Facts product."
+  },
+  "offContributionSuggestCorrection": "Suggest a correction",
+  "@offContributionSuggestCorrection": {
+    "description": "Action to submit a correction for an Open Food Facts product."
+  },
+  "offContributionSubmit": "Submit",
+  "@offContributionSubmit": {
+    "description": "Button that submits an Open Food Facts contribution."
+  },
+  "offProductName": "Product name",
+  "@offProductName": {
+    "description": "Open Food Facts contribution product name field."
+  },
+  "offContributionNameRequired": "Enter a product name",
+  "@offContributionNameRequired": {
+    "description": "Validation error for missing Open Food Facts product name."
+  },
+  "offContributionSubmitted": "Contribution submitted.",
+  "@offContributionSubmitted": {
+    "description": "Success message after an Open Food Facts contribution is submitted."
+  },
+  "offContributionSubmitFailed": "Could not submit. Your product details are still here.",
+  "@offContributionSubmitFailed": {
+    "description": "Error shown when an Open Food Facts contribution fails without clearing the form."
+  },
   "vdRegionBrazil": "Brazil",
   "@vdRegionBrazil": {
     "description": "Percent-daily-value reference region option for Brazil."

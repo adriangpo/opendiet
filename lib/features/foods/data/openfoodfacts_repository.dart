@@ -126,6 +126,19 @@ class OpenFoodFactsRepository implements OffRepository {
     return false;
   }
 
+  @override
+  void restoreCredentials(String userId, String password) {
+    off.OpenFoodAPIConfiguration.globalUser = off.User(
+      userId: userId,
+      password: password,
+    );
+  }
+
+  @override
+  void clearCredentials() {
+    off.OpenFoodAPIConfiguration.globalUser = null;
+  }
+
   off.Product _toOffProduct(Food food) => off.Product(
     barcode: food.barcode,
     productName: food.name,

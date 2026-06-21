@@ -132,5 +132,19 @@
   "csvImportFieldEnergy": "Energia",
   "csvImportFieldSalt": "Sal",
   "csvImportFieldMicronutrient": "Micronutriente",
-  "csvImportFieldIgnore": "Ignorar"
+  "csvImportFieldIgnore": "Ignorar",
+  "settingsReminders": "Lembretes",
+  "remindersTitle": "Lembretes",
+  "remindersEmpty": "Nenhum lembrete ainda.",
+  "remindersAdd": "+ Adicionar lembrete",
+  "remindersEdit": "Editar lembrete",
+  "remindersLocalOnly": "Lembretes sao apenas locais.",
+  "remindersLoadError": "Nao foi possivel carregar os lembretes.",
+  "remindersPermissionDenied": "Permissao de notificacao negada",
+  "remindersPermissionExplanation": "Lembretes precisam de permissao de notificacao para alertar nos horarios das refeicoes.",
+  "remindersOpenSettings": "Abrir configuracoes",
+  "remindersRemoveTitle": "Remover lembrete?",
+  "remindersRemoveMessage": "Remover o lembrete das {time}?",
+  "remindersRemoveConfirm": "Remover",
+  "actionCancel": "Cancelar"
 }

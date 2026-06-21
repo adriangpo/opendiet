@@ -20,9 +20,9 @@ OpenDiet shall allow the user to configure mealtime reminder times, optionally t
 
 ## Acceptance Criteria
 
-- [ ] The user can add, edit, enable/disable, and remove reminder times.
-- [ ] A reminder can optionally reference a meal slot.
-- [ ] Reminder settings persist locally across app launches.
+- [x] The user can add, edit, enable/disable, and remove reminder times.
+- [x] A reminder can optionally reference a meal slot.
+- [x] Reminder settings persist locally across app launches.
 
 ## Implementation Notes
 

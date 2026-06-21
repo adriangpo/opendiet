@@ -423,5 +423,64 @@
   "foodPickerEmpty": "No foods found. Create one first.",
   "@foodPickerEmpty": {
     "description": "Empty state in the food picker when no foods match."
+  },
+  "settingsReminders": "Reminders",
+  "@settingsReminders": {
+    "description": "Settings hub row that opens reminder configuration."
+  },
+  "remindersTitle": "Reminders",
+  "@remindersTitle": {
+    "description": "Title of the reminder configuration screen."
+  },
+  "remindersEmpty": "No reminders yet.",
+  "@remindersEmpty": {
+    "description": "Empty state when no local reminders are configured."
+  },
+  "remindersAdd": "+ Add reminder",
+  "@remindersAdd": {
+    "description": "Button to add a new mealtime reminder."
+  },
+  "remindersEdit": "Edit reminder",
+  "@remindersEdit": {
+    "description": "Tooltip for the button that edits a saved reminder time."
+  },
+  "remindersLocalOnly": "Reminders are local only.",
+  "@remindersLocalOnly": {
+    "description": "Footer text stating that reminders use no remote/push service (FR-021)."
+  },
+  "remindersLoadError": "Could not load reminders.",
+  "@remindersLoadError": {
+    "description": "Shown when reminder data cannot be loaded."
+  },
+  "remindersPermissionDenied": "Notification permission denied",
+  "@remindersPermissionDenied": {
+    "description": "Shown when local notification permission is denied."
+  },
+  "remindersPermissionExplanation": "Reminders need notification permission to alert you at meal times.",
+  "@remindersPermissionExplanation": {
+    "description": "Explains why notification permission is requested."
+  },
+  "remindersOpenSettings": "Open settings",
+  "@remindersOpenSettings": {
+    "description": "Button to open platform settings after permission denial."
+  },
+  "remindersRemoveTitle": "Remove reminder?",
+  "@remindersRemoveTitle": {
+    "description": "Title of the confirmation dialog for deleting a reminder."
+  },
+  "remindersRemoveMessage": "Remove the {time} reminder?",
+  "@remindersRemoveMessage": {
+    "description": "Confirmation message for deleting a reminder at a time.",
+    "placeholders": {
+      "time": { "type": "String", "example": "08:00" }
+    }
+  },
+  "remindersRemoveConfirm": "Remove",
+  "@remindersRemoveConfirm": {
+    "description": "Confirmation action to remove a reminder."
+  },
+  "actionCancel": "Cancel",
+  "@actionCancel": {
+    "description": "Generic cancel action."
   }
 }

@@ -25,6 +25,13 @@ const List<Nutrient> _targetNutrients = [
   Nutrient.dietaryFiber,
 ];
 
+const List<Nutrient> _requiredTargetNutrients = [
+  Nutrient.energy,
+  Nutrient.protein,
+  Nutrient.carbohydrates,
+  Nutrient.totalFat,
+];
+
 class _DailyTargetScreenState extends ConsumerState<DailyTargetScreen> {
   final Map<Nutrient, TextEditingController> _controllers = {};
   String? _error;
@@ -47,16 +54,22 @@ class _DailyTargetScreenState extends ConsumerState<DailyTargetScreen> {
   }
 
   Nutrients? _readTarget() {
-    for (final text in _controllers.values.map((c) => c.text)) {
-      if (!_parse(text).valid) return null;
+    final values = <Nutrient, double?>{};
+    for (final nutrient in _targetNutrients) {
+      final parsed = _parse(_controllers[nutrient]!.text);
+      if (!parsed.valid) return null;
+      values[nutrient] = parsed.value;
+    }
+    for (final nutrient in _requiredTargetNutrients) {
+      if (values[nutrient] == null) return null;
     }
     final target = Nutrients(
-      energyKcal: _parse(_controllers[Nutrient.energy]!.text).value,
-      protein: _parse(_controllers[Nutrient.protein]!.text).value,
-      carbohydrates: _parse(_controllers[Nutrient.carbohydrates]!.text).value,
-      totalFat: _parse(_controllers[Nutrient.totalFat]!.text).value,
-      sodiumMilligrams: _parse(_controllers[Nutrient.sodium]!.text).value,
-      dietaryFiber: _parse(_controllers[Nutrient.dietaryFiber]!.text).value,
+      energyKcal: values[Nutrient.energy],
+      protein: values[Nutrient.protein],
+      carbohydrates: values[Nutrient.carbohydrates],
+      totalFat: values[Nutrient.totalFat],
+      sodiumMilligrams: values[Nutrient.sodium],
+      dietaryFiber: values[Nutrient.dietaryFiber],
     );
     if (target == Nutrients.empty) return null;
     return target;
@@ -162,7 +175,9 @@ class _DailyTargetScreenState extends ConsumerState<DailyTargetScreen> {
     final trimmed = text.trim();
     if (trimmed.isEmpty) return (valid: true, value: null);
     final parsed = double.tryParse(trimmed.replaceAll(',', '.'));
-    if (parsed == null || parsed < 0) return (valid: false, value: null);
+    if (parsed == null || !parsed.isFinite || parsed < 0) {
+      return (valid: false, value: null);
+    }
     return (valid: true, value: parsed);
   }
 

@@ -98,6 +98,18 @@ void main() {
       expect(target?.totalFat, 60);
     });
 
+    testWidgets('rejects missing required macro values', (tester) async {
+      final repository = FakeSettingsRepository();
+      await pumpScreen(tester, repository: repository);
+
+      await tester.enterText(find.byKey(const Key('field-energy')), '1800');
+      await tester.tap(find.text('Save'));
+      await tester.pump();
+
+      expect(repository.current.dailyTarget, isNull);
+      expect(find.text('Enter valid, non-negative numbers'), findsOneWidget);
+    });
+
     testWidgets('clear target removes it and pops back', (tester) async {
       final repository = FakeSettingsRepository(
         AppSettings.defaults.copyWith(
@@ -120,6 +132,18 @@ void main() {
       await tester.tap(find.text('Save'));
       await tester.pump();
 
+      expect(find.text('Enter valid, non-negative numbers'), findsOneWidget);
+    });
+
+    testWidgets('shows error on non-finite value', (tester) async {
+      final repository = FakeSettingsRepository();
+      await pumpScreen(tester, repository: repository);
+
+      await tester.enterText(find.byKey(const Key('field-energy')), 'NaN');
+      await tester.tap(find.text('Save'));
+      await tester.pump();
+
+      expect(repository.current.dailyTarget, isNull);
       expect(find.text('Enter valid, non-negative numbers'), findsOneWidget);
     });
   });

@@ -26,11 +26,12 @@ OpenDiet shall allow a user who is signed in to their Open Food Facts account to
 
 ## Implementation Notes
 
-<!-- Engineers add notes here during implementation -->
+- 2026-06-21: S-07 exposes the correction entry point only for saved Open Food
+  Facts foods. Submission/auth handling remains in S-17.
 
 ## Test Cases
 
-<!-- QA adds test case references here -->
+- `test/features/foods/presentation/food_detail_screen_test.dart`
 
 ---
 *Created: 2026-06-19*

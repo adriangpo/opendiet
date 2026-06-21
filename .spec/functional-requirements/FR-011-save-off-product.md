@@ -27,11 +27,14 @@ OpenDiet shall allow the user to save an Open Food Facts product into the local 
 
 ## Implementation Notes
 
-<!-- Engineers add notes here during implementation -->
+- 2026-06-21: S-07 reads saved products from the local `FoodRepository` only.
+  The detail screen does not fetch Open Food Facts; saved OFF foods and custom
+  foods render through the same domain `Food` model and nutrition table.
 
 ## Test Cases
 
-<!-- QA adds test case references here -->
+- `test/features/foods/presentation/food_detail_screen_test.dart`
+- `test/features/foods/presentation/foods_screen_test.dart`
 
 ---
 *Created: 2026-06-19*

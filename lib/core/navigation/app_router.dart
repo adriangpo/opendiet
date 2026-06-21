@@ -4,9 +4,11 @@ import 'package:opendiet/core/time/time_providers.dart';
 import 'package:opendiet/core/widgets/app_scaffold.dart';
 import 'package:opendiet/features/add_food/presentation/add_log_hub_screen.dart';
 import 'package:opendiet/features/diary/presentation/diary_screen.dart';
+import 'package:opendiet/features/diary/presentation/food_quantity_entry_screen.dart';
 import 'package:opendiet/features/diary/presentation/quick_add_screen.dart';
 import 'package:opendiet/features/foods/presentation/csv_import/csv_import_screen.dart';
 import 'package:opendiet/features/foods/presentation/custom_food_editor.dart';
+import 'package:opendiet/features/foods/presentation/food_detail_screen.dart';
 import 'package:opendiet/features/foods/presentation/foods_screen.dart';
 import 'package:opendiet/features/recipes/presentation/recipe_detail_screen.dart';
 import 'package:opendiet/features/recipes/presentation/recipe_editor_screen.dart';
@@ -28,6 +30,21 @@ GoRouter goRouter(Ref ref) => buildAppRouter(clock: ref.watch(clockProvider));
 GoRouter buildAppRouter({Clock clock = const SystemClock()}) => GoRouter(
   initialLocation: '/diary',
   routes: [
+    GoRoute(
+      path: '/log/quantity/:foodRef',
+      builder: (context, state) {
+        final foodRef = state.pathParameters['foodRef']!;
+        final foodId = _savedFoodId(foodRef);
+        final slot = state.uri.queryParameters['slot'];
+        final dateStr = state.uri.queryParameters['date'];
+        final day = dateStr != null ? DateTime.parse(dateStr) : clock.now();
+        return FoodQuantityEntryScreen(
+          foodId: foodId,
+          mealSlotId: slot,
+          day: day,
+        );
+      },
+    ),
     GoRoute(
       path: '/log',
       builder: (context, state) {
@@ -71,6 +88,20 @@ GoRouter buildAppRouter({Clock clock = const SystemClock()}) => GoRouter(
                 GoRoute(
                   path: 'import',
                   builder: (context, state) => const CsvImportScreen(),
+                ),
+                GoRoute(
+                  path: ':id',
+                  builder: (context, state) => FoodDetailScreen(
+                    foodId: state.pathParameters['id']!,
+                  ),
+                  routes: [
+                    GoRoute(
+                      path: 'edit',
+                      builder: (context, state) => FoodEditScreen(
+                        foodId: state.pathParameters['id']!,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -131,3 +162,9 @@ GoRouter buildAppRouter({Clock clock = const SystemClock()}) => GoRouter(
     ),
   ],
 );
+
+String _savedFoodId(String foodRef) {
+  const prefix = 'food:';
+  if (!foodRef.startsWith(prefix)) return foodRef;
+  return foodRef.substring(prefix.length);
+}

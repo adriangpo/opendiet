@@ -31,7 +31,8 @@ OpenDiet shall present any food or recipe as the ANVISA nutrition table, with a 
 
 ## Test Cases
 
-<!-- QA adds test case references here -->
+- `test/features/foods/presentation/food_detail_screen_test.dart`
+- `test/features/diary/presentation/food_quantity_entry_screen_test.dart`
 
 ---
 *Created: 2026-06-19*

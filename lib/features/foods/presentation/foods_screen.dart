@@ -197,6 +197,7 @@ class _FoodListTile extends StatelessWidget {
       title: Text(food.name),
       subtitle: food.brand != null ? Text(food.brand!) : null,
       trailing: Text(trailing),
+      onTap: () => context.push('/foods/${Uri.encodeComponent(food.id)}'),
     );
   }
 }

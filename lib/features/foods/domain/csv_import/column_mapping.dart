@@ -89,3 +89,15 @@ class ColumnMapping {
     isRequired,
   );
 }
+
+List<CsvField> missingRequiredCsvFields(Iterable<ColumnMapping> mappings) {
+  final selectedFields = mappings
+      .map((mapping) => mapping.selectedField)
+      .toSet();
+  return [
+    if (!selectedFields.contains(CsvField.name)) CsvField.name,
+    if (!selectedFields.contains(CsvField.energyKcal) &&
+        !selectedFields.contains(CsvField.energyKj))
+      CsvField.energyKcal,
+  ];
+}

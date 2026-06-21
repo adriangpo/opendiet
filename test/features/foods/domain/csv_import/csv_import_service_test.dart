@@ -72,6 +72,23 @@ Bad Energy,abc,5''';
       expect(result.rejectedCount, 0);
     });
 
+    test('rejects rows when the required name column is unmapped', () async {
+      const csv = '''
+Energy,Protein
+100,10
+200,20''';
+
+      final result = await service.importFromCsv(csv);
+
+      expect(result.importedCount, 0);
+      expect(result.rejectedCount, 2);
+      expect(result.rejectedRowReasons, hasLength(2));
+      expect(result.rejectedRowReasons.first.reason, contains('name'));
+
+      final foods = await repository.allFoods();
+      expect(foods, isEmpty);
+    });
+
     test('handles empty content', () async {
       final result = await service.importFromCsv('');
 

@@ -224,6 +224,10 @@ abstract final class CsvRowValidator {
       }
     }
 
+    if (name == null) {
+      return const RejectedRow(rowNumber: 0, reason: 'name is missing');
+    }
+
     // Energy must be present: either kcal or kJ, or both converted.
     if (energyKcal == null && energyKj == null) {
       return const RejectedRow(
@@ -246,7 +250,7 @@ abstract final class CsvRowValidator {
     }
 
     return ValidRow(
-      name: name ?? '',
+      name: name,
       brand: brand,
       barcode: barcode,
       basis: basis,

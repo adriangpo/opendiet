@@ -163,9 +163,7 @@ class _CsvImportScreenState extends ConsumerState<CsvImportScreen> {
       return const SizedBox.shrink();
     }
 
-    final requiredUnmapped = mappings
-        .where((m) => m.isRequired && m.selectedField == CsvField.ignore)
-        .toList();
+    final requiredUnmapped = missingRequiredCsvFields(mappings);
 
     return Column(
       children: [
@@ -219,7 +217,9 @@ class _CsvImportScreenState extends ConsumerState<CsvImportScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Text(
               l10n.csvImportRequiredUnmapped(
-                requiredUnmapped.map((m) => m.originalHeader).join(', '),
+                requiredUnmapped
+                    .map((field) => _fieldLabel(l10n, field))
+                    .join(', '),
               ),
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),

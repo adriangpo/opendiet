@@ -39,6 +39,24 @@ void main() {
       }
     });
 
+    test('rejects row when no column is mapped to name', () {
+      const noNameMappings = [
+        ColumnMapping(
+          columnIndex: 0,
+          originalHeader: 'Energy',
+          proposedField: CsvField.energyKcal,
+          selectedField: CsvField.energyKcal,
+          isRequired: true,
+        ),
+      ];
+      final result = CsvRowValidator.validate(['120'], noNameMappings);
+      if (result is RejectedRow) {
+        expect(result.reason, contains('name'));
+      } else {
+        fail('Expected rejection when name mapping is missing');
+      }
+    });
+
     test('rejects row with missing energy', () {
       final row = _row(name: 'Test', energy: '');
       final result = CsvRowValidator.validate(row, mappings);

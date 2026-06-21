@@ -1,0 +1,84 @@
+#!/usr/bin/env sh
+# Run Dart without leaking the app worktree Git environment into the Flutter
+# SDK checkout, and serialize SDK cache access across parallel agents.
+set -eu
+
+find_dart() {
+  if command -v dart >/dev/null 2>&1; then
+    command -v dart
+    return 0
+  fi
+
+  for candidate in \
+    "${FLUTTER_ROOT:-}/bin/dart" \
+    "${HOME:-}/flutter/bin/dart" \
+    "${HOME:-}/fvm/default/bin/dart" \
+    "${HOME:-}/development/flutter/bin/dart" \
+    "/opt/flutter/bin/dart" \
+    "/usr/local/flutter/bin/dart"; do
+    if [ -x "$candidate" ]; then
+      printf '%s\n' "$candidate"
+      return 0
+    fi
+  done
+
+  return 1
+}
+
+dart_bin="$(find_dart)" || {
+  echo "[dart_safe] dart not found on PATH. Set FLUTTER_ROOT or add Dart to PATH." >&2
+  exit 127
+}
+
+if [ -z "${FLUTTER_ROOT:-}" ]; then
+  FLUTTER_ROOT="$(dirname "$(dirname "$dart_bin")")"
+  export FLUTTER_ROOT
+fi
+
+lock_parent="${TMPDIR:-/tmp}/opendiet-flutter-locks"
+mkdir -p "$lock_parent"
+
+lock_name="$(printf '%s' "$FLUTTER_ROOT" | tr -c 'A-Za-z0-9._-' '_')"
+lock_dir="$lock_parent/$lock_name.lock"
+
+while ! mkdir "$lock_dir" 2>/dev/null; do
+  if [ -f "$lock_dir/pid" ]; then
+    lock_pid="$(cat "$lock_dir/pid" 2>/dev/null || :)"
+    case "$lock_pid" in
+      '' | *[!0-9]*)
+        stale_lock=1
+        ;;
+      *)
+        if kill -0 "$lock_pid" 2>/dev/null; then
+          stale_lock=0
+        else
+          stale_lock=1
+        fi
+        ;;
+    esac
+
+    if [ "$stale_lock" = 1 ]; then
+      rm -rf "$lock_dir" 2>/dev/null || true
+      continue
+    fi
+  fi
+
+  sleep 1
+done
+
+printf '%s\n' "$$" > "$lock_dir/pid"
+
+OPENDIET_DART_LOCK_DIR="$lock_dir"
+export OPENDIET_DART_LOCK_DIR
+
+cleanup() {
+  rm -rf "$lock_dir" 2>/dev/null || true
+}
+trap cleanup EXIT INT TERM HUP
+
+git_environment_variables="$(git rev-parse --local-env-vars 2>/dev/null || :)"
+for variable in $git_environment_variables; do
+  unset "$variable"
+done
+
+"$dart_bin" "$@"

@@ -259,10 +259,10 @@ class _QuickLogTile extends ConsumerWidget {
     final now = clock.now();
     final day = ref.read(diaryDayProvider);
 
-    // Compute the nutrients for 1 serving of this food.
+    final quantity = _defaultQuickLogQuantity(food);
     final servingNutrition = FoodNutrition.forQuantity(
       food,
-      Quantity.servings(1),
+      quantity,
     );
 
     final entry = DiaryEntry(
@@ -272,7 +272,7 @@ class _QuickLogTile extends ConsumerWidget {
       referenceKind: DiaryReferenceKind.food,
       referenceId: food.id,
       label: food.name,
-      quantity: Quantity.servings(1),
+      quantity: quantity,
       nutrients: Nutrients(
         energyKcal: servingNutrition.energyKcal,
         carbohydrates: servingNutrition.carbohydrates,
@@ -294,6 +294,19 @@ class _QuickLogTile extends ConsumerWidget {
 
     if (!context.mounted) return;
     context.pop();
+  }
+
+  Quantity _defaultQuickLogQuantity(Food food) => switch (food.basis) {
+    NutrientBasis.per100g when _hasServingSize(food) => Quantity.servings(1),
+    NutrientBasis.per100ml when _hasServingSize(food) => Quantity.servings(1),
+    NutrientBasis.per100g => Quantity.grams(100),
+    NutrientBasis.per100ml => Quantity.milliliters(100),
+    NutrientBasis.perServing => Quantity.servings(1),
+  };
+
+  bool _hasServingSize(Food food) {
+    final size = food.servingSizeMetric;
+    return size != null && size > 0;
   }
 }
 

@@ -49,6 +49,31 @@ void main() {
     expect(find.text('Serves 4'), findsOneWidget);
   });
 
+  testWidgets('shows fractional serves count without rounding', (tester) async {
+    final recipeRepo = FakeRecipeRepository();
+    final foodRepo = FakeFoodRepository();
+    await foodRepo.saveFood(_food('chicken'));
+    await recipeRepo.saveRecipe(
+      _recipe(
+        'r1',
+        'Chicken curry',
+        [RecipeIngredient(foodId: 'chicken', quantity: Quantity.grams(200))],
+        yieldServings: 1.5,
+      ),
+    );
+
+    await pumpApp(
+      tester,
+      const RecipeDetailScreen(recipeId: 'r1'),
+      overrides: baseOverrides(recipeRepo: recipeRepo, foodRepo: foodRepo),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Serves 1.5'), findsOneWidget);
+    expect(find.text('Serves 2'), findsNothing);
+  });
+
   testWidgets('shows per-serving and total nutrition', (tester) async {
     final recipeRepo = FakeRecipeRepository();
     final foodRepo = FakeFoodRepository();
@@ -145,15 +170,19 @@ void main() {
   });
 }
 
-Recipe _recipe(String id, String name, List<RecipeIngredient> ingredients) =>
-    Recipe(
-      id: id,
-      name: name,
-      yieldServings: 4,
-      ingredients: ingredients,
-      createdAt: DateTime(2025),
-      updatedAt: DateTime(2025),
-    );
+Recipe _recipe(
+  String id,
+  String name,
+  List<RecipeIngredient> ingredients, {
+  double yieldServings = 4,
+}) => Recipe(
+  id: id,
+  name: name,
+  yieldServings: yieldServings,
+  ingredients: ingredients,
+  createdAt: DateTime(2025),
+  updatedAt: DateTime(2025),
+);
 
 Food _food(String id, {double? energy}) => Food(
   id: id,

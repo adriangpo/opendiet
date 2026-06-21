@@ -82,10 +82,16 @@ class _RecipeListTile extends StatelessWidget {
     return ListTile(
       title: Text(recipe.name),
       subtitle: Text(
-        l10n.recipeServes(recipe.yieldServings.toStringAsFixed(0)),
+        l10n.recipeServes(_formatServingCount(recipe.yieldServings)),
       ),
       trailing: Text(l10n.recipeEnergyPerServing(energyText)),
       onTap: () => context.push('/recipes/${recipe.id}'),
     );
+  }
+
+  String _formatServingCount(double value) {
+    return value == value.roundToDouble()
+        ? value.toInt().toString()
+        : value.toStringAsFixed(1);
   }
 }

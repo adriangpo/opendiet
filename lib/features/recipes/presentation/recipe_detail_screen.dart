@@ -57,7 +57,7 @@ class RecipeDetailScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(16),
             children: [
               Text(
-                l10n.recipeServes(recipe.yieldServings.toStringAsFixed(0)),
+                l10n.recipeServes(_formatServingCount(recipe.yieldServings)),
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 16),
@@ -122,6 +122,12 @@ class RecipeDetailScreen extends ConsumerWidget {
 
   String _formatKcal(double? value) {
     if (value == null) return '--';
+    return value == value.roundToDouble()
+        ? value.toInt().toString()
+        : value.toStringAsFixed(1);
+  }
+
+  String _formatServingCount(double value) {
     return value == value.roundToDouble()
         ? value.toInt().toString()
         : value.toStringAsFixed(1);

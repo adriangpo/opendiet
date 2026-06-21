@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:opendiet/core/identifiers/identifier_providers.dart';
 import 'package:opendiet/core/nutrition/nutrients.dart';
 import 'package:opendiet/core/time/time_providers.dart';
@@ -71,7 +72,22 @@ class _QuickAddScreenState extends ConsumerState<QuickAddScreen> {
 
     await repository.saveEntry(entry);
 
-    if (mounted) Navigator.of(context).pop();
+    if (mounted) _closeAfterSave();
+  }
+
+  void _closeAfterSave() {
+    final router = GoRouter.maybeOf(context);
+    if (router != null) {
+      if (router.canPop()) {
+        context.pop();
+      } else {
+        context.go('/diary');
+      }
+      return;
+    }
+
+    final navigator = Navigator.of(context);
+    if (navigator.canPop()) navigator.pop();
   }
 
   @override
@@ -144,6 +160,7 @@ class _QuickAddScreenState extends ConsumerState<QuickAddScreen> {
               decoration: InputDecoration(
                 labelText: '${l10n.nutrientProtein} (${l10n.unitGram})',
               ),
+              validator: (value) => _validateOptionalNumber(value, l10n),
             ),
             const SizedBox(height: 12),
             TextFormField(
@@ -153,6 +170,7 @@ class _QuickAddScreenState extends ConsumerState<QuickAddScreen> {
               decoration: InputDecoration(
                 labelText: '${l10n.nutrientCarbohydrates} (${l10n.unitGram})',
               ),
+              validator: (value) => _validateOptionalNumber(value, l10n),
             ),
             const SizedBox(height: 12),
             TextFormField(
@@ -162,6 +180,7 @@ class _QuickAddScreenState extends ConsumerState<QuickAddScreen> {
               decoration: InputDecoration(
                 labelText: '${l10n.nutrientTotalFat} (${l10n.unitGram})',
               ),
+              validator: (value) => _validateOptionalNumber(value, l10n),
             ),
             const SizedBox(height: 24),
             FilledButton(
@@ -180,5 +199,15 @@ class _QuickAddScreenState extends ConsumerState<QuickAddScreen> {
     final v = double.tryParse(trimmed);
     if (v == null || !v.isFinite || v < 0) return null;
     return v;
+  }
+
+  String? _validateOptionalNumber(String? value, AppLocalizations l10n) {
+    final trimmed = value?.trim() ?? '';
+    if (trimmed.isEmpty) return null;
+    final v = double.tryParse(trimmed);
+    if (v == null || !v.isFinite || v < 0) {
+      return l10n.foodErrorInvalidValue;
+    }
+    return null;
   }
 }

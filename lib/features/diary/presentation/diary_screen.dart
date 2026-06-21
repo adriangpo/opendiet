@@ -71,7 +71,7 @@ class _MealSlotSection extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: TextButton.icon(
-            onPressed: () => context.go('/log?slot=${slot.id}&date=$dateStr'),
+            onPressed: () => context.push('/log?slot=${slot.id}&date=$dateStr'),
             icon: const Icon(Icons.add, size: 18),
             label: Text(l10n.diaryAddToSlot(slot.name)),
           ),

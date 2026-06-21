@@ -1,4 +1,6 @@
 import 'package:go_router/go_router.dart';
+import 'package:opendiet/core/time/clock.dart';
+import 'package:opendiet/core/time/time_providers.dart';
 import 'package:opendiet/core/widgets/app_scaffold.dart';
 import 'package:opendiet/features/diary/presentation/diary_screen.dart';
 import 'package:opendiet/features/diary/presentation/quick_add_screen.dart';
@@ -14,10 +16,10 @@ part 'app_router.g.dart';
 /// Recipes, Settings). Deeper routes hang off these branches in later
 /// increments (see .spec/design/ui/_index.md route table).
 @Riverpod(keepAlive: true)
-GoRouter goRouter(Ref ref) => buildAppRouter();
+GoRouter goRouter(Ref ref) => buildAppRouter(clock: ref.watch(clockProvider));
 
 /// Builds the application router. Exposed for widget tests.
-GoRouter buildAppRouter() => GoRouter(
+GoRouter buildAppRouter({Clock clock = const SystemClock()}) => GoRouter(
   initialLocation: '/diary',
   routes: [
     GoRoute(
@@ -25,7 +27,7 @@ GoRouter buildAppRouter() => GoRouter(
       builder: (context, state) {
         final slot = state.uri.queryParameters['slot'] ?? '';
         final dateStr = state.uri.queryParameters['date'];
-        final day = dateStr != null ? DateTime.parse(dateStr) : DateTime.now();
+        final day = dateStr != null ? DateTime.parse(dateStr) : clock.now();
         return QuickAddScreen(slotId: slot, day: day);
       },
     ),

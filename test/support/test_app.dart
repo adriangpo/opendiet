@@ -49,10 +49,12 @@ Future<void> pumpAppShell(
   await tester.pumpWidget(
     ProviderScope(
       overrides: overrides,
-      child: MaterialApp.router(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        routerConfig: buildAppRouter(),
+      child: Consumer(
+        builder: (context, ref, child) => MaterialApp.router(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          routerConfig: ref.watch(goRouterProvider),
+        ),
       ),
     ),
   );

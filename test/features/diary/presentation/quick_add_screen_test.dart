@@ -99,6 +99,38 @@ void main() {
       expect(repository.allEntries(), completion(isEmpty));
     });
 
+    testWidgets('validates optional nutrients are not malformed', (
+      tester,
+    ) async {
+      final repository = FakeDiaryRepository();
+      await pumpScreen(tester, repository: repository);
+
+      await tester.enterText(find.byKey(const Key('field-name')), 'Omelette');
+      await tester.enterText(find.byKey(const Key('field-energy')), '300');
+      await tester.enterText(find.byKey(const Key('field-protein')), 'abc');
+      await tester.tap(find.text('Save'));
+      await tester.pump();
+
+      expect(find.text('Enter valid, non-negative numbers'), findsOneWidget);
+      expect(repository.allEntries(), completion(isEmpty));
+    });
+
+    testWidgets('validates optional nutrients are not negative', (
+      tester,
+    ) async {
+      final repository = FakeDiaryRepository();
+      await pumpScreen(tester, repository: repository);
+
+      await tester.enterText(find.byKey(const Key('field-name')), 'Omelette');
+      await tester.enterText(find.byKey(const Key('field-energy')), '300');
+      await tester.enterText(find.byKey(const Key('field-total-fat')), '-1');
+      await tester.tap(find.text('Save'));
+      await tester.pump();
+
+      expect(find.text('Enter valid, non-negative numbers'), findsOneWidget);
+      expect(repository.allEntries(), completion(isEmpty));
+    });
+
     testWidgets('saves a quick-add entry and pops back (FR-031)', (
       tester,
     ) async {

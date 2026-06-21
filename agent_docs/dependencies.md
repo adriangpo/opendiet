@@ -33,20 +33,17 @@ the Riverpod lint plugins cannot be added in stable form on any Flutter right no
 is covered by `very_good_analysis` + the strict analyzer modes. Add `riverpod_lint`/
 `custom_lint` back once the ecosystem realigns on a single analyzer major.
 
-## file_picker removed; no win32 override (was: win32 ^6 override)
-We initially added `file_picker ^11` and forced `win32: ^6.0.1` (so `share_plus 13.x`,
-which needs `win32 ^6`, and `file_picker` could coexist). That override was **not**
-harmless: `file_picker 11`'s Windows implementation (`file_picker_windows.dart`) is
-compiled even for an **Android** build, and it targets the `win32 5.x` API
-(`COINIT.*`, `COMObject`, positional `CoInitializeEx`), so it fails to compile against
-`win32 6` -- breaking `flutter run` on a phone with a `kernel_snapshot` error.
+## file_picker 10.3.10 with share_plus 12.x; no win32 override
+`file_picker 8.3.7` hardcodes Android `compileSdk 34`, which fails current Android
+debug builds because `flutter_plugin_android_lifecycle 2.0.35` requires API 36 metadata
+checks. Keep `file_picker` on the latest 10.3.x line unless this is revalidated on a
+device build.
 
-`file_picker` is only needed for CSV import (FR-013) / backup file selection, which is
-**not built yet**, so we removed it and the `win32` override. `win32` now resolves to 6
-for `share_plus` (whose Windows code is properly conditionally compiled and does not
-break the mobile build). When CSV import lands, re-add a file-picking dependency that is
-compatible with `win32 6` (a newer `file_picker`, or an alternative), and verify a device
-build before relying on it.
+Do not add a `win32` dependency override. `file_picker 10.3.10` and `share_plus 12.0.2`
+both resolve against `win32 5.x`, which avoids the earlier failed experiment where a
+forced `win32 6.x` made `file_picker`'s Windows implementation fail during mobile
+kernel compilation. `file_picker 11.0.2` resolves, but failed this app's Android build on
+AGP 9 because the generated Java plugin registrant could not see the Kotlin plugin class.
 
 ## Pinning & lockfile
 This is an app: **commit `pubspec.lock`**. Verify latest stable before bumping (AGENTS.md).

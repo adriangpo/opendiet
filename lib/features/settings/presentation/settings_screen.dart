@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:opendiet/core/nutrition/nutrients.dart';
 import 'package:opendiet/core/nutrition/vd_reference.dart';
 import 'package:opendiet/core/units/unit_system.dart';
 import 'package:opendiet/features/settings/domain/app_settings.dart';
@@ -41,6 +43,12 @@ class _SettingsList extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 8),
       children: [
+        ListTile(
+          title: Text(l10n.settingsDailyTarget),
+          subtitle: Text(_dailyTargetSubtitle(l10n, settings.dailyTarget)),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => context.push('/settings/target'),
+        ),
         ListTile(
           title: Text(l10n.settingsUnitSystem),
           subtitle: SegmentedButton<UnitSystem>(
@@ -85,5 +93,32 @@ class _SettingsList extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  String _dailyTargetSubtitle(AppLocalizations l10n, Nutrients? target) {
+    if (target == null) return l10n.settingsDailyTargetNone;
+    final parts = <String>[];
+    if (target.energyKcal != null) {
+      parts.add('${target.energyKcal!.toInt()} kcal');
+    }
+    if (target.protein != null) {
+      parts.add(
+        '${target.protein!.toInt()}g '
+        '${l10n.nutrientProtein.toLowerCase()}',
+      );
+    }
+    if (target.carbohydrates != null) {
+      parts.add(
+        '${target.carbohydrates!.toInt()}g '
+        '${l10n.nutrientCarbohydrates.toLowerCase()}',
+      );
+    }
+    if (target.totalFat != null) {
+      parts.add(
+        '${target.totalFat!.toInt()}g '
+        '${l10n.nutrientTotalFat.toLowerCase()}',
+      );
+    }
+    return parts.join(' - ');
   }
 }

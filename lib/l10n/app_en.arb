@@ -64,17 +64,29 @@
   "@settingsVdRegion": {
     "description": "Label for the percent-daily-value reference region setting."
   },
+  "settingsDailyTarget": "Daily target",
+  "@settingsDailyTarget": {
+    "description": "Title of the daily target editor screen (S-16) and the settings hub row that leads to it."
+  },
+  "settingsClearTarget": "Clear target",
+  "@settingsClearTarget": {
+    "description": "Button to remove the daily target."
+  },
+  "settingsDailyTargetNone": "None",
+  "@settingsDailyTargetNone": {
+    "description": "Shown in the settings hub when no daily target is set."
+  },
   "vdRegionBrazil": "Brazil",
   "@vdRegionBrazil": {
-    "description": "Brazil %VD reference region (ANVISA)."
+    "description": "Percent-daily-value reference region option for Brazil."
   },
   "vdRegionUnitedStates": "United States",
   "@vdRegionUnitedStates": {
-    "description": "United States %VD reference region (FDA)."
+    "description": "Percent-daily-value reference region option for the United States."
   },
   "vdRegionEuropeanUnion": "European Union",
   "@vdRegionEuropeanUnion": {
-    "description": "European Union %VD reference region."
+    "description": "Percent-daily-value reference region option for the European Union."
   },
   "settingsLoadError": "Could not load settings.",
   "foodsLoadError": "Could not load foods.",

@@ -440,6 +440,10 @@
   "@remindersAdd": {
     "description": "Button to add a new mealtime reminder."
   },
+  "remindersEdit": "Edit reminder",
+  "@remindersEdit": {
+    "description": "Tooltip for the button that edits a saved reminder time."
+  },
   "remindersLocalOnly": "Reminders are local only.",
   "@remindersLocalOnly": {
     "description": "Footer text stating that reminders use no remote/push service (FR-021)."

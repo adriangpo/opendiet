@@ -61,6 +61,17 @@ void main() {
       expect(find.text('13:00'), findsOneWidget);
     });
 
+    testWidgets('shows an edit action for saved reminders', (tester) async {
+      final repository = FakeReminderRepository();
+      await repository.saveReminder(
+        const Reminder(id: '1', hour: 8, minute: 0, enabled: true),
+      );
+
+      await pumpRemindersScreen(tester, repository: repository);
+
+      expect(find.byKey(const Key('reminder-edit-1')), findsOneWidget);
+    });
+
     testWidgets('toggling a reminder enables/disables it', (tester) async {
       final repository = FakeReminderRepository();
       await repository.saveReminder(

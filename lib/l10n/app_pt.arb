@@ -137,6 +137,7 @@
   "remindersTitle": "Lembretes",
   "remindersEmpty": "Nenhum lembrete ainda.",
   "remindersAdd": "+ Adicionar lembrete",
+  "remindersEdit": "Editar lembrete",
   "remindersLocalOnly": "Lembretes sao apenas locais.",
   "remindersLoadError": "Nao foi possivel carregar os lembretes.",
   "remindersPermissionDenied": "Permissao de notificacao negada",

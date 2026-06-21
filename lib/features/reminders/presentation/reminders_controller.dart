@@ -1,7 +1,7 @@
+import 'package:opendiet/core/identifiers/identifier_providers.dart';
 import 'package:opendiet/features/reminders/data/reminder_providers.dart';
 import 'package:opendiet/features/reminders/domain/reminder.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:uuid/uuid.dart';
 
 part 'reminders_controller.g.dart';
 
@@ -19,8 +19,9 @@ class RemindersController extends _$RemindersController {
     required int minute,
     String? mealSlotId,
   }) async {
+    final idGenerator = ref.read(idGeneratorProvider);
     final reminder = Reminder(
-      id: const Uuid().v4(),
+      id: idGenerator.newId(),
       hour: hour,
       minute: minute,
       enabled: true,
@@ -43,6 +44,24 @@ class RemindersController extends _$RemindersController {
       await _schedule(updated);
     } else {
       await _cancel(updated.id);
+    }
+  }
+
+  /// Updates the reminder time while preserving its identity and enabled state.
+  Future<void> updateReminderTime(
+    String id, {
+    required int hour,
+    required int minute,
+  }) async {
+    final reminders = await future;
+    final index = reminders.indexWhere((r) => r.id == id);
+    if (index == -1) return;
+
+    final updated = reminders[index].copyWith(hour: hour, minute: minute);
+    await _cancel(updated.id);
+    await _save(updated);
+    if (updated.enabled) {
+      await _schedule(updated);
     }
   }
 

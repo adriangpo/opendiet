@@ -175,6 +175,12 @@ class _ReminderList extends ConsumerWidget {
                     .toggleReminder(reminder.id),
               ),
               IconButton(
+                key: Key('reminder-edit-${reminder.id}'),
+                tooltip: AppLocalizations.of(context).remindersEdit,
+                icon: const Icon(Icons.edit),
+                onPressed: () => _editReminder(context, ref, reminder),
+              ),
+              IconButton(
                 icon: const Icon(Icons.delete),
                 onPressed: () => _confirmDelete(context, ref, reminder),
               ),
@@ -183,6 +189,22 @@ class _ReminderList extends ConsumerWidget {
         );
       },
     );
+  }
+
+  Future<void> _editReminder(
+    BuildContext context,
+    WidgetRef ref,
+    Reminder reminder,
+  ) async {
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: reminder.hour, minute: reminder.minute),
+    );
+    if (time == null) return;
+
+    await ref
+        .read(remindersControllerProvider.notifier)
+        .updateReminderTime(reminder.id, hour: time.hour, minute: time.minute);
   }
 
   void _confirmDelete(BuildContext context, WidgetRef ref, Reminder reminder) {

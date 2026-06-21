@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:opendiet/core/identifiers/id_generator.dart';
 import 'package:opendiet/core/identifiers/identifier_providers.dart';
@@ -5,6 +6,7 @@ import 'package:opendiet/core/nutrition/nutrients.dart';
 import 'package:opendiet/core/nutrition/quantity.dart';
 import 'package:opendiet/core/time/clock.dart';
 import 'package:opendiet/core/time/time_providers.dart';
+import 'package:opendiet/core/widgets/food_list_tile.dart';
 import 'package:opendiet/features/diary/data/diary_providers.dart';
 import 'package:opendiet/features/diary/domain/diary_entry.dart';
 import 'package:opendiet/features/diary/domain/diary_repository.dart';
@@ -120,7 +122,13 @@ void main() {
           initialRoute: '/diary/add/s1',
         );
 
-        await tester.tap(find.byTooltip('Log 1 serving'));
+        final quickLogButton = tester.widget<IconButton>(
+          find.descendant(
+            of: find.byType(FoodListTile),
+            matching: find.byType(IconButton),
+          ),
+        );
+        quickLogButton.onPressed!();
         await tester.pump();
         await tester.pump();
 

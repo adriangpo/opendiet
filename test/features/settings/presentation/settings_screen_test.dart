@@ -52,4 +52,15 @@ void main() {
 
     expect(find.text('Daily target'), findsOneWidget);
   });
+
+  testWidgets('shows the Meal slots row (FR-019)', (tester) async {
+    final repository = FakeSettingsRepository();
+    await pumpApp(
+      tester,
+      const SettingsScreen(),
+      overrides: [settingsRepositoryProvider.overrideWithValue(repository)],
+    );
+
+    expect(find.text('Meal slots'), findsOneWidget);
+  });
 }

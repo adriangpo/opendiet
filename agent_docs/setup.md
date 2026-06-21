@@ -52,15 +52,23 @@ git config core.hooksPath .githooks
 ```
 Mirrors CI: `dart format` + `flutter analyze` + `flutter test`.
 
-The hooks clear Git's hook-local environment before running Flutter. Keep that
-cleanup in place: Flutter is itself a Git checkout, and leaked app worktree
-variables can make Pub resolve the SDK as `0.0.0-unknown`.
+The hooks run Flutter through `tool/flutter_safe`. Keep that wrapper in place:
+Flutter is itself a Git checkout, and leaked app worktree variables can make Pub
+resolve the SDK as `0.0.0-unknown`. The wrapper also serializes Flutter SDK cache
+access across parallel agents.
+
+Agents should use the same wrapper for direct Flutter commands:
+```
+tool/flutter_safe pub get
+tool/flutter_safe analyze
+tool/flutter_safe test
+```
 
 ## 6. Verify
 ```
 dart format --output=none --set-exit-if-changed .
-flutter analyze
-flutter test
+tool/flutter_safe analyze
+tool/flutter_safe test
 ```
 
 > Verify the latest stable of each dependency at add time (AGENTS.md guardrail) — do not trust

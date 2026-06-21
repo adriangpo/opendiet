@@ -21,17 +21,20 @@ Order for **every** change: **tests -> docs -> code.**
 
 Writing code before a failing test, or tests and code together without seeing red, is **not** TDD — call it out. The test is the spec.
 
+Keep the test loop targeted while developing: run the new or affected test once to prove red, then the same targeted test(s) to prove green. Let the pre-push hook be the single full local `tool/flutter_safe test` gate before pushing; do not manually run a full suite immediately before `git push` unless the change is broad/risky, conflict-heavy, or you are not pushing.
+
 **Edge cases are mandatory — one happy-path test is never enough.** For each unit/flow cover, and only stop when each is tested or justified N/A: **happy path + boundaries** (zero, one, max, empty, exactly-at-limit); **invalid input** (wrong type, missing/null, malformed — e.g. a malformed CSV row, an OFF product with missing nutriment fields); **failure modes** (OFF request timeout/offline, empty search result); **state-dependent** behaviour; **lists** (first/last/empty/single, pagination, ordering). Then ask **"what did I miss?"**
 
 ## Commands
-- Install: `flutter pub get` (if Flutter reports SDK version `0.0.0-unknown`, check the Flutter SDK cache; hooks must clear Git's hook environment before invoking Flutter so app worktree metadata cannot poison `bin/cache/flutter.version.json`).
+- Run Flutter through `tool/flutter_safe` in agent/worktree sessions; it clears Git worktree variables and serializes Flutter SDK cache access so parallel agents do not poison `bin/cache/flutter.version.json`.
+- Install: `tool/flutter_safe pub get` (if Flutter reports SDK version `0.0.0-unknown`, check the Flutter SDK cache and rerun through the wrapper).
 - Codegen: `dart run build_runner build --delete-conflicting-outputs` (watch: `... watch`). Drift, Riverpod, freezed, and json_serializable all generate.
-- Run: `flutter run`
-- Test: `flutter test`   single: `flutter test test/path_test.dart --plain-name "<name>"`
-- Analyze: `flutter analyze`   Format: `dart format .`
-- **Done = a failing test was written first, docs updated, then codegen current + `dart format` clean + `flutter analyze` clean + `flutter test` green.** Never leave generated output stale.
-- **Pre-commit hook**: `dart format .` + `flutter analyze` -- runs before every commit (`.githooks/pre-commit`). Auto-formats in place and stages formatting fixes; skips tests for speed. It clears Git's hook-local environment before Flutter commands so multiple worktrees cannot corrupt Flutter SDK version detection. Pre-push covers the full gate.
-- **Pre-push gate (hard)**: `dart format --set-exit-if-changed .` + `flutter analyze` + `flutter test` must all pass before pushing (`.githooks/pre-push`). It uses the same Flutter environment cleanup as pre-commit. If a check can't run, say so — never claim it passed.
+- Run: `tool/flutter_safe run`
+- Test: `tool/flutter_safe test`   single: `tool/flutter_safe test test/path_test.dart --plain-name "<name>"`
+- Analyze: `tool/flutter_safe analyze`   Format: `dart format .`
+- **Done = a failing test was written first, docs updated, then codegen current + `dart format` clean + `tool/flutter_safe analyze` clean + `tool/flutter_safe test` green.** Never leave generated output stale.
+- **Pre-commit hook**: `dart format .` + `tool/flutter_safe analyze` -- runs before every commit (`.githooks/pre-commit`). Auto-formats in place and stages formatting fixes; skips tests for speed. Pre-push covers the full gate.
+- **Pre-push gate (hard)**: `dart format --set-exit-if-changed .` + `tool/flutter_safe analyze` + `tool/flutter_safe test` must all pass before pushing (`.githooks/pre-push`). If a check can't run, say so — never claim it passed.
 
 ## Structure
 Feature-first: `lib/features/<feature>/{data,domain,presentation}` with shared code in `lib/core/`.
@@ -69,7 +72,7 @@ Feature-first: `lib/features/<feature>/{data,domain,presentation}` with shared c
 - **No AI attribution** in commits or PR bodies (no `Co-Authored-By: <model>`, no "Generated with" line); commit identity = the configured git user only. <!-- OPINIONATED -->
 - **Subagent work**: give a detailed prompt, then verify the actual diff — not the summary.
 - **No `TODO` without a linked issue.**
-- **Enable hooks** with `git config core.hooksPath .githooks` (already set for this repo). Both `pre-commit` (lint) and `pre-push` (format + analyze + test) are enforced locally. Keep the Git environment cleanup in both hooks; Flutter is itself a Git checkout, and leaked worktree variables can make Pub see the SDK as `0.0.0-unknown`.
+- **Enable hooks** with `git config core.hooksPath .githooks` (already set for this repo). Both `pre-commit` (lint) and `pre-push` (format + analyze + test) are enforced locally. Keep `tool/flutter_safe` in both hooks; Flutter is itself a Git checkout, and leaked worktree variables or parallel cache writes can make Pub see the SDK as `0.0.0-unknown`.
 - Do not invent Open Food Facts endpoints, fields, or values — confirm against its API docs first.
 - **Never bundle or redistribute TACO/TBCA data** (restricted-use licence) — Brazilian foods enter only via the user's own imported file.
 - **Never hardcode %VD reference values or the ANVISA nutrient set in prose/comments** — hold each in one test-verified table citing the regulation (`agent_docs/brazilian_nutrition.md`).
@@ -78,7 +81,7 @@ Feature-first: `lib/features/<feature>/{data,domain,presentation}` with shared c
 - Unit-test domain/repository logic with fakes; **widget-test** UI with `testWidgets`; reserve `integration_test/` for end-to-end flows.
 - Never hit the live Open Food Facts API in tests — fake the repository or stub the HTTP client with recorded fixtures.
 - Nutrition math (totals, recipe scaling, unit conversion) and CSV/backup round-trips must be covered — they are integrity-critical (NFR-003, NFR-004, NFR-009).
-- Single test: `flutter test test/path_test.dart --plain-name "<name>"`.
+- Single test: `tool/flutter_safe test test/path_test.dart --plain-name "<name>"`.
 </important>
 
 <important if="you are integrating Open Food Facts (search, fetch, or auth)">

@@ -3,6 +3,9 @@
 # Enable once with: git config core.hooksPath .githooks
 set -e
 
+hook_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+flutter_safe="$hook_dir/../tool/flutter_safe"
+
 # IDEs and git GUIs invoke hooks without sourcing the user's shell profile, so
 # tool dirs like the Flutter SDK are absent from PATH and dart/flutter fail to
 # resolve. Recover the SDK from common locations (override with FLUTTER_ROOT).
@@ -32,15 +35,6 @@ if [ -z "$FLUTTER_ROOT" ]; then
   }
 fi
 
-run_without_git_environment() {
-  git_environment_variables="$(git rev-parse --local-env-vars 2>/dev/null || :)"
-  for variable in $git_environment_variables; do
-    unset "$variable"
-  done
-
-  "$@"
-}
-
 for tool in dart flutter; do
   if ! command -v "$tool" >/dev/null 2>&1; then
     echo "[pre-push] $tool not found on PATH." >&2
@@ -54,9 +48,9 @@ echo "[pre-push] dart format --set-exit-if-changed ."
 dart format --output=none --set-exit-if-changed .
 
 echo "[pre-push] flutter analyze"
-run_without_git_environment flutter analyze
+"$flutter_safe" analyze
 
 echo "[pre-push] flutter test"
-run_without_git_environment flutter test
+"$flutter_safe" test
 
 echo "[pre-push] OK"

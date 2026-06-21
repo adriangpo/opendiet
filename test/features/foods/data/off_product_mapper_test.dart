@@ -163,5 +163,31 @@ void main() {
       expect(food.servingSizeMetric, 12.5);
       expect(food.servingUnit, ServingUnit.gram);
     });
+
+    test('parses metric serving size from mixed-token text', () {
+      final product = product0(servingSize: '1 cup (30 g)');
+
+      final food = OffProductMapper.toFood(
+        product: product,
+        id: id,
+        now: fixedTime,
+      );
+
+      expect(food.servingSizeMetric, 30);
+      expect(food.servingUnit, ServingUnit.gram);
+    });
+
+    test('does not treat milligrams as gram serving units', () {
+      final product = product0(servingSize: '10 mg');
+
+      final food = OffProductMapper.toFood(
+        product: product,
+        id: id,
+        now: fixedTime,
+      );
+
+      expect(food.servingSizeMetric, isNull);
+      expect(food.servingUnit, isNull);
+    });
   });
 }

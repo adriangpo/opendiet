@@ -9,6 +9,11 @@ import 'package:openfoodfacts/openfoodfacts.dart' as off;
 /// https://openfoodfacts.github.io/openfoodfacts-server/api/).
 /// Never restate field meanings or limits in code comments (AGENTS.md).
 abstract final class OffProductMapper {
+  static final RegExp _metricServingPattern = RegExp(
+    r'([0-9]+(?:[,.][0-9]+)?)\s*(ml|g)\b',
+    caseSensitive: false,
+  );
+
   /// Converts [product] to a [Food] with source [FoodSource.openFoodFacts].
   ///
   /// [id] is a fresh app-level identifier; [now] is the creation timestamp.
@@ -89,18 +94,22 @@ abstract final class OffProductMapper {
     if (quantity != null && quantity > 0) return quantity;
     final size = product.servingSize;
     if (size == null) return null;
-    final normalized = size.replaceAll(',', '.');
-    final parsed = double.tryParse(
-      normalized.replaceAll(RegExp('[^0-9.]'), ''),
-    );
+    final metricMatch = _metricServingPattern.firstMatch(size);
+    if (metricMatch == null) return null;
+    final parsed = double.tryParse(metricMatch.group(1)!.replaceAll(',', '.'));
     if (parsed != null && parsed > 0) return parsed;
     return null;
   }
 
   static ServingUnit? _servingUnit(off.Product product) {
-    final size = product.servingSize?.toLowerCase() ?? '';
-    if (size.contains('ml')) return ServingUnit.milliliter;
-    if (size.contains('g')) return ServingUnit.gram;
+    final size = product.servingSize;
+    if (size == null) return null;
+    final unit = _metricServingPattern
+        .firstMatch(size)
+        ?.group(2)
+        ?.toLowerCase();
+    if (unit == 'ml') return ServingUnit.milliliter;
+    if (unit == 'g') return ServingUnit.gram;
     return null;
   }
 }

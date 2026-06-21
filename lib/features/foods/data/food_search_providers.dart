@@ -7,10 +7,7 @@ part 'food_search_providers.g.dart';
 
 /// Combined search results from local foods and Open Food Facts.
 class FoodSearchResult {
-  const FoodSearchResult({
-    required this.local,
-    required this.offProducts,
-  });
+  const FoodSearchResult({required this.local, required this.offProducts});
 
   final List<Food> local;
   final List<Food> offProducts;
@@ -25,8 +22,10 @@ class FoodSearchResult {
         offProducts: const [],
       ),
       FoodSourceFilter.savedFromOff => FoodSearchResult(
-        local: const [],
-        offProducts: offProducts,
+        local: local
+            .where((food) => food.source == FoodSource.openFoodFacts)
+            .toList(),
+        offProducts: const [],
       ),
       FoodSourceFilter.all => this,
     };
@@ -42,7 +41,9 @@ class FoodSearchQuery extends _$FoodSearchQuery {
   @override
   String build() => '';
 
-  void update(String query) => state = query;
+  String get query => state;
+
+  set query(String query) => state = query;
 }
 
 /// Holds the current source filter for the foods catalog.
@@ -51,7 +52,9 @@ class FoodSourceFilterNotifier extends _$FoodSourceFilterNotifier {
   @override
   FoodSourceFilter build() => FoodSourceFilter.all;
 
-  void setFilter(FoodSourceFilter filter) => state = filter;
+  FoodSourceFilter get filter => state;
+
+  set filter(FoodSourceFilter filter) => state = filter;
 }
 
 /// Searches local foods and Open Food Facts in parallel.
@@ -63,13 +66,15 @@ Future<FoodSearchResult> foodSearchResults(Ref ref) async {
     return FoodSearchResult(local: local, offProducts: const []);
   }
 
-  final local = await ref.watch(foodRepositoryProvider).searchFoods(query);
-  final offResult = await ref
+  final localFuture = ref.watch(foodRepositoryProvider).searchFoods(query);
+  final offProductsFuture = ref
       .watch(offRepositoryProvider)
-      .searchProducts(query);
+      .searchProducts(query)
+      .then((result) => result.products)
+      .onError<Object>((_, _) => const <Food>[]);
 
-  return FoodSearchResult(
-    local: local,
-    offProducts: offResult.products,
-  );
+  final local = await localFuture;
+  final offProducts = await offProductsFuture;
+
+  return FoodSearchResult(local: local, offProducts: offProducts);
 }

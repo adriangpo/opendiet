@@ -2,10 +2,10 @@ import 'package:opendiet/features/foods/domain/food.dart';
 
 /// Search result from Open Food Facts (FR-009).
 class OffSearchResult {
-  const OffSearchResult({
-    required this.products,
+  OffSearchResult({
+    required List<Food> products,
     required this.totalCount,
-  });
+  }) : products = List.unmodifiable(products);
 
   final List<Food> products;
   final int totalCount;

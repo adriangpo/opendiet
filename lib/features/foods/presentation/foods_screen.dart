@@ -15,12 +15,30 @@ class FoodsScreen extends ConsumerStatefulWidget {
 }
 
 class _FoodsScreenState extends ConsumerState<FoodsScreen> {
-  final _searchController = TextEditingController();
+  late final TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController(
+      text: ref.read(foodSearchQueryProvider),
+    )..addListener(_syncSearchQuery);
+  }
 
   @override
   void dispose() {
-    _searchController.dispose();
+    _searchController
+      ..removeListener(_syncSearchQuery)
+      ..dispose();
     super.dispose();
+  }
+
+  void _syncSearchQuery() {
+    final query = _searchController.text;
+    final notifier = ref.read(foodSearchQueryProvider.notifier);
+    if (ref.read(foodSearchQueryProvider) != query) {
+      notifier.query = query;
+    }
   }
 
   @override
@@ -29,6 +47,14 @@ class _FoodsScreenState extends ConsumerState<FoodsScreen> {
     final searchQuery = ref.watch(foodSearchQueryProvider);
     final resultsAsync = ref.watch(foodSearchResultsProvider);
     final sourceFilter = ref.watch(foodSourceFilterProvider);
+    ref.listen(foodSearchQueryProvider, (_, next) {
+      if (_searchController.text == next) return;
+      _searchController.value = _searchController.value.copyWith(
+        text: next,
+        selection: TextSelection.collapsed(offset: next.length),
+        composing: TextRange.empty,
+      );
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -53,10 +79,7 @@ class _FoodsScreenState extends ConsumerState<FoodsScreen> {
                 suffixIcon: searchQuery.isNotEmpty
                     ? IconButton(
                         icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          _searchController.clear();
-                          ref.read(foodSearchQueryProvider.notifier).update('');
-                        },
+                        onPressed: _searchController.clear,
                       )
                     : null,
                 border: OutlineInputBorder(
@@ -65,35 +88,35 @@ class _FoodsScreenState extends ConsumerState<FoodsScreen> {
                 contentPadding: const EdgeInsets.symmetric(vertical: 12),
               ),
               onChanged: (value) =>
-                  ref.read(foodSearchQueryProvider.notifier).update(value),
+                  ref.read(foodSearchQueryProvider.notifier).query = value,
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
               children: [
                 _FilterChip(
                   label: l10n.foodsFilterMine,
                   selected: sourceFilter == FoodSourceFilter.mine,
-                  onSelected: () => ref
-                      .read(foodSourceFilterProvider.notifier)
-                      .setFilter(FoodSourceFilter.mine),
+                  onSelected: () =>
+                      ref.read(foodSourceFilterProvider.notifier).filter =
+                          FoodSourceFilter.mine,
                 ),
-                const SizedBox(width: 8),
                 _FilterChip(
                   label: l10n.foodsFilterSavedFromOff,
                   selected: sourceFilter == FoodSourceFilter.savedFromOff,
-                  onSelected: () => ref
-                      .read(foodSourceFilterProvider.notifier)
-                      .setFilter(FoodSourceFilter.savedFromOff),
+                  onSelected: () =>
+                      ref.read(foodSourceFilterProvider.notifier).filter =
+                          FoodSourceFilter.savedFromOff,
                 ),
-                const SizedBox(width: 8),
                 _FilterChip(
                   label: l10n.foodsFilterAll,
                   selected: sourceFilter == FoodSourceFilter.all,
-                  onSelected: () => ref
-                      .read(foodSourceFilterProvider.notifier)
-                      .setFilter(FoodSourceFilter.all),
+                  onSelected: () =>
+                      ref.read(foodSourceFilterProvider.notifier).filter =
+                          FoodSourceFilter.all,
                 ),
               ],
             ),
@@ -102,9 +125,7 @@ class _FoodsScreenState extends ConsumerState<FoodsScreen> {
           Expanded(
             child: resultsAsync.when(
               loading: () => const SizedBox.shrink(),
-              error: (error, stack) => Center(
-                child: Text(l10n.foodsLoadError),
-              ),
+              error: (error, stack) => Center(child: Text(l10n.foodsLoadError)),
               data: (result) {
                 final filtered = result.filterBySource(sourceFilter);
                 if (filtered.isEmpty) {

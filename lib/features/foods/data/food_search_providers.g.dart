@@ -44,7 +44,7 @@ final class FoodSearchQueryProvider
   }
 }
 
-String _$foodSearchQueryHash() => r'20c31ab0a2c82ae0421012156c1061ca1165d78d';
+String _$foodSearchQueryHash() => r'0da0da8cd46307af0ee9f2b704b5e8c4dc774d49';
 
 /// Holds the current search query for the foods catalog.
 
@@ -103,7 +103,7 @@ final class FoodSourceFilterNotifierProvider
 }
 
 String _$foodSourceFilterNotifierHash() =>
-    r'40cf58e55aad96cc868ebe276020f37d5c08f8a9';
+    r'387e954a46d975351c555a150c3f18809096126f';
 
 /// Holds the current source filter for the foods catalog.
 
@@ -167,4 +167,4 @@ final class FoodSearchResultsProvider
   }
 }
 
-String _$foodSearchResultsHash() => r'2993e2114b3aecc8a02a150ebceac4ae53e42feb';
+String _$foodSearchResultsHash() => r'a9575502c6aaae5e4ef9d518dcc706c57540e611';

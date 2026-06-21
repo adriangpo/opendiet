@@ -1,18 +1,19 @@
-import 'package:openfoodfacts/openfoodfacts.dart' as off;
+import 'dart:developer' as developer;
+
 import 'package:opendiet/core/identifiers/id_generator.dart';
 import 'package:opendiet/core/time/clock.dart';
 import 'package:opendiet/features/foods/data/off_product_mapper.dart';
 import 'package:opendiet/features/foods/domain/food.dart';
 import 'package:opendiet/features/foods/domain/off_repository.dart';
+import 'package:openfoodfacts/openfoodfacts.dart' as off;
 
 /// Open Food Facts repository backed by the official Dart SDK (FR-009,
 /// FR-010, FR-011).
 class OpenFoodFactsRepository implements OffRepository {
   OpenFoodFactsRepository({
-    required IdGenerator idGenerator,
-    required Clock clock,
-  }) : _idGenerator = idGenerator,
-       _clock = clock;
+    required this._idGenerator,
+    required this._clock,
+  });
 
   final IdGenerator _idGenerator;
   final Clock _clock;
@@ -23,38 +24,52 @@ class OpenFoodFactsRepository implements OffRepository {
     int page = 1,
     int pageSize = 25,
   }) async {
-    final config = off.ProductSearchQueryConfiguration(
-      parametersList: [
-        off.SearchTerms(terms: [query]),
-      ],
-      version: off.ProductQueryVersion.v3,
-      fields: [
-        off.ProductField.BARCODE,
-        off.ProductField.NAME,
-        off.ProductField.BRANDS,
-        off.ProductField.NUTRIMENTS,
-        off.ProductField.SERVING_SIZE,
-      ],
-    );
-    final result = await off.OpenFoodAPIClient.searchProducts(
-      off.OpenFoodAPIConfiguration.globalUser,
-      config,
-    );
-    final products = result.products ?? [];
-    final now = _clock.now();
-    return OffSearchResult(
-      products: products
-          .where((p) => p.barcode != null || p.productName != null)
-          .map(
-            (p) => OffProductMapper.toFood(
-              product: p,
-              id: _idGenerator.newId(),
-              now: now,
-            ),
-          )
-          .toList(),
-      totalCount: result.count ?? products.length,
-    );
+    final safePage = page < 1 ? 1 : page;
+    final safePageSize = pageSize < 1 ? 1 : pageSize;
+    try {
+      final config = off.ProductSearchQueryConfiguration(
+        parametersList: [
+          off.SearchTerms(terms: [query]),
+          off.PageNumber(page: safePage),
+          off.PageSize(size: safePageSize),
+        ],
+        version: off.ProductQueryVersion.v3,
+        fields: [
+          off.ProductField.BARCODE,
+          off.ProductField.NAME,
+          off.ProductField.BRANDS,
+          off.ProductField.NUTRIMENTS,
+          off.ProductField.SERVING_SIZE,
+        ],
+      );
+      final result = await off.OpenFoodAPIClient.searchProducts(
+        off.OpenFoodAPIConfiguration.globalUser,
+        config,
+      );
+      final products = result.products ?? [];
+      final now = _clock.now();
+      return OffSearchResult(
+        products: products
+            .where((p) => p.barcode != null || p.productName != null)
+            .map(
+              (p) => OffProductMapper.toFood(
+                product: p,
+                id: _idGenerator.newId(),
+                now: now,
+              ),
+            )
+            .toList(),
+        totalCount: result.count ?? products.length,
+      );
+    } on Object catch (error, stackTrace) {
+      developer.log(
+        'Open Food Facts search failed',
+        name: 'opendiet.off',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      return OffSearchResult(products: const [], totalCount: 0);
+    }
   }
 
   @override

@@ -12,7 +12,7 @@ void main() {
       repository = FakeOffRepository();
     });
 
-    Food _food({
+    Food food0({
       String id = '1',
       String name = 'Test',
       String? barcode = '123',
@@ -21,22 +21,28 @@ void main() {
       name: name,
       source: FoodSource.openFoodFacts,
       basis: NutrientBasis.per100g,
-      nutrients: Nutrients(energyKcal: 100),
-      brand: null,
+      nutrients: const Nutrients(energyKcal: 100),
       barcode: barcode,
-      servingSizeMetric: null,
-      servingUnit: null,
-      householdMeasure: null,
-      energyIsManual: false,
       createdAt: DateTime(2026),
       updatedAt: DateTime(2026),
     );
 
     group('searchProducts', () {
+      test('stores search results as an unmodifiable list', () {
+        final food = food0(name: 'Oats');
+        final result = OffSearchResult(products: [food], totalCount: 1);
+
+        expect(
+          () => result.products.add(food0(name: 'Banana')),
+          throwsA(anything),
+        );
+      });
+
       test('returns matching products', () async {
-        repository.addProduct(_food(id: '1', name: 'Oats'));
-        repository.addProduct(_food(id: '2', name: 'Banana'));
-        repository.addProduct(_food(id: '3', name: 'Chicken'));
+        repository
+          ..addProduct(food0(name: 'Oats'))
+          ..addProduct(food0(id: '2', name: 'Banana'))
+          ..addProduct(food0(id: '3', name: 'Chicken'));
 
         final result = await repository.searchProducts('Oats');
 
@@ -45,7 +51,7 @@ void main() {
       });
 
       test('returns empty list when no match', () async {
-        repository.addProduct(_food(name: 'Oats'));
+        repository.addProduct(food0(name: 'Oats'));
 
         final result = await repository.searchProducts('Pizza');
 
@@ -54,7 +60,7 @@ void main() {
       });
 
       test('is case-insensitive', () async {
-        repository.addProduct(_food(name: 'Greek Yogurt'));
+        repository.addProduct(food0(name: 'Greek Yogurt'));
 
         final result = await repository.searchProducts('greek');
 
@@ -66,11 +72,46 @@ void main() {
 
         expect(result.totalCount, 0);
       });
+
+      test('applies page and pageSize boundaries', () async {
+        repository
+          ..addProduct(food0(name: 'Oat A'))
+          ..addProduct(food0(id: '2', name: 'Oat B'))
+          ..addProduct(food0(id: '3', name: 'Oat C'));
+
+        final firstPage = await repository.searchProducts(
+          'Oat',
+          pageSize: 2,
+        );
+        final secondPage = await repository.searchProducts(
+          'Oat',
+          page: 2,
+          pageSize: 2,
+        );
+        final zeroValues = await repository.searchProducts(
+          'Oat',
+          page: 0,
+          pageSize: 0,
+        );
+        final emptyPage = await repository.searchProducts(
+          'Oat',
+          page: 4,
+          pageSize: 2,
+        );
+
+        expect(firstPage.totalCount, 3);
+        expect(firstPage.products.map((food) => food.id), ['1', '2']);
+        expect(secondPage.totalCount, 3);
+        expect(secondPage.products.map((food) => food.id), ['3']);
+        expect(zeroValues.products.map((food) => food.id), ['1']);
+        expect(emptyPage.totalCount, 3);
+        expect(emptyPage.products, isEmpty);
+      });
     });
 
     group('getProductByBarcode', () {
       test('returns found product for matching barcode', () async {
-        repository.addProduct(_food(id: '1', barcode: '789123'));
+        repository.addProduct(food0(barcode: '789123'));
 
         final result = await repository.getProductByBarcode('789123');
 
@@ -79,7 +120,7 @@ void main() {
       });
 
       test('returns not-found for unknown barcode', () async {
-        repository.addProduct(_food(barcode: '123'));
+        repository.addProduct(food0());
 
         final result = await repository.getProductByBarcode('999');
 
@@ -96,7 +137,7 @@ void main() {
 
     group('saveProduct', () {
       test('adds product to repository', () async {
-        final food = _food(id: 'new-id', barcode: '555');
+        final food = food0(id: 'new-id', barcode: '555');
         await repository.saveProduct(food);
 
         final result = await repository.getProductByBarcode('555');

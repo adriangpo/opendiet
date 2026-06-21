@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:opendiet/core/nutrition/nutrients.dart';
 import 'package:opendiet/features/diary/data/diary_providers.dart';
 import 'package:opendiet/features/foods/data/food_providers.dart';
+import 'package:opendiet/features/foods/data/food_search_providers.dart';
 import 'package:opendiet/features/foods/data/off_providers.dart';
 import 'package:opendiet/features/foods/domain/food.dart';
+import 'package:opendiet/features/foods/domain/off_repository.dart';
 import 'package:opendiet/features/settings/data/settings_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -16,7 +21,7 @@ import '../../../support/test_app.dart';
 void main() {
   List<Override> baseOverrides(
     FakeFoodRepository foodRepo, {
-    FakeOffRepository? offRepo,
+    OffRepository? offRepo,
   }) => [
     foodRepositoryProvider.overrideWithValue(foodRepo),
     offRepositoryProvider.overrideWithValue(offRepo ?? FakeOffRepository()),
@@ -122,10 +127,7 @@ void main() {
       _food(name: 'Oat Bread', energy: 250, source: FoodSource.openFoodFacts),
     );
 
-    await pumpFoodsTab(
-      tester,
-      baseOverrides(foodRepo, offRepo: offRepo),
-    );
+    await pumpFoodsTab(tester, baseOverrides(foodRepo, offRepo: offRepo));
 
     // Clear initial state - check search results.
     await tester.enterText(find.byType(TextField), 'Oat');
@@ -139,6 +141,70 @@ void main() {
     expect(find.text('Oat Milk'), findsOneWidget);
     expect(find.text('Oat Bread'), findsOneWidget);
     expect(find.text('Banana'), findsNothing);
+  });
+
+  testWidgets('OFF failure still shows local search results', (tester) async {
+    final foodRepo = FakeFoodRepository();
+    await foodRepo.saveFood(_food(name: 'Oats', energy: 180));
+    await foodRepo.saveFood(_food(name: 'Banana', energy: 89));
+
+    await pumpFoodsTab(
+      tester,
+      baseOverrides(foodRepo, offRepo: _ThrowingOffRepository()),
+    );
+
+    await tester.enterText(find.byType(TextField), 'Oat');
+    await tester.pump();
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Oats'), findsOneWidget);
+    expect(find.text('Banana'), findsNothing);
+  });
+
+  testWidgets('saved-from-OFF filter shows persisted OFF foods', (
+    tester,
+  ) async {
+    final repo = FakeFoodRepository();
+    await repo.saveFood(_food(name: 'Local Oats'));
+    await repo.saveFood(
+      _food(name: 'Saved OFF Oats', source: FoodSource.openFoodFacts),
+    );
+
+    await pumpFoodsTab(tester, baseOverrides(repo));
+
+    await tester.tap(find.text('Saved from OFF'));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Saved OFF Oats'), findsOneWidget);
+    expect(find.text('Local Oats'), findsNothing);
+  });
+
+  testWidgets('search field mirrors cached provider query', (tester) async {
+    final repo = FakeFoodRepository();
+    await repo.saveFood(_food(name: 'Oats'));
+
+    await pumpFoodsTab(tester, baseOverrides(repo));
+    final context = tester.element(find.byType(TextField));
+    final container = ProviderScope.containerOf(context);
+
+    container.read(foodSearchQueryProvider.notifier).query = 'Oat';
+    await tester.pump();
+
+    final textField = tester.widget<TextField>(find.byType(TextField));
+    expect(textField.controller?.text, 'Oat');
+  });
+
+  testWidgets('filter chips wrap on narrow layouts', (tester) async {
+    tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await pumpFoodsTab(tester, baseOverrides(FakeFoodRepository()));
+
+    expect(find.byType(Wrap), findsOneWidget);
   });
 }
 
@@ -155,3 +221,24 @@ Food _food({
   createdAt: DateTime(2025),
   updatedAt: DateTime(2025),
 );
+
+class _ThrowingOffRepository implements OffRepository {
+  @override
+  Future<OffSearchResult> searchProducts(
+    String query, {
+    int page = 1,
+    int pageSize = 25,
+  }) async {
+    throw TimeoutException('offline');
+  }
+
+  @override
+  Future<OffBarcodeResult> getProductByBarcode(String barcode) async =>
+      const OffBarcodeNotFound();
+
+  @override
+  Future<void> saveProduct(Food food) async {}
+
+  @override
+  Future<bool> login(String userId, String password) async => false;
+}

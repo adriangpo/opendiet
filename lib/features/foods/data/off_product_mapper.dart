@@ -1,7 +1,7 @@
-import 'package:openfoodfacts/openfoodfacts.dart' as off;
 import 'package:opendiet/core/nutrition/nutrients.dart';
 import 'package:opendiet/core/units/measurement_unit.dart';
 import 'package:opendiet/features/foods/domain/food.dart';
+import 'package:openfoodfacts/openfoodfacts.dart' as off;
 
 /// Maps an Open Food Facts [off.Product] to the app's [Food] model.
 ///
@@ -37,10 +37,7 @@ abstract final class OffProductMapper {
         addedSugars: _addedSugars(nutriments, perSize),
         protein: nutriments?.getValue(off.Nutrient.proteins, perSize),
         totalFat: nutriments?.getValue(off.Nutrient.fat, perSize),
-        saturatedFat: nutriments?.getValue(
-          off.Nutrient.saturatedFat,
-          perSize,
-        ),
+        saturatedFat: nutriments?.getValue(off.Nutrient.saturatedFat, perSize),
         transFat: nutriments?.getValue(off.Nutrient.transFat, perSize),
         dietaryFiber: nutriments?.getValue(off.Nutrient.fiber, perSize),
         sodiumMilligrams: _sodiumMilligrams(nutriments, perSize),
@@ -64,21 +61,18 @@ abstract final class OffProductMapper {
 
   static NutrientBasis _basis(off.Product product) {
     final dataPer = product.nutrimentDataPer;
-    if (dataPer == '100g' || dataPer == '100 ml') {
-      final isLiquid = product.quantity?.contains('ml') ?? false;
-      return isLiquid ? NutrientBasis.per100ml : NutrientBasis.per100g;
-    }
+    if (dataPer == '100 ml') return NutrientBasis.per100ml;
+    if (dataPer == '100g') return NutrientBasis.per100g;
+    final isLiquid = product.quantity?.toLowerCase().contains('ml') ?? false;
+    if (isLiquid) return NutrientBasis.per100ml;
     return NutrientBasis.per100g;
   }
 
-  static double? _addedSugars(
-    off.Nutriments? nutriments,
-    off.PerSize perSize,
-  ) {
+  static double? _addedSugars(off.Nutriments? nutriments, off.PerSize perSize) {
     if (nutriments == null) return null;
     final added = nutriments.getValue(off.Nutrient.addedSugars, perSize);
     if (added != null && added > 0) return added;
-    return nutriments.getValue(off.Nutrient.sugars, perSize);
+    return null;
   }
 
   static double? _sodiumMilligrams(
@@ -95,7 +89,10 @@ abstract final class OffProductMapper {
     if (quantity != null && quantity > 0) return quantity;
     final size = product.servingSize;
     if (size == null) return null;
-    final parsed = double.tryParse(size.replaceAll(RegExp(r'[^0-9.]'), ''));
+    final normalized = size.replaceAll(',', '.');
+    final parsed = double.tryParse(
+      normalized.replaceAll(RegExp('[^0-9.]'), ''),
+    );
     if (parsed != null && parsed > 0) return parsed;
     return null;
   }

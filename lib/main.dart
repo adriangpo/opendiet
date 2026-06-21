@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:openfoodfacts/openfoodfacts.dart' as off;
 import 'package:opendiet/core/navigation/app_router.dart';
 import 'package:opendiet/core/theme/app_theme.dart';
 import 'package:opendiet/l10n/app_localizations.dart';
+import 'package:openfoodfacts/openfoodfacts.dart' as off;
 
 void main() {
   off.OpenFoodAPIConfiguration.userAgent = off.UserAgent(

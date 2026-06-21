@@ -14,11 +14,16 @@ class FakeOffRepository implements OffRepository {
     int pageSize = 25,
   }) async {
     final matched = _products
-        .where(
-          (p) => p.name.toLowerCase().contains(query.toLowerCase()),
-        )
+        .where((p) => p.name.toLowerCase().contains(query.toLowerCase()))
         .toList();
-    return OffSearchResult(products: matched, totalCount: matched.length);
+    final safePage = page < 1 ? 1 : page;
+    final safePageSize = pageSize < 1 ? 1 : pageSize;
+    final start = (safePage - 1) * safePageSize;
+    final end = (start + safePageSize).clamp(0, matched.length);
+    final paged = start >= matched.length
+        ? <Food>[]
+        : matched.sublist(start, end);
+    return OffSearchResult(products: paged, totalCount: matched.length);
   }
 
   @override

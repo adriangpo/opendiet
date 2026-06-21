@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:opendiet/features/diary/data/diary_providers.dart';
 import 'package:opendiet/features/foods/data/food_providers.dart';
 import 'package:opendiet/features/settings/data/settings_providers.dart';
+import 'package:opendiet/features/settings/domain/app_settings.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../support/fake_food_repository.dart';
@@ -78,5 +79,39 @@ void main() {
     await tester.pump();
 
     expect(find.byKey(const Key('field-name')), findsOneWidget);
+  });
+
+  testWidgets('first launch starts on onboarding before the shell', (
+    tester,
+  ) async {
+    await pumpAppShell(
+      tester,
+      overrides: [
+        foodRepositoryProvider.overrideWithValue(FakeFoodRepository()),
+        settingsRepositoryProvider.overrideWithValue(
+          FakeSettingsRepository(AppSettings.defaults),
+        ),
+        mealSlotsProvider.overrideWithValue(const AsyncData([])),
+      ],
+    );
+
+    expect(find.text('Welcome to OpenDiet'), findsOneWidget);
+    expect(find.byType(NavigationBar), findsNothing);
+  });
+
+  testWidgets('Settings can re-run onboarding after first launch', (
+    tester,
+  ) async {
+    await pumpAppShell(tester, overrides: overrides());
+
+    await tester.tap(find.widgetWithText(NavigationDestination, 'Settings'));
+    await tester.pump();
+    await tester.pump();
+
+    await tester.tap(find.text('First-run setup'));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Welcome to OpenDiet'), findsOneWidget);
   });
 }

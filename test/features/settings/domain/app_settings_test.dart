@@ -13,6 +13,7 @@ void main() {
         expect(AppSettings.defaults.vdRegion, VdRegion.brazil);
         expect(AppSettings.defaults.dailyTarget, isNull);
         expect(AppSettings.defaults.languageCode, isNull);
+        expect(AppSettings.defaults.onboardingCompleted, isFalse);
       },
     );
 
@@ -21,6 +22,7 @@ void main() {
         unitSystem: UnitSystem.imperial,
         vdRegion: VdRegion.unitedStates,
         languageCode: 'pt',
+        onboardingCompleted: true,
         dailyTarget: Nutrients(energyKcal: 2200, protein: 120),
       );
 

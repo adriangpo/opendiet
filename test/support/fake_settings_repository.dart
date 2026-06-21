@@ -4,7 +4,9 @@ import 'package:opendiet/features/settings/domain/settings_repository.dart';
 /// An in-memory [SettingsRepository] for widget tests (no real database).
 class FakeSettingsRepository implements SettingsRepository {
   /// Creates a fake seeded with [current].
-  FakeSettingsRepository([this.current = AppSettings.defaults]);
+  FakeSettingsRepository([AppSettings? current])
+    : current =
+          current ?? AppSettings.defaults.copyWith(onboardingCompleted: true);
 
   /// The settings currently held; updated on every [save].
   AppSettings current;

@@ -50,6 +50,11 @@ class _SettingsList extends ConsumerWidget {
           onTap: () => context.push('/settings/target'),
         ),
         ListTile(
+          title: Text(l10n.settingsFirstRunSetup),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => context.push('/onboarding?rerun=true'),
+        ),
+        ListTile(
           title: Text(l10n.settingsReminders),
           trailing: const Icon(Icons.chevron_right),
           onTap: () => context.push('/settings/reminders'),

@@ -26,6 +26,7 @@ void main() {
       unitSystem: UnitSystem.imperial,
       vdRegion: VdRegion.unitedStates,
       languageCode: 'pt',
+      onboardingCompleted: true,
       dailyTarget: Nutrients(energyKcal: 2200, protein: 120),
     );
 

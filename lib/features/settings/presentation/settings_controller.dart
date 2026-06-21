@@ -25,6 +25,22 @@ class SettingsController extends _$SettingsController {
   Future<void> setDailyTarget(Nutrients? target) =>
       _update((settings) => settings.copyWith(dailyTarget: target));
 
+  /// Completes S-18 while applying its local settings.
+  Future<void> completeOnboarding({
+    required UnitSystem unitSystem,
+    required Nutrients? dailyTarget,
+  }) => _update(
+    (settings) => settings.copyWith(
+      unitSystem: unitSystem,
+      dailyTarget: dailyTarget,
+      onboardingCompleted: true,
+    ),
+  );
+
+  /// Skips S-18 without changing optional setup values.
+  Future<void> skipOnboarding() =>
+      _update((settings) => settings.copyWith(onboardingCompleted: true));
+
   Future<void> _update(AppSettings Function(AppSettings current) change) async {
     final repository = ref.read(settingsRepositoryProvider);
     final updated = change(await future);

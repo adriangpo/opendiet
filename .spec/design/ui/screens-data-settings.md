@@ -179,3 +179,8 @@ Step 3 Preview          | [ Back ]          [ Next > ]|
 
 - **Interactions:** all steps skippable; lands on the Diary. No account is required to use the app (NFR-001/007).
 - **States:** shown only on first launch; re-runnable later from Settings.
+- **Implementation dependency:** S-18 persists unit system, optional daily target, and
+  first-run completion through the same Settings repository used by S-13/S-16.
+  The optional Open Food Facts entry validates through the OFF repository
+  boundary; it must not depend on the S-17 account route being present, and it
+  must remain skippable if authentication fails or is not attempted.

@@ -22,6 +22,7 @@ class DriftSettingsRepository implements SettingsRepository {
     return AppSettings(
       unitSystem: row.unitSystem,
       vdRegion: row.vdRegion,
+      onboardingCompleted: row.onboardingCompleted,
       languageCode: row.languageCode,
       dailyTarget: row.dailyTarget,
     );
@@ -35,6 +36,7 @@ class DriftSettingsRepository implements SettingsRepository {
           id: const Value(_settingsRowId),
           unitSystem: Value(settings.unitSystem),
           vdRegion: Value(settings.vdRegion),
+          onboardingCompleted: Value(settings.onboardingCompleted),
           languageCode: Value(settings.languageCode),
           dailyTarget: Value(settings.dailyTarget),
         ),

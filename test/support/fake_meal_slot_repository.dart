@@ -22,4 +22,15 @@ class FakeMealSlotRepository implements MealSlotRepository {
   @override
   Future<void> deleteMealSlot(String id) async =>
       _slots.removeWhere((s) => s.id == id);
+
+  @override
+  Future<void> replaceAll({
+    required Set<String> deletedIds,
+    required List<MealSlot> slots,
+  }) async {
+    _slots
+      ..clear()
+      ..addAll(slots)
+      ..sort((a, b) => a.position.compareTo(b.position));
+  }
 }

@@ -36,6 +36,7 @@ class _MealSlotsScreenState extends ConsumerState<MealSlotsScreen> {
     for (final slot in _slots) {
       slot.dispose();
     }
+    _saving = false;
     super.dispose();
   }
 
@@ -77,12 +78,11 @@ class _MealSlotsScreenState extends ConsumerState<MealSlotsScreen> {
 
     try {
       final repository = ref.read(mealSlotRepositoryProvider);
-      for (final id in _deletedSlotIds) {
-        await repository.deleteMealSlot(id);
-      }
-      for (final slot in normalized) {
-        await repository.saveMealSlot(slot);
-      }
+      await repository.replaceAll(
+        deletedIds: _deletedSlotIds,
+        slots: normalized,
+      );
+      _deletedSlotIds.clear();
       ref.invalidate(mealSlotsProvider);
       if (!mounted) return;
       await Navigator.of(context).maybePop();

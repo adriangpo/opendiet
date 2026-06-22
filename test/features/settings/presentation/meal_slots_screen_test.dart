@@ -257,6 +257,12 @@ class _FailingMealSlotRepository implements MealSlotRepository {
 
   @override
   Future<void> saveMealSlot(MealSlot slot) async {}
+
+  @override
+  Future<void> replaceAll({
+    required Set<String> deletedIds,
+    required List<MealSlot> slots,
+  }) async {}
 }
 
 class _DeleteFailingMealSlotRepository implements MealSlotRepository {
@@ -279,5 +285,13 @@ class _DeleteFailingMealSlotRepository implements MealSlotRepository {
     } else {
       _slots[index] = slot;
     }
+  }
+
+  @override
+  Future<void> replaceAll({
+    required Set<String> deletedIds,
+    required List<MealSlot> slots,
+  }) async {
+    throw StateError('restricted');
   }
 }

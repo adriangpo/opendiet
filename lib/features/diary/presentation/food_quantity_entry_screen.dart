@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -80,8 +82,9 @@ class _FoodQuantityEntryScreenState
                 icon: Icon(
                   food.isFavorite ? Icons.favorite : Icons.favorite_border,
                 ),
-                onPressed: () =>
-                    ref.read(foodRepositoryProvider).toggleFavorite(food.id),
+                onPressed: () => unawaited(
+                  ref.read(foodRepositoryProvider).toggleFavorite(food.id),
+                ),
               ),
             ],
           ),
@@ -121,7 +124,9 @@ class _FoodQuantityEntryScreenState
 
   Future<void> _save(Food food, String mealSlotId) async {
     final quantity = _quantity;
-    if (quantity == null) return;
+    if (quantity == null) {
+      throw StateError('Quantity must not be null when saving');
+    }
 
     final now = ref.read(clockProvider).now();
     final nutrients = FoodNutrition.forQuantity(food, quantity);

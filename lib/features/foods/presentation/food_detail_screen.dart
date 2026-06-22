@@ -67,8 +67,9 @@ class FoodDetailScreen extends ConsumerWidget {
                 icon: Icon(
                   food.isFavorite ? Icons.favorite : Icons.favorite_border,
                 ),
-                onPressed: () =>
-                    ref.read(foodRepositoryProvider).toggleFavorite(food.id),
+                onPressed: () => unawaited(
+                  ref.read(foodRepositoryProvider).toggleFavorite(food.id),
+                ),
               ),
             ],
           ),

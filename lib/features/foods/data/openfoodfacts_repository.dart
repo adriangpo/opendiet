@@ -118,12 +118,22 @@ class OpenFoodFactsRepository implements OffRepository {
   @override
   Future<bool> login(String userId, String password) async {
     final user = off.User(userId: userId, password: password);
-    final status = await off.OpenFoodAPIClient.login2(user);
-    if (status?.successful == true) {
-      off.OpenFoodAPIConfiguration.globalUser = user;
-      return true;
+    try {
+      final status = await off.OpenFoodAPIClient.login2(user);
+      if (status?.successful == true) {
+        off.OpenFoodAPIConfiguration.globalUser = user;
+        return true;
+      }
+      return false;
+    } on Object catch (error, stackTrace) {
+      developer.log(
+        'Open Food Facts login failed',
+        name: 'opendiet.off',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      return false;
     }
-    return false;
   }
 
   @override

@@ -118,13 +118,17 @@ class _BackupRestoreScreenState extends ConsumerState<BackupRestoreScreen> {
 
   Future<void> _restoreBackup(AppLocalizations l10n) async {
     setState(() {
+      _isRestoring = true;
       _statusMessage = null;
       _errorMessage = null;
     });
 
     try {
       final json = await ref.read(backupFileGatewayProvider).pickJsonBackup();
-      if (!mounted || json == null) return;
+      if (!mounted || json == null) {
+        setState(() => _isRestoring = false);
+        return;
+      }
 
       final confirmed = await showDialog<bool>(
         context: context,
@@ -143,9 +147,10 @@ class _BackupRestoreScreenState extends ConsumerState<BackupRestoreScreen> {
           ],
         ),
       );
-      if (!mounted || confirmed != true) return;
-
-      setState(() => _isRestoring = true);
+      if (!mounted || confirmed != true) {
+        setState(() => _isRestoring = false);
+        return;
+      }
       await ref.read(backupRepositoryProvider).import(json);
       if (!mounted) return;
       setState(() {

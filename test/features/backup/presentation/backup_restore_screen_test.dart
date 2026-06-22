@@ -146,7 +146,7 @@ void main() {
 }
 
 class FakeBackupRepository implements BackupRepository {
-  final Map<String, dynamic> exportJson = <String, dynamic>{
+  final Map<String, Object?> exportJson = <String, Object?>{
     'version': BackupDocument.currentVersion,
     'foods': <Object?>[],
     'recipes': <Object?>[],
@@ -157,16 +157,16 @@ class FakeBackupRepository implements BackupRepository {
 
   int exportCount = 0;
   int importCount = 0;
-  Map<String, dynamic>? importedJson;
+  Map<String, Object?>? importedJson;
 
   @override
-  Future<Map<String, dynamic>> export() async {
+  Future<Map<String, Object?>> export() async {
     exportCount++;
     return exportJson;
   }
 
   @override
-  Future<void> import(Map<String, dynamic> json) async {
+  Future<void> import(Map<String, Object?> json) async {
     importCount++;
     importedJson = json;
   }
@@ -181,13 +181,13 @@ class FakeBackupFileGateway implements BackupFileGateway {
   });
 
   final String? savedPath;
-  final Map<String, dynamic>? importJson;
+  final Map<String, Object?>? importJson;
   final Exception? saveError;
   final Exception? importError;
-  Map<String, dynamic>? savedJson;
+  Map<String, Object?>? savedJson;
 
   @override
-  Future<Map<String, dynamic>?> pickJsonBackup() async {
+  Future<Map<String, Object?>?> pickJsonBackup() async {
     final error = importError;
     if (error != null) throw error;
     return importJson;
@@ -196,7 +196,7 @@ class FakeBackupFileGateway implements BackupFileGateway {
   @override
   Future<String?> saveJsonBackup({
     required String fileName,
-    required Map<String, dynamic> json,
+    required Map<String, Object?> json,
   }) async {
     final error = saveError;
     if (error != null) throw error;

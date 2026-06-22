@@ -12,11 +12,11 @@ abstract interface class BackupFileGateway {
   /// path or file name. Returns null when the user cancels.
   Future<String?> saveJsonBackup({
     required String fileName,
-    required Map<String, dynamic> json,
+    required Map<String, Object?> json,
   });
 
   /// Reads a user-selected JSON backup. Returns null when the user cancels.
-  Future<Map<String, dynamic>?> pickJsonBackup();
+  Future<Map<String, Object?>?> pickJsonBackup();
 }
 
 /// Platform implementation using the OS file picker.
@@ -24,7 +24,7 @@ class DeviceBackupFileGateway implements BackupFileGateway {
   @override
   Future<String?> saveJsonBackup({
     required String fileName,
-    required Map<String, dynamic> json,
+    required Map<String, Object?> json,
   }) async {
     final content = const JsonEncoder.withIndent('  ').convert(json);
     return FilePicker.platform.saveFile(
@@ -36,7 +36,7 @@ class DeviceBackupFileGateway implements BackupFileGateway {
   }
 
   @override
-  Future<Map<String, dynamic>?> pickJsonBackup() async {
+  Future<Map<String, Object?>?> pickJsonBackup() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['json'],
@@ -51,7 +51,11 @@ class DeviceBackupFileGateway implements BackupFileGateway {
         : file.path != null
         ? await File(file.path!).readAsString()
         : null;
-    if (content == null) return null;
+    if (content == null) {
+      throw const BackupFormatException(
+        'Backup file could not be read.',
+      );
+    }
 
     try {
       final decoded = jsonDecode(content);
@@ -60,7 +64,7 @@ class DeviceBackupFileGateway implements BackupFileGateway {
           'Backup file must contain a JSON object.',
         );
       }
-      return Map<String, dynamic>.from(decoded);
+      return Map<String, Object?>.from(decoded);
     } on BackupFormatException {
       rethrow;
     } on Object {

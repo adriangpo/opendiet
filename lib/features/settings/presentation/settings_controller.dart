@@ -44,7 +44,7 @@ class SettingsController extends _$SettingsController {
   Future<void> _update(AppSettings Function(AppSettings current) change) async {
     final repository = ref.read(settingsRepositoryProvider);
     final updated = change(await future);
-    state = AsyncData(updated);
     await repository.save(updated);
+    state = AsyncData(updated);
   }
 }

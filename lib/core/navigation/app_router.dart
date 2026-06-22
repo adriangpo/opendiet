@@ -39,17 +39,21 @@ GoRouter buildAppRouter({
   redirect: (context, state) async {
     final repository = settingsRepository;
     if (repository == null) return null;
-    final settings = await repository.load();
-    final location = state.uri.path;
-    final isOnboarding = location == '/onboarding';
-    final isRerun = state.uri.queryParameters['rerun'] == 'true';
-    if (!settings.onboardingCompleted && !isOnboarding) {
-      return '/onboarding';
+    try {
+      final settings = await repository.load();
+      final location = state.uri.path;
+      final isOnboarding = location == '/onboarding';
+      final isRerun = state.uri.queryParameters['rerun'] == 'true';
+      if (!settings.onboardingCompleted && !isOnboarding) {
+        return '/onboarding';
+      }
+      if (settings.onboardingCompleted && isOnboarding && !isRerun) {
+        return '/diary';
+      }
+      return null;
+    } on Object {
+      return null;
     }
-    if (settings.onboardingCompleted && isOnboarding && !isRerun) {
-      return '/diary';
-    }
-    return null;
   },
   routes: [
     GoRoute(

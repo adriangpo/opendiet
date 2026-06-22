@@ -5,6 +5,7 @@ import 'package:opendiet/core/nutrition/nutrient.dart';
 import 'package:opendiet/core/nutrition/nutrients.dart';
 import 'package:opendiet/core/units/unit_system.dart';
 import 'package:opendiet/features/foods/data/off_providers.dart';
+import 'package:opendiet/features/settings/domain/app_settings.dart';
 import 'package:opendiet/features/settings/presentation/settings_controller.dart';
 import 'package:opendiet/l10n/app_localizations.dart';
 
@@ -52,7 +53,24 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     }
     _offUserIdController.dispose();
     _offPasswordController.dispose();
+    _submitting = false;
     super.dispose();
+  }
+
+  void _onSettingsLoaded(AppSettings settings) {
+    if (_initialized || !mounted) return;
+    _initialized = true;
+    setState(() {
+      _unitSystem = settings.unitSystem;
+      final target = settings.dailyTarget;
+      if (target != null) {
+        for (final nutrient in _targetNutrients) {
+          _targetControllers[nutrient]?.text = _format(
+            target.amountOf(nutrient),
+          );
+        }
+      }
+    });
   }
 
   Future<void> _skip() async {
@@ -81,27 +99,36 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       _error = null;
       _submitting = true;
     });
-    if (userId.isNotEmpty) {
-      final signedIn = await ref
-          .read(offRepositoryProvider)
-          .login(userId, password);
-      if (!mounted) return;
-      if (!signedIn) {
-        setState(() {
-          _error = l10n.onboardingOffSignInFailed;
-          _submitting = false;
-        });
-        return;
+    try {
+      if (userId.isNotEmpty) {
+        final signedIn = await ref
+            .read(offRepositoryProvider)
+            .login(userId, password);
+        if (!mounted) return;
+        if (!signedIn) {
+          setState(() {
+            _error = l10n.onboardingOffSignInFailed;
+            _submitting = false;
+          });
+          return;
+        }
       }
-    }
 
-    await ref
-        .read(settingsControllerProvider.notifier)
-        .completeOnboarding(
-          unitSystem: _unitSystem,
-          dailyTarget: targetResult.target,
-        );
-    if (!mounted) return;
+      await ref
+          .read(settingsControllerProvider.notifier)
+          .completeOnboarding(
+            unitSystem: _unitSystem,
+            dailyTarget: targetResult.target,
+          );
+      if (!mounted) return;
+    } on Object {
+      if (!mounted) return;
+      setState(() {
+        _error = l10n.onboardingSaveError;
+        _submitting = false;
+      });
+      return;
+    }
     _finish();
   }
 
@@ -120,18 +147,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final settings = ref.watch(settingsControllerProvider);
 
     final data = settings.asData;
-    if (!_initialized && data != null) {
-      _initialized = true;
-      _unitSystem = data.value.unitSystem;
-      final target = data.value.dailyTarget;
-      if (target != null) {
-        for (final nutrient in _targetNutrients) {
-          _targetControllers[nutrient]?.text = _format(
-            target.amountOf(nutrient),
-          );
-        }
-      }
-    }
+    if (!_initialized && data != null) _onSettingsLoaded(data.value);
 
     return Scaffold(
       body: switch (settings) {
@@ -265,7 +281,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     }
     if (!hasAnyValue) return (valid: true, target: null);
     for (final nutrient in _targetNutrients) {
-      if (values[nutrient] == null) return (valid: false, target: null);
+      if (values[nutrient] == null) {
+        setState(
+          () => _error = AppLocalizations.of(context).onboardingTargetPartial,
+        );
+        return (valid: false, target: null);
+      }
     }
     return (
       valid: true,

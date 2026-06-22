@@ -108,6 +108,14 @@
   "@onboardingOffSignInFailed": {
     "description": "Error shown when optional Open Food Facts sign-in fails during onboarding."
   },
+  "onboardingSaveError": "Could not save your settings. Please try again.",
+  "@onboardingSaveError": {
+    "description": "Error shown when the onboarding settings could not be persisted."
+  },
+  "onboardingTargetPartial": "Fill all daily target fields or leave all blank.",
+  "@onboardingTargetPartial": {
+    "description": "Error shown when only some daily target fields are filled."
+  },
   "vdRegionBrazil": "Brazil",
   "@vdRegionBrazil": {
     "description": "Percent-daily-value reference region option for Brazil."

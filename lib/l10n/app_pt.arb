@@ -27,6 +27,8 @@
   "onboardingOffPassword": "Senha",
   "onboardingOffCredentialsRequired": "Preencha os dois campos do Open Food Facts ou deixe ambos em branco",
   "onboardingOffSignInFailed": "Não foi possível entrar no Open Food Facts",
+  "onboardingSaveError": "Não foi possível salvar as configurações. Tente novamente.",
+  "onboardingTargetPartial": "Preencha todos os campos de meta diária ou deixe todos em branco.",
   "vdRegionBrazil": "Brasil",
   "vdRegionUnitedStates": "Estados Unidos",
   "vdRegionEuropeanUnion": "União Europeia",

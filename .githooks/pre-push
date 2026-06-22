@@ -66,8 +66,11 @@ echo "[pre-push] flutter test"
 "$flutter_safe" test
 
 if [ -n "$cache_file" ]; then
-  mkdir -p "$(dirname "$cache_file")"
-  printf '%s\n' "$current_tree" > "$cache_file"
+  cache_dir="$(dirname "$cache_file")"
+  mkdir -p "$cache_dir"
+  tmp_file="$(mktemp "$cache_dir/pre-push-passed-tree.XXXXXXXX")"
+  printf '%s\n' "$current_tree" > "$tmp_file"
+  mv "$tmp_file" "$cache_file"
 fi
 
 echo "[pre-push] OK"

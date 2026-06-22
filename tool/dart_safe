@@ -56,11 +56,13 @@ while ! mkdir "$lock_dir" 2>/dev/null; do
         fi
         ;;
     esac
+  else
+    stale_lock=1
+  fi
 
-    if [ "$stale_lock" = 1 ]; then
-      rm -rf "$lock_dir" 2>/dev/null || true
-      continue
-    fi
+  if [ "$stale_lock" = 1 ]; then
+    rm -rf "$lock_dir" 2>/dev/null || true
+    continue
   fi
 
   sleep 1
@@ -72,7 +74,9 @@ OPENDIET_DART_LOCK_DIR="$lock_dir"
 export OPENDIET_DART_LOCK_DIR
 
 cleanup() {
-  rm -rf "$lock_dir" 2>/dev/null || true
+  if [ -n "${lock_dir:-}" ]; then
+    rm -rf "$lock_dir" 2>/dev/null || true
+  fi
 }
 trap cleanup EXIT INT TERM HUP
 

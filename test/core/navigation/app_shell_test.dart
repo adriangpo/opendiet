@@ -66,6 +66,7 @@ void main() {
     await tester.pump();
 
     expect(find.text('Unit system'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('%VD reference'), 100);
     expect(find.text('%VD reference'), findsOneWidget);
   });
 

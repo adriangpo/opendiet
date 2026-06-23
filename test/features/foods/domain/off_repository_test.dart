@@ -136,8 +136,19 @@ void main() {
     });
 
     group('saveProduct', () {
+      test('requires an authenticated account', () async {
+        final food = food0(id: 'new-id', barcode: '555');
+
+        await expectLater(
+          repository.saveProduct(food),
+          throwsA(isA<StateError>()),
+        );
+      });
+
       test('adds product to repository', () async {
         final food = food0(id: 'new-id', barcode: '555');
+        await repository.login('user', 'pass');
+
         await repository.saveProduct(food);
 
         final result = await repository.getProductByBarcode('555');

@@ -45,4 +45,10 @@ abstract interface class OffRepository {
 
   /// Validates OFF account credentials.
   Future<bool> login(String userId, String password);
+
+  /// Restores previously persisted credentials for authenticated writes.
+  void restoreCredentials(String userId, String password);
+
+  /// Clears credentials used for authenticated writes.
+  void clearCredentials();
 }

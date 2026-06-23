@@ -4,6 +4,7 @@ import 'package:opendiet/features/foods/domain/off_repository.dart';
 /// An in-memory [OffRepository] for tests that never hits the live API.
 class FakeOffRepository implements OffRepository {
   final List<Food> _products = [];
+  bool isAuthenticated = false;
 
   void addProduct(Food food) => _products.add(food);
 
@@ -36,11 +37,25 @@ class FakeOffRepository implements OffRepository {
 
   @override
   Future<void> saveProduct(Food food) async {
+    if (!isAuthenticated) {
+      throw StateError('OFF account is required to save products');
+    }
     _products.add(food);
   }
 
   @override
   Future<bool> login(String userId, String password) async {
+    isAuthenticated = true;
     return true;
+  }
+
+  @override
+  void restoreCredentials(String userId, String password) {
+    isAuthenticated = true;
+  }
+
+  @override
+  void clearCredentials() {
+    isAuthenticated = false;
   }
 }

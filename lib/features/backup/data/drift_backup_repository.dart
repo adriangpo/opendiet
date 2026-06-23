@@ -33,7 +33,7 @@ class DriftBackupRepository implements BackupRepository {
   final SettingsRepository _settings;
 
   @override
-  Future<Map<String, dynamic>> export() async {
+  Future<Map<String, Object?>> export() async {
     final document = BackupDocument(
       version: BackupDocument.currentVersion,
       foods: await _foods.allFoods(),
@@ -46,10 +46,12 @@ class DriftBackupRepository implements BackupRepository {
   }
 
   @override
-  Future<void> import(Map<String, dynamic> json) async {
+  Future<void> import(Map<String, Object?> json) async {
     // Parse and validate the whole document before touching the store, so a
     // malformed backup is rejected without any write (FR-006).
-    final document = BackupDocument.fromJson(json);
+    final document = BackupDocument.fromJson(
+      Map<String, dynamic>.from(json),
+    );
     await _database.transaction(() async {
       await _wipe();
       // Insert in dependency order: a recipe ingredient references a food and a

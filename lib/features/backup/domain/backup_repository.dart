@@ -5,7 +5,7 @@
 abstract interface class BackupRepository {
   /// Serializes every entity to a single JSON document the user can store
   /// outside the app (FR-005).
-  Future<Map<String, dynamic>> export();
+  Future<Map<String, Object?>> export();
 
   /// Restores the complete dataset from [json], atomically replacing all
   /// existing data (FR-006).
@@ -13,5 +13,5 @@ abstract interface class BackupRepository {
   /// A malformed or version-incompatible document is rejected before any write,
   /// and a failure mid-restore rolls back so previously committed data survives
   /// (NFR-004).
-  Future<void> import(Map<String, dynamic> json);
+  Future<void> import(Map<String, Object?> json);
 }

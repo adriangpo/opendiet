@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:opendiet/core/widgets/empty_state.dart';
+import 'package:opendiet/features/foods/data/food_providers.dart';
 import 'package:opendiet/features/foods/data/food_search_providers.dart';
 import 'package:opendiet/features/foods/domain/food.dart';
 import 'package:opendiet/l10n/app_localizations.dart';
@@ -176,13 +179,15 @@ class _FilterChip extends StatelessWidget {
   }
 }
 
-class _FoodListTile extends StatelessWidget {
+enum _FoodRowAction { log, favorite, edit, delete }
+
+class _FoodListTile extends ConsumerWidget {
   const _FoodListTile({required this.food});
 
   final Food food;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final energyText = switch (food.nutrients.energyKcal) {
       null => '--',
@@ -197,8 +202,106 @@ class _FoodListTile extends StatelessWidget {
     return ListTile(
       title: Text(food.name),
       subtitle: food.brand != null ? Text(food.brand!) : null,
-      trailing: Text(trailing),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(trailing),
+          PopupMenuButton<_FoodRowAction>(
+            key: Key('food-row-menu-${food.id}'),
+            tooltip: l10n.foodRowMenuTooltip,
+            onSelected: (action) => unawaited(
+              _handleAction(context, ref, action),
+            ),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                key: Key('food-row-log-${food.id}'),
+                value: _FoodRowAction.log,
+                child: Text(l10n.foodActionLog),
+              ),
+              PopupMenuItem(
+                key: Key('food-row-favorite-${food.id}'),
+                value: _FoodRowAction.favorite,
+                child: Text(
+                  food.isFavorite
+                      ? l10n.foodActionUnfavorite
+                      : l10n.foodActionFavorite,
+                ),
+              ),
+              PopupMenuItem(
+                key: Key('food-row-edit-${food.id}'),
+                value: _FoodRowAction.edit,
+                child: Text(l10n.foodActionEdit),
+              ),
+              PopupMenuItem(
+                key: Key('food-row-delete-${food.id}'),
+                value: _FoodRowAction.delete,
+                child: Text(l10n.foodActionDelete),
+              ),
+            ],
+          ),
+        ],
+      ),
       onTap: () => context.push('/foods/${Uri.encodeComponent(food.id)}'),
     );
+  }
+
+  Future<void> _handleAction(
+    BuildContext context,
+    WidgetRef ref,
+    _FoodRowAction action,
+  ) async {
+    switch (action) {
+      case _FoodRowAction.log:
+        unawaited(
+          context.push('/log/quantity/food:${Uri.encodeComponent(food.id)}'),
+        );
+      case _FoodRowAction.favorite:
+        await ref.read(foodRepositoryProvider).toggleFavorite(food.id);
+        _refreshFoods(ref);
+      case _FoodRowAction.edit:
+        unawaited(context.push('/foods/${Uri.encodeComponent(food.id)}/edit'));
+      case _FoodRowAction.delete:
+        await _confirmAndDelete(context, ref);
+    }
+  }
+
+  Future<void> _confirmAndDelete(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.foodDeleteConfirmTitle),
+        content: Text(l10n.foodDeleteConfirmMessage(food.name)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.actionCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.foodDeleteConfirmAction),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+
+    try {
+      await ref.read(foodRepositoryProvider).deleteFood(food.id);
+      _refreshFoods(ref);
+    } on Object {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.foodDeleteError)),
+      );
+    }
+  }
+
+  void _refreshFoods(WidgetRef ref) {
+    ref
+      ..invalidate(foodSearchResultsProvider)
+      ..invalidate(foodListProvider)
+      ..invalidate(recentFoodsProvider)
+      ..invalidate(favoriteFoodsProvider);
   }
 }

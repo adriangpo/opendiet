@@ -75,6 +75,47 @@ void main() {
     expect(find.text('Nutrition facts'), findsOneWidget);
   });
 
+  testWidgets('deletes a saved food from the row menu after confirmation', (
+    tester,
+  ) async {
+    final repo = FakeFoodRepository();
+    await repo.saveFood(_food(name: 'Rice', energy: 130));
+
+    await pumpFoodsTab(tester, baseOverrides(repo));
+
+    await tester.tap(find.byKey(const Key('food-row-menu-Rice')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('food-row-delete-Rice')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Delete food?'), findsOneWidget);
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Delete'));
+    await tester.pump();
+    await tester.pump();
+
+    expect(await repo.findFood('Rice'), isNull);
+    expect(find.text('Rice'), findsNothing);
+  });
+
+  testWidgets('canceling food deletion keeps the food', (tester) async {
+    final repo = FakeFoodRepository();
+    await repo.saveFood(_food(name: 'Rice', energy: 130));
+
+    await pumpFoodsTab(tester, baseOverrides(repo));
+
+    await tester.tap(find.byKey(const Key('food-row-menu-Rice')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('food-row-delete-Rice')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Cancel'));
+    await tester.pump();
+    await tester.pump();
+
+    expect(await repo.findFood('Rice'), isNotNull);
+    expect(find.text('Rice'), findsOneWidget);
+  });
+
   testWidgets('shows energy per 100g on food tiles', (tester) async {
     final repo = FakeFoodRepository();
     await repo.saveFood(_food(name: 'Oats', energy: 180));

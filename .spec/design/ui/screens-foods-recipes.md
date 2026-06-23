@@ -22,7 +22,7 @@ Conventions and shared components are in `design-system.md`.
 ```
 
 - **Components:** search (local + OFF), source filter, `FoodListTile`, import + create actions.
-- **Interactions:** tap -> S-07; row menu = log / favorite / edit / delete; Import -> S-11; New -> S-05; OFF results can be saved locally (FR-011).
+- **Interactions:** tap -> S-07; row menu = log / favorite / edit / delete; deleting a saved food requires confirmation and removes the local catalog record without deleting existing diary snapshots; Import -> S-11; New -> S-05; OFF results can be saved locally (FR-011).
 - **States:** *Empty* -> `EmptyState` ("Add your first food / import a CSV / search Open Food Facts"); OFF results loading/error isolated and offline-tolerant.
 
 ---

@@ -52,7 +52,7 @@ Step 3 Preview          | [ Back ]          [ Next > ]|
 +-----------------------------------+
 ```
 
-- **Interactions:** Export writes one backup file to a user location (FR-005); Restore confirms before replacing current data (FR-006).
+- **Interactions:** Export writes one backup file to a user location (FR-005); Restore confirms before replacing current data (FR-006). A successful restore refreshes the active diary, food, recipe, and settings reads immediately; the user must not need to restart the app to see restored data.
 - **States:** *Export in progress* -> actions disabled with inline status; *Export failed* -> clear retryable message and actions re-enabled; *Restore confirmation canceled* -> no data change; *Restore of malformed file* -> rejected with a clear message, no partial corruption (FR-006, NFR-004); round-trip is lossless (NFR-003).
 
 ---

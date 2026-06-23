@@ -6,6 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:opendiet/features/backup/data/backup_providers.dart';
 import 'package:opendiet/features/backup/domain/backup_document.dart';
 import 'package:opendiet/features/backup/presentation/backup_file_gateway.dart';
+import 'package:opendiet/features/diary/data/diary_providers.dart';
+import 'package:opendiet/features/foods/data/food_providers.dart';
+import 'package:opendiet/features/foods/data/food_search_providers.dart';
+import 'package:opendiet/features/recipes/data/recipe_providers.dart';
+import 'package:opendiet/features/settings/presentation/settings_controller.dart';
 import 'package:opendiet/l10n/app_localizations.dart';
 
 /// Backup export and restore screen (S-12, FR-005, FR-006).
@@ -153,6 +158,7 @@ class _BackupRestoreScreenState extends ConsumerState<BackupRestoreScreen> {
         return;
       }
       await ref.read(backupRepositoryProvider).import(json);
+      _refreshRestoredData();
       if (!mounted) return;
       setState(() {
         _isRestoring = false;
@@ -171,6 +177,18 @@ class _BackupRestoreScreenState extends ConsumerState<BackupRestoreScreen> {
         _errorMessage = l10n.backupRestoreError;
       });
     }
+  }
+
+  void _refreshRestoredData() {
+    ref
+      ..invalidate(mealSlotsProvider)
+      ..invalidate(selectedDayEntriesProvider)
+      ..invalidate(foodListProvider)
+      ..invalidate(recentFoodsProvider)
+      ..invalidate(favoriteFoodsProvider)
+      ..invalidate(foodSearchResultsProvider)
+      ..invalidate(recipeListProvider)
+      ..invalidate(settingsControllerProvider);
   }
 
   String _displayPath(String path) {

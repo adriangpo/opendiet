@@ -475,6 +475,49 @@
   "@foodsFilterAll": {
     "description": "Source filter tab showing all foods regardless of source."
   },
+  "foodRowMenuTooltip": "Food actions",
+  "@foodRowMenuTooltip": {
+    "description": "Tooltip for the saved food row overflow menu."
+  },
+  "foodActionLog": "Log",
+  "@foodActionLog": {
+    "description": "Food row menu action that opens quantity entry."
+  },
+  "foodActionFavorite": "Favorite",
+  "@foodActionFavorite": {
+    "description": "Food row menu action that marks a food as favorite."
+  },
+  "foodActionUnfavorite": "Unfavorite",
+  "@foodActionUnfavorite": {
+    "description": "Food row menu action that removes a food from favorites."
+  },
+  "foodActionEdit": "Edit",
+  "@foodActionEdit": {
+    "description": "Food row menu action that opens the food editor."
+  },
+  "foodActionDelete": "Delete",
+  "@foodActionDelete": {
+    "description": "Food row menu action that asks before deleting a saved food."
+  },
+  "foodDeleteConfirmTitle": "Delete food?",
+  "@foodDeleteConfirmTitle": {
+    "description": "Title of the confirmation dialog before deleting a saved food."
+  },
+  "foodDeleteConfirmMessage": "This removes {foodName} from your local foods. Existing diary entries keep their logged snapshot.",
+  "@foodDeleteConfirmMessage": {
+    "description": "Confirmation message before deleting a saved food.",
+    "placeholders": {
+      "foodName": { "type": "String", "example": "Rice" }
+    }
+  },
+  "foodDeleteConfirmAction": "Delete",
+  "@foodDeleteConfirmAction": {
+    "description": "Confirmation action for deleting a saved food."
+  },
+  "foodDeleteError": "Could not delete this food.",
+  "@foodDeleteError": {
+    "description": "Error message shown when deleting a saved food fails."
+  },
   "foodDetailBrand": "Brand: {brand}",
   "@foodDetailBrand": {
     "description": "Food detail metadata line showing a brand.",

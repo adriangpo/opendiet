@@ -526,6 +526,84 @@
   "@settingsReminders": {
     "description": "Settings hub row that opens reminder configuration."
   },
+  "settingsBackupRestore": "Backup and restore",
+  "@settingsBackupRestore": {
+    "description": "Settings hub row that opens backup export and restore."
+  },
+  "backupTitle": "Backup and restore",
+  "@backupTitle": {
+    "description": "Title of the backup export and restore screen."
+  },
+  "backupDescription": "Your data lives only on this device. Back it up to a file you can store outside OpenDiet.",
+  "@backupDescription": {
+    "description": "Intro text explaining local-only data and backup."
+  },
+  "backupExport": "Export backup",
+  "@backupExport": {
+    "description": "Button to export a backup file."
+  },
+  "backupExportInProgress": "Exporting...",
+  "@backupExportInProgress": {
+    "description": "Disabled export button label while exporting."
+  },
+  "backupLastExport": "Last export: {path}",
+  "@backupLastExport": {
+    "description": "Shows the most recent exported backup file path or 'never'.",
+    "placeholders": {
+      "path": { "type": "String", "example": "opendiet-backup.json" }
+    }
+  },
+  "backupNever": "never",
+  "@backupNever": {
+    "description": "Shown when no backup has been exported in the current session."
+  },
+  "backupExportSuccess": "Backup exported to {path}.",
+  "@backupExportSuccess": {
+    "description": "Success message after exporting a backup.",
+    "placeholders": {
+      "path": { "type": "String", "example": "opendiet-backup.json" }
+    }
+  },
+  "backupExportError": "Could not export backup. Try another location.",
+  "@backupExportError": {
+    "description": "Error message after backup export fails."
+  },
+  "backupRestore": "Restore from file",
+  "@backupRestore": {
+    "description": "Button to choose and restore a backup file."
+  },
+  "backupRestoreInProgress": "Restoring...",
+  "@backupRestoreInProgress": {
+    "description": "Disabled restore button label while restoring."
+  },
+  "backupRestoreWarning": "Restoring affects current data.",
+  "@backupRestoreWarning": {
+    "description": "Warning shown before the restore action."
+  },
+  "backupRestoreConfirmTitle": "Replace current data?",
+  "@backupRestoreConfirmTitle": {
+    "description": "Title of the restore confirmation dialog."
+  },
+  "backupRestoreConfirmMessage": "This will replace your current OpenDiet data with the selected backup file.",
+  "@backupRestoreConfirmMessage": {
+    "description": "Restore confirmation dialog body."
+  },
+  "backupRestoreConfirmAction": "Restore",
+  "@backupRestoreConfirmAction": {
+    "description": "Confirmation action in the restore dialog."
+  },
+  "backupRestoreSuccess": "Backup restored.",
+  "@backupRestoreSuccess": {
+    "description": "Success message after restoring a backup."
+  },
+  "backupMalformedError": "Backup file is malformed or incompatible. No data was changed.",
+  "@backupMalformedError": {
+    "description": "Error shown when a selected backup file cannot be parsed or is incompatible."
+  },
+  "backupRestoreError": "Could not restore backup. No data was changed.",
+  "@backupRestoreError": {
+    "description": "Error shown when restore fails after parsing."
+  },
   "remindersTitle": "Reminders",
   "@remindersTitle": {
     "description": "Title of the reminder configuration screen."

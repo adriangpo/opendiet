@@ -52,8 +52,8 @@ Step 3 Preview          | [ Back ]          [ Next > ]|
 +-----------------------------------+
 ```
 
-- **Interactions:** Export writes one backup file to a user location (FR-005); Restore asks merge/replace and confirms before overwriting (FR-006).
-- **States:** *Restore of malformed file* -> rejected with a clear message, no partial corruption (FR-006, NFR-004); round-trip is lossless (NFR-003).
+- **Interactions:** Export writes one backup file to a user location (FR-005); Restore confirms before replacing current data (FR-006).
+- **States:** *Export in progress* -> actions disabled with inline status; *Export failed* -> clear retryable message and actions re-enabled; *Restore confirmation canceled* -> no data change; *Restore of malformed file* -> rejected with a clear message, no partial corruption (FR-006, NFR-004); round-trip is lossless (NFR-003).
 
 ---
 

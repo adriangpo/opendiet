@@ -114,6 +114,8 @@ class AppSettingsRows extends Table {
   IntColumn get id => integer().withDefault(const Constant(0))();
   IntColumn get unitSystem => intEnum<UnitSystem>()();
   IntColumn get vdRegion => intEnum<VdRegion>()();
+  BoolColumn get onboardingCompleted =>
+      boolean().withDefault(const Constant(false))();
   TextColumn get languageCode => text().nullable()();
   TextColumn get dailyTarget =>
       text().map(const NutrientsConverter()).nullable()();

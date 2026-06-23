@@ -3000,6 +3000,20 @@ class $AppSettingsRowsTable extends AppSettingsRows
         type: DriftSqlType.int,
         requiredDuringInsert: true,
       ).withConverter<VdRegion>($AppSettingsRowsTable.$convertervdRegion);
+  static const VerificationMeta _onboardingCompletedMeta =
+      const VerificationMeta('onboardingCompleted');
+  @override
+  late final GeneratedColumn<bool> onboardingCompleted = GeneratedColumn<bool>(
+    'onboarding_completed',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("onboarding_completed" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   static const VerificationMeta _languageCodeMeta = const VerificationMeta(
     'languageCode',
   );
@@ -3025,6 +3039,7 @@ class $AppSettingsRowsTable extends AppSettingsRows
     id,
     unitSystem,
     vdRegion,
+    onboardingCompleted,
     languageCode,
     dailyTarget,
   ];
@@ -3042,6 +3057,15 @@ class $AppSettingsRowsTable extends AppSettingsRows
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('onboarding_completed')) {
+      context.handle(
+        _onboardingCompletedMeta,
+        onboardingCompleted.isAcceptableOrUnknown(
+          data['onboarding_completed']!,
+          _onboardingCompletedMeta,
+        ),
+      );
     }
     if (data.containsKey('language_code')) {
       context.handle(
@@ -3077,6 +3101,10 @@ class $AppSettingsRowsTable extends AppSettingsRows
           data['${effectivePrefix}vd_region'],
         )!,
       ),
+      onboardingCompleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}onboarding_completed'],
+      )!,
       languageCode: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}language_code'],
@@ -3109,12 +3137,14 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
   final int id;
   final UnitSystem unitSystem;
   final VdRegion vdRegion;
+  final bool onboardingCompleted;
   final String? languageCode;
   final Nutrients? dailyTarget;
   const AppSettingsRow({
     required this.id,
     required this.unitSystem,
     required this.vdRegion,
+    required this.onboardingCompleted,
     this.languageCode,
     this.dailyTarget,
   });
@@ -3132,6 +3162,7 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
         $AppSettingsRowsTable.$convertervdRegion.toSql(vdRegion),
       );
     }
+    map['onboarding_completed'] = Variable<bool>(onboardingCompleted);
     if (!nullToAbsent || languageCode != null) {
       map['language_code'] = Variable<String>(languageCode);
     }
@@ -3148,6 +3179,7 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
       id: Value(id),
       unitSystem: Value(unitSystem),
       vdRegion: Value(vdRegion),
+      onboardingCompleted: Value(onboardingCompleted),
       languageCode: languageCode == null && nullToAbsent
           ? const Value.absent()
           : Value(languageCode),
@@ -3170,6 +3202,9 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
       vdRegion: $AppSettingsRowsTable.$convertervdRegion.fromJson(
         serializer.fromJson<int>(json['vdRegion']),
       ),
+      onboardingCompleted: serializer.fromJson<bool>(
+        json['onboardingCompleted'],
+      ),
       languageCode: serializer.fromJson<String?>(json['languageCode']),
       dailyTarget: serializer.fromJson<Nutrients?>(json['dailyTarget']),
     );
@@ -3185,6 +3220,7 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
       'vdRegion': serializer.toJson<int>(
         $AppSettingsRowsTable.$convertervdRegion.toJson(vdRegion),
       ),
+      'onboardingCompleted': serializer.toJson<bool>(onboardingCompleted),
       'languageCode': serializer.toJson<String?>(languageCode),
       'dailyTarget': serializer.toJson<Nutrients?>(dailyTarget),
     };
@@ -3194,12 +3230,14 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
     int? id,
     UnitSystem? unitSystem,
     VdRegion? vdRegion,
+    bool? onboardingCompleted,
     Value<String?> languageCode = const Value.absent(),
     Value<Nutrients?> dailyTarget = const Value.absent(),
   }) => AppSettingsRow(
     id: id ?? this.id,
     unitSystem: unitSystem ?? this.unitSystem,
     vdRegion: vdRegion ?? this.vdRegion,
+    onboardingCompleted: onboardingCompleted ?? this.onboardingCompleted,
     languageCode: languageCode.present ? languageCode.value : this.languageCode,
     dailyTarget: dailyTarget.present ? dailyTarget.value : this.dailyTarget,
   );
@@ -3210,6 +3248,9 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
           ? data.unitSystem.value
           : this.unitSystem,
       vdRegion: data.vdRegion.present ? data.vdRegion.value : this.vdRegion,
+      onboardingCompleted: data.onboardingCompleted.present
+          ? data.onboardingCompleted.value
+          : this.onboardingCompleted,
       languageCode: data.languageCode.present
           ? data.languageCode.value
           : this.languageCode,
@@ -3225,6 +3266,7 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
           ..write('id: $id, ')
           ..write('unitSystem: $unitSystem, ')
           ..write('vdRegion: $vdRegion, ')
+          ..write('onboardingCompleted: $onboardingCompleted, ')
           ..write('languageCode: $languageCode, ')
           ..write('dailyTarget: $dailyTarget')
           ..write(')'))
@@ -3232,8 +3274,14 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, unitSystem, vdRegion, languageCode, dailyTarget);
+  int get hashCode => Object.hash(
+    id,
+    unitSystem,
+    vdRegion,
+    onboardingCompleted,
+    languageCode,
+    dailyTarget,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3241,6 +3289,7 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
           other.id == this.id &&
           other.unitSystem == this.unitSystem &&
           other.vdRegion == this.vdRegion &&
+          other.onboardingCompleted == this.onboardingCompleted &&
           other.languageCode == this.languageCode &&
           other.dailyTarget == this.dailyTarget);
 }
@@ -3249,12 +3298,14 @@ class AppSettingsRowsCompanion extends UpdateCompanion<AppSettingsRow> {
   final Value<int> id;
   final Value<UnitSystem> unitSystem;
   final Value<VdRegion> vdRegion;
+  final Value<bool> onboardingCompleted;
   final Value<String?> languageCode;
   final Value<Nutrients?> dailyTarget;
   const AppSettingsRowsCompanion({
     this.id = const Value.absent(),
     this.unitSystem = const Value.absent(),
     this.vdRegion = const Value.absent(),
+    this.onboardingCompleted = const Value.absent(),
     this.languageCode = const Value.absent(),
     this.dailyTarget = const Value.absent(),
   });
@@ -3262,6 +3313,7 @@ class AppSettingsRowsCompanion extends UpdateCompanion<AppSettingsRow> {
     this.id = const Value.absent(),
     required UnitSystem unitSystem,
     required VdRegion vdRegion,
+    this.onboardingCompleted = const Value.absent(),
     this.languageCode = const Value.absent(),
     this.dailyTarget = const Value.absent(),
   }) : unitSystem = Value(unitSystem),
@@ -3270,6 +3322,7 @@ class AppSettingsRowsCompanion extends UpdateCompanion<AppSettingsRow> {
     Expression<int>? id,
     Expression<int>? unitSystem,
     Expression<int>? vdRegion,
+    Expression<bool>? onboardingCompleted,
     Expression<String>? languageCode,
     Expression<String>? dailyTarget,
   }) {
@@ -3277,6 +3330,8 @@ class AppSettingsRowsCompanion extends UpdateCompanion<AppSettingsRow> {
       if (id != null) 'id': id,
       if (unitSystem != null) 'unit_system': unitSystem,
       if (vdRegion != null) 'vd_region': vdRegion,
+      if (onboardingCompleted != null)
+        'onboarding_completed': onboardingCompleted,
       if (languageCode != null) 'language_code': languageCode,
       if (dailyTarget != null) 'daily_target': dailyTarget,
     });
@@ -3286,6 +3341,7 @@ class AppSettingsRowsCompanion extends UpdateCompanion<AppSettingsRow> {
     Value<int>? id,
     Value<UnitSystem>? unitSystem,
     Value<VdRegion>? vdRegion,
+    Value<bool>? onboardingCompleted,
     Value<String?>? languageCode,
     Value<Nutrients?>? dailyTarget,
   }) {
@@ -3293,6 +3349,7 @@ class AppSettingsRowsCompanion extends UpdateCompanion<AppSettingsRow> {
       id: id ?? this.id,
       unitSystem: unitSystem ?? this.unitSystem,
       vdRegion: vdRegion ?? this.vdRegion,
+      onboardingCompleted: onboardingCompleted ?? this.onboardingCompleted,
       languageCode: languageCode ?? this.languageCode,
       dailyTarget: dailyTarget ?? this.dailyTarget,
     );
@@ -3314,6 +3371,9 @@ class AppSettingsRowsCompanion extends UpdateCompanion<AppSettingsRow> {
         $AppSettingsRowsTable.$convertervdRegion.toSql(vdRegion.value),
       );
     }
+    if (onboardingCompleted.present) {
+      map['onboarding_completed'] = Variable<bool>(onboardingCompleted.value);
+    }
     if (languageCode.present) {
       map['language_code'] = Variable<String>(languageCode.value);
     }
@@ -3331,6 +3391,7 @@ class AppSettingsRowsCompanion extends UpdateCompanion<AppSettingsRow> {
           ..write('id: $id, ')
           ..write('unitSystem: $unitSystem, ')
           ..write('vdRegion: $vdRegion, ')
+          ..write('onboardingCompleted: $onboardingCompleted, ')
           ..write('languageCode: $languageCode, ')
           ..write('dailyTarget: $dailyTarget')
           ..write(')'))
@@ -5754,6 +5815,7 @@ typedef $$AppSettingsRowsTableCreateCompanionBuilder =
       Value<int> id,
       required UnitSystem unitSystem,
       required VdRegion vdRegion,
+      Value<bool> onboardingCompleted,
       Value<String?> languageCode,
       Value<Nutrients?> dailyTarget,
     });
@@ -5762,6 +5824,7 @@ typedef $$AppSettingsRowsTableUpdateCompanionBuilder =
       Value<int> id,
       Value<UnitSystem> unitSystem,
       Value<VdRegion> vdRegion,
+      Value<bool> onboardingCompleted,
       Value<String?> languageCode,
       Value<Nutrients?> dailyTarget,
     });
@@ -5791,6 +5854,11 @@ class $$AppSettingsRowsTableFilterComposer
         column: $table.vdRegion,
         builder: (column) => ColumnWithTypeConverterFilters(column),
       );
+
+  ColumnFilters<bool> get onboardingCompleted => $composableBuilder(
+    column: $table.onboardingCompleted,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get languageCode => $composableBuilder(
     column: $table.languageCode,
@@ -5828,6 +5896,11 @@ class $$AppSettingsRowsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<bool> get onboardingCompleted => $composableBuilder(
+    column: $table.onboardingCompleted,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get languageCode => $composableBuilder(
     column: $table.languageCode,
     builder: (column) => ColumnOrderings(column),
@@ -5859,6 +5932,11 @@ class $$AppSettingsRowsTableAnnotationComposer
 
   GeneratedColumnWithTypeConverter<VdRegion, int> get vdRegion =>
       $composableBuilder(column: $table.vdRegion, builder: (column) => column);
+
+  GeneratedColumn<bool> get onboardingCompleted => $composableBuilder(
+    column: $table.onboardingCompleted,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get languageCode => $composableBuilder(
     column: $table.languageCode,
@@ -5912,12 +5990,14 @@ class $$AppSettingsRowsTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<UnitSystem> unitSystem = const Value.absent(),
                 Value<VdRegion> vdRegion = const Value.absent(),
+                Value<bool> onboardingCompleted = const Value.absent(),
                 Value<String?> languageCode = const Value.absent(),
                 Value<Nutrients?> dailyTarget = const Value.absent(),
               }) => AppSettingsRowsCompanion(
                 id: id,
                 unitSystem: unitSystem,
                 vdRegion: vdRegion,
+                onboardingCompleted: onboardingCompleted,
                 languageCode: languageCode,
                 dailyTarget: dailyTarget,
               ),
@@ -5926,12 +6006,14 @@ class $$AppSettingsRowsTableTableManager
                 Value<int> id = const Value.absent(),
                 required UnitSystem unitSystem,
                 required VdRegion vdRegion,
+                Value<bool> onboardingCompleted = const Value.absent(),
                 Value<String?> languageCode = const Value.absent(),
                 Value<Nutrients?> dailyTarget = const Value.absent(),
               }) => AppSettingsRowsCompanion.insert(
                 id: id,
                 unitSystem: unitSystem,
                 vdRegion: vdRegion,
+                onboardingCompleted: onboardingCompleted,
                 languageCode: languageCode,
                 dailyTarget: dailyTarget,
               ),

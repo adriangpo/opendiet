@@ -9,10 +9,13 @@ import 'package:opendiet/features/diary/presentation/quick_add_screen.dart';
 import 'package:opendiet/features/foods/presentation/csv_import/csv_import_screen.dart';
 import 'package:opendiet/features/foods/presentation/custom_food_editor.dart';
 import 'package:opendiet/features/foods/presentation/foods_screen.dart';
+import 'package:opendiet/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:opendiet/features/recipes/presentation/recipe_detail_screen.dart';
 import 'package:opendiet/features/recipes/presentation/recipe_editor_screen.dart';
 import 'package:opendiet/features/recipes/presentation/recipes_screen.dart';
 import 'package:opendiet/features/reminders/presentation/reminders_screen.dart';
+import 'package:opendiet/features/settings/data/settings_providers.dart';
+import 'package:opendiet/features/settings/domain/settings_repository.dart';
 import 'package:opendiet/features/settings/presentation/daily_target_screen.dart';
 import 'package:opendiet/features/settings/presentation/meal_slots_screen.dart';
 import 'package:opendiet/features/settings/presentation/off_account_screen.dart';
@@ -26,12 +29,41 @@ part 'app_router.g.dart';
 /// Recipes, Settings). Deeper routes hang off these branches in later
 /// increments (see .spec/design/ui/_index.md route table).
 @Riverpod(keepAlive: true)
-GoRouter goRouter(Ref ref) => buildAppRouter(clock: ref.watch(clockProvider));
+GoRouter goRouter(Ref ref) => buildAppRouter(
+  clock: ref.watch(clockProvider),
+  settingsRepository: ref.watch(settingsRepositoryProvider),
+);
 
 /// Builds the application router. Exposed for widget tests.
-GoRouter buildAppRouter({Clock clock = const SystemClock()}) => GoRouter(
+GoRouter buildAppRouter({
+  Clock clock = const SystemClock(),
+  SettingsRepository? settingsRepository,
+}) => GoRouter(
   initialLocation: '/diary',
+  redirect: (context, state) async {
+    final repository = settingsRepository;
+    if (repository == null) return null;
+    try {
+      final settings = await repository.load();
+      final location = state.uri.path;
+      final isOnboarding = location == '/onboarding';
+      final isRerun = state.uri.queryParameters['rerun'] == 'true';
+      if (!settings.onboardingCompleted && !isOnboarding) {
+        return '/onboarding';
+      }
+      if (settings.onboardingCompleted && isOnboarding && !isRerun) {
+        return '/diary';
+      }
+      return null;
+    } on Object {
+      return null;
+    }
+  },
   routes: [
+    GoRoute(
+      path: '/onboarding',
+      builder: (context, state) => const OnboardingScreen(),
+    ),
     GoRoute(
       path: '/log',
       builder: (context, state) {

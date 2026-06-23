@@ -53,6 +53,19 @@ void main() {
     expect(find.text('Daily target'), findsOneWidget);
   });
 
+  testWidgets('shows the First-run setup row for re-running onboarding', (
+    tester,
+  ) async {
+    final repository = FakeSettingsRepository();
+    await pumpApp(
+      tester,
+      const SettingsScreen(),
+      overrides: [settingsRepositoryProvider.overrideWithValue(repository)],
+    );
+
+    expect(find.text('First-run setup'), findsOneWidget);
+  });
+
   testWidgets('shows the Meal slots row (FR-019)', (tester) async {
     final repository = FakeSettingsRepository();
     await pumpApp(

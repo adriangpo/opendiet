@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AppSettings {
 
- UnitSystem get unitSystem; VdRegion get vdRegion; String? get languageCode; Nutrients? get dailyTarget;
+ UnitSystem get unitSystem; VdRegion get vdRegion; bool get onboardingCompleted; String? get languageCode; Nutrients? get dailyTarget;
 /// Create a copy of AppSettings
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $AppSettingsCopyWith<AppSettings> get copyWith => _$AppSettingsCopyWithImpl<AppS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppSettings&&(identical(other.unitSystem, unitSystem) || other.unitSystem == unitSystem)&&(identical(other.vdRegion, vdRegion) || other.vdRegion == vdRegion)&&(identical(other.languageCode, languageCode) || other.languageCode == languageCode)&&(identical(other.dailyTarget, dailyTarget) || other.dailyTarget == dailyTarget));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppSettings&&(identical(other.unitSystem, unitSystem) || other.unitSystem == unitSystem)&&(identical(other.vdRegion, vdRegion) || other.vdRegion == vdRegion)&&(identical(other.onboardingCompleted, onboardingCompleted) || other.onboardingCompleted == onboardingCompleted)&&(identical(other.languageCode, languageCode) || other.languageCode == languageCode)&&(identical(other.dailyTarget, dailyTarget) || other.dailyTarget == dailyTarget));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,unitSystem,vdRegion,languageCode,dailyTarget);
+int get hashCode => Object.hash(runtimeType,unitSystem,vdRegion,onboardingCompleted,languageCode,dailyTarget);
 
 @override
 String toString() {
-  return 'AppSettings(unitSystem: $unitSystem, vdRegion: $vdRegion, languageCode: $languageCode, dailyTarget: $dailyTarget)';
+  return 'AppSettings(unitSystem: $unitSystem, vdRegion: $vdRegion, onboardingCompleted: $onboardingCompleted, languageCode: $languageCode, dailyTarget: $dailyTarget)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $AppSettingsCopyWith<$Res>  {
   factory $AppSettingsCopyWith(AppSettings value, $Res Function(AppSettings) _then) = _$AppSettingsCopyWithImpl;
 @useResult
 $Res call({
- UnitSystem unitSystem, VdRegion vdRegion, String? languageCode, Nutrients? dailyTarget
+ UnitSystem unitSystem, VdRegion vdRegion, bool onboardingCompleted, String? languageCode, Nutrients? dailyTarget
 });
 
 
@@ -65,11 +65,12 @@ class _$AppSettingsCopyWithImpl<$Res>
 
 /// Create a copy of AppSettings
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? unitSystem = null,Object? vdRegion = null,Object? languageCode = freezed,Object? dailyTarget = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? unitSystem = null,Object? vdRegion = null,Object? onboardingCompleted = null,Object? languageCode = freezed,Object? dailyTarget = freezed,}) {
   return _then(_self.copyWith(
 unitSystem: null == unitSystem ? _self.unitSystem : unitSystem // ignore: cast_nullable_to_non_nullable
 as UnitSystem,vdRegion: null == vdRegion ? _self.vdRegion : vdRegion // ignore: cast_nullable_to_non_nullable
-as VdRegion,languageCode: freezed == languageCode ? _self.languageCode : languageCode // ignore: cast_nullable_to_non_nullable
+as VdRegion,onboardingCompleted: null == onboardingCompleted ? _self.onboardingCompleted : onboardingCompleted // ignore: cast_nullable_to_non_nullable
+as bool,languageCode: freezed == languageCode ? _self.languageCode : languageCode // ignore: cast_nullable_to_non_nullable
 as String?,dailyTarget: freezed == dailyTarget ? _self.dailyTarget : dailyTarget // ignore: cast_nullable_to_non_nullable
 as Nutrients?,
   ));
@@ -168,10 +169,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( UnitSystem unitSystem,  VdRegion vdRegion,  String? languageCode,  Nutrients? dailyTarget)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( UnitSystem unitSystem,  VdRegion vdRegion,  bool onboardingCompleted,  String? languageCode,  Nutrients? dailyTarget)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AppSettings() when $default != null:
-return $default(_that.unitSystem,_that.vdRegion,_that.languageCode,_that.dailyTarget);case _:
+return $default(_that.unitSystem,_that.vdRegion,_that.onboardingCompleted,_that.languageCode,_that.dailyTarget);case _:
   return orElse();
 
 }
@@ -189,10 +190,10 @@ return $default(_that.unitSystem,_that.vdRegion,_that.languageCode,_that.dailyTa
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( UnitSystem unitSystem,  VdRegion vdRegion,  String? languageCode,  Nutrients? dailyTarget)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( UnitSystem unitSystem,  VdRegion vdRegion,  bool onboardingCompleted,  String? languageCode,  Nutrients? dailyTarget)  $default,) {final _that = this;
 switch (_that) {
 case _AppSettings():
-return $default(_that.unitSystem,_that.vdRegion,_that.languageCode,_that.dailyTarget);case _:
+return $default(_that.unitSystem,_that.vdRegion,_that.onboardingCompleted,_that.languageCode,_that.dailyTarget);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -209,10 +210,10 @@ return $default(_that.unitSystem,_that.vdRegion,_that.languageCode,_that.dailyTa
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( UnitSystem unitSystem,  VdRegion vdRegion,  String? languageCode,  Nutrients? dailyTarget)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( UnitSystem unitSystem,  VdRegion vdRegion,  bool onboardingCompleted,  String? languageCode,  Nutrients? dailyTarget)?  $default,) {final _that = this;
 switch (_that) {
 case _AppSettings() when $default != null:
-return $default(_that.unitSystem,_that.vdRegion,_that.languageCode,_that.dailyTarget);case _:
+return $default(_that.unitSystem,_that.vdRegion,_that.onboardingCompleted,_that.languageCode,_that.dailyTarget);case _:
   return null;
 
 }
@@ -224,11 +225,12 @@ return $default(_that.unitSystem,_that.vdRegion,_that.languageCode,_that.dailyTa
 @JsonSerializable()
 
 class _AppSettings implements AppSettings {
-  const _AppSettings({required this.unitSystem, required this.vdRegion, this.languageCode, this.dailyTarget});
+  const _AppSettings({required this.unitSystem, required this.vdRegion, required this.onboardingCompleted, this.languageCode, this.dailyTarget});
   factory _AppSettings.fromJson(Map<String, dynamic> json) => _$AppSettingsFromJson(json);
 
 @override final  UnitSystem unitSystem;
 @override final  VdRegion vdRegion;
+@override final  bool onboardingCompleted;
 @override final  String? languageCode;
 @override final  Nutrients? dailyTarget;
 
@@ -245,16 +247,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppSettings&&(identical(other.unitSystem, unitSystem) || other.unitSystem == unitSystem)&&(identical(other.vdRegion, vdRegion) || other.vdRegion == vdRegion)&&(identical(other.languageCode, languageCode) || other.languageCode == languageCode)&&(identical(other.dailyTarget, dailyTarget) || other.dailyTarget == dailyTarget));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppSettings&&(identical(other.unitSystem, unitSystem) || other.unitSystem == unitSystem)&&(identical(other.vdRegion, vdRegion) || other.vdRegion == vdRegion)&&(identical(other.onboardingCompleted, onboardingCompleted) || other.onboardingCompleted == onboardingCompleted)&&(identical(other.languageCode, languageCode) || other.languageCode == languageCode)&&(identical(other.dailyTarget, dailyTarget) || other.dailyTarget == dailyTarget));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,unitSystem,vdRegion,languageCode,dailyTarget);
+int get hashCode => Object.hash(runtimeType,unitSystem,vdRegion,onboardingCompleted,languageCode,dailyTarget);
 
 @override
 String toString() {
-  return 'AppSettings(unitSystem: $unitSystem, vdRegion: $vdRegion, languageCode: $languageCode, dailyTarget: $dailyTarget)';
+  return 'AppSettings(unitSystem: $unitSystem, vdRegion: $vdRegion, onboardingCompleted: $onboardingCompleted, languageCode: $languageCode, dailyTarget: $dailyTarget)';
 }
 
 
@@ -265,7 +267,7 @@ abstract mixin class _$AppSettingsCopyWith<$Res> implements $AppSettingsCopyWith
   factory _$AppSettingsCopyWith(_AppSettings value, $Res Function(_AppSettings) _then) = __$AppSettingsCopyWithImpl;
 @override @useResult
 $Res call({
- UnitSystem unitSystem, VdRegion vdRegion, String? languageCode, Nutrients? dailyTarget
+ UnitSystem unitSystem, VdRegion vdRegion, bool onboardingCompleted, String? languageCode, Nutrients? dailyTarget
 });
 
 
@@ -282,11 +284,12 @@ class __$AppSettingsCopyWithImpl<$Res>
 
 /// Create a copy of AppSettings
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? unitSystem = null,Object? vdRegion = null,Object? languageCode = freezed,Object? dailyTarget = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? unitSystem = null,Object? vdRegion = null,Object? onboardingCompleted = null,Object? languageCode = freezed,Object? dailyTarget = freezed,}) {
   return _then(_AppSettings(
 unitSystem: null == unitSystem ? _self.unitSystem : unitSystem // ignore: cast_nullable_to_non_nullable
 as UnitSystem,vdRegion: null == vdRegion ? _self.vdRegion : vdRegion // ignore: cast_nullable_to_non_nullable
-as VdRegion,languageCode: freezed == languageCode ? _self.languageCode : languageCode // ignore: cast_nullable_to_non_nullable
+as VdRegion,onboardingCompleted: null == onboardingCompleted ? _self.onboardingCompleted : onboardingCompleted // ignore: cast_nullable_to_non_nullable
+as bool,languageCode: freezed == languageCode ? _self.languageCode : languageCode // ignore: cast_nullable_to_non_nullable
 as String?,dailyTarget: freezed == dailyTarget ? _self.dailyTarget : dailyTarget // ignore: cast_nullable_to_non_nullable
 as Nutrients?,
   ));

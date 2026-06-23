@@ -195,7 +195,7 @@ GoRouter buildAppRouter({
                   builder: (context, state) => const RemindersScreen(),
                 ),
                 GoRoute(
-                  path: 'open-food-facts',
+                  path: 'account',
                   builder: (context, state) => const OffAccountScreen(),
                   routes: [
                     GoRoute(

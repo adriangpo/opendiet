@@ -37,4 +37,29 @@ class DriftMealSlotRepository implements MealSlotRepository {
   Future<void> deleteMealSlot(String id) => (_database.delete(
     _database.mealSlots,
   )..where((row) => row.id.equals(id))).go();
+
+  @override
+  Future<void> replaceAll({
+    required Set<String> deletedIds,
+    required List<MealSlot> slots,
+  }) async {
+    await _database.transaction(() async {
+      for (final id in deletedIds) {
+        await (_database.delete(
+          _database.mealSlots,
+        )..where((row) => row.id.equals(id))).go();
+      }
+      for (final slot in slots) {
+        await _database
+            .into(_database.mealSlots)
+            .insertOnConflictUpdate(
+              MealSlotsCompanion(
+                id: Value(slot.id),
+                name: Value(slot.name),
+                position: Value(slot.position),
+              ),
+            );
+      }
+    });
+  }
 }

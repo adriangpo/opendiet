@@ -10,12 +10,14 @@ part 'app_settings.g.dart';
 ///
 /// [unitSystem] and [vdRegion] are independent of the UI [languageCode].
 /// [dailyTarget] is optional: with none set, totals are still shown (FR-022).
+/// [onboardingCompleted] controls the first-run S-18 gate.
 @freezed
 abstract class AppSettings with _$AppSettings {
   /// Creates a settings snapshot.
   const factory AppSettings({
     required UnitSystem unitSystem,
     required VdRegion vdRegion,
+    required bool onboardingCompleted,
     String? languageCode,
     Nutrients? dailyTarget,
   }) = _AppSettings;
@@ -28,5 +30,6 @@ abstract class AppSettings with _$AppSettings {
   static const AppSettings defaults = AppSettings(
     unitSystem: UnitSystem.metric,
     vdRegion: VdRegion.brazil,
+    onboardingCompleted: false,
   );
 }

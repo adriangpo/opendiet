@@ -3,6 +3,7 @@ import 'package:opendiet/core/time/clock.dart';
 import 'package:opendiet/core/time/time_providers.dart';
 import 'package:opendiet/core/widgets/app_scaffold.dart';
 import 'package:opendiet/features/add_food/presentation/add_log_hub_screen.dart';
+import 'package:opendiet/features/backup/presentation/backup_restore_screen.dart';
 import 'package:opendiet/features/diary/presentation/diary_screen.dart';
 import 'package:opendiet/features/diary/presentation/food_quantity_entry_screen.dart';
 import 'package:opendiet/features/diary/presentation/quick_add_screen.dart';
@@ -10,11 +11,17 @@ import 'package:opendiet/features/foods/presentation/csv_import/csv_import_scree
 import 'package:opendiet/features/foods/presentation/custom_food_editor.dart';
 import 'package:opendiet/features/foods/presentation/food_detail_screen.dart';
 import 'package:opendiet/features/foods/presentation/foods_screen.dart';
+import 'package:opendiet/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:opendiet/features/recipes/presentation/recipe_detail_screen.dart';
 import 'package:opendiet/features/recipes/presentation/recipe_editor_screen.dart';
 import 'package:opendiet/features/recipes/presentation/recipes_screen.dart';
 import 'package:opendiet/features/reminders/presentation/reminders_screen.dart';
+import 'package:opendiet/features/settings/data/settings_providers.dart';
+import 'package:opendiet/features/settings/domain/settings_repository.dart';
 import 'package:opendiet/features/settings/presentation/daily_target_screen.dart';
+import 'package:opendiet/features/settings/presentation/meal_slots_screen.dart';
+import 'package:opendiet/features/settings/presentation/off_account_screen.dart';
+import 'package:opendiet/features/settings/presentation/off_contribution_screen.dart';
 import 'package:opendiet/features/settings/presentation/settings_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -24,11 +31,36 @@ part 'app_router.g.dart';
 /// Recipes, Settings). Deeper routes hang off these branches in later
 /// increments (see .spec/design/ui/_index.md route table).
 @Riverpod(keepAlive: true)
-GoRouter goRouter(Ref ref) => buildAppRouter(clock: ref.watch(clockProvider));
+GoRouter goRouter(Ref ref) => buildAppRouter(
+  clock: ref.watch(clockProvider),
+  settingsRepository: ref.watch(settingsRepositoryProvider),
+);
 
 /// Builds the application router. Exposed for widget tests.
-GoRouter buildAppRouter({Clock clock = const SystemClock()}) => GoRouter(
+GoRouter buildAppRouter({
+  Clock clock = const SystemClock(),
+  SettingsRepository? settingsRepository,
+}) => GoRouter(
   initialLocation: '/diary',
+  redirect: (context, state) async {
+    final repository = settingsRepository;
+    if (repository == null) return null;
+    try {
+      final settings = await repository.load();
+      final location = state.uri.path;
+      final isOnboarding = location == '/onboarding';
+      final isRerun = state.uri.queryParameters['rerun'] == 'true';
+      if (!settings.onboardingCompleted && !isOnboarding) {
+        return '/onboarding';
+      }
+      if (settings.onboardingCompleted && isOnboarding && !isRerun) {
+        return '/diary';
+      }
+      return null;
+    } on Object {
+      return null;
+    }
+  },
   routes: [
     GoRoute(
       path: '/log/quantity/:foodRef',
@@ -44,6 +76,10 @@ GoRouter buildAppRouter({Clock clock = const SystemClock()}) => GoRouter(
           day: day,
         );
       },
+    ),
+    GoRoute(
+      path: '/onboarding',
+      builder: (context, state) => const OnboardingScreen(),
     ),
     GoRoute(
       path: '/log',
@@ -151,8 +187,34 @@ GoRouter buildAppRouter({Clock clock = const SystemClock()}) => GoRouter(
                   builder: (context, state) => const DailyTargetScreen(),
                 ),
                 GoRoute(
+                  path: 'meals',
+                  builder: (context, state) => const MealSlotsScreen(),
+                ),
+                GoRoute(
                   path: 'reminders',
                   builder: (context, state) => const RemindersScreen(),
+                ),
+                GoRoute(
+                  path: 'open-food-facts',
+                  builder: (context, state) => const OffAccountScreen(),
+                  routes: [
+                    GoRoute(
+                      path: 'add',
+                      builder: (context, state) => const OffContributionScreen(
+                        mode: OffContributionMode.addProduct,
+                      ),
+                    ),
+                    GoRoute(
+                      path: 'correction',
+                      builder: (context, state) => const OffContributionScreen(
+                        mode: OffContributionMode.suggestCorrection,
+                      ),
+                    ),
+                  ],
+                ),
+                GoRoute(
+                  path: 'backup',
+                  builder: (context, state) => const BackupRestoreScreen(),
                 ),
               ],
             ),

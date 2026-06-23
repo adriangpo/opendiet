@@ -152,8 +152,7 @@ void main() {
 
     final context = tester.element(find.text('Diary').first);
     final pushed = context.push<void>('/log?slot=s1');
-    await tester.pump();
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     await tester.enterText(find.byKey(const Key('field-name')), 'Pastel');
     await tester.enterText(find.byKey(const Key('field-energy')), '250');

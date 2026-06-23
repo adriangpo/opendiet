@@ -27,11 +27,12 @@ OpenDiet shall allow the user to create, rename, reorder, and remove meal slots,
 
 ## Implementation Notes
 
-<!-- Engineers add notes here during implementation -->
+- S-14 (`/settings/meals`) uses the existing `MealSlotRepository` to stage and persist create, rename, reorder, remove, and reset-to-default changes. Deletion is confirmation-gated; entry-aware reassignment will need a diary-entry count/reassign use case because the current meal-slot repository only exposes save/list/delete.
 
 ## Test Cases
 
-<!-- QA adds test case references here -->
+- Widget coverage: `test/features/settings/presentation/meal_slots_screen_test.dart`
+- Settings/router coverage: `test/features/settings/presentation/settings_screen_test.dart`, `test/core/navigation/app_shell_test.dart`
 
 ---
 *Created: 2026-06-19*

@@ -9,6 +9,7 @@ part of 'app_settings.dart';
 _AppSettings _$AppSettingsFromJson(Map<String, dynamic> json) => _AppSettings(
   unitSystem: $enumDecode(_$UnitSystemEnumMap, json['unitSystem']),
   vdRegion: $enumDecode(_$VdRegionEnumMap, json['vdRegion']),
+  onboardingCompleted: json['onboardingCompleted'] as bool,
   languageCode: json['languageCode'] as String?,
   dailyTarget: json['dailyTarget'] == null
       ? null
@@ -19,6 +20,7 @@ Map<String, dynamic> _$AppSettingsToJson(_AppSettings instance) =>
     <String, dynamic>{
       'unitSystem': _$UnitSystemEnumMap[instance.unitSystem]!,
       'vdRegion': _$VdRegionEnumMap[instance.vdRegion]!,
+      'onboardingCompleted': instance.onboardingCompleted,
       'languageCode': instance.languageCode,
       'dailyTarget': instance.dailyTarget?.toJson(),
     };

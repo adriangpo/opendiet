@@ -45,6 +45,7 @@ void main() {
   const settings = AppSettings(
     unitSystem: UnitSystem.imperial,
     vdRegion: VdRegion.brazil,
+    onboardingCompleted: true,
     languageCode: 'pt',
     dailyTarget: Nutrients(energyKcal: 2000),
   );

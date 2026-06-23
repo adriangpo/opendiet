@@ -133,12 +133,13 @@ void main() {
     await foodRepo.saveFood(_food(name: 'Banana', energy: 89));
 
     // Add an OFF result.
-    await offRepo.saveProduct(
-      _food(name: 'Oat Milk', energy: 45, source: FoodSource.openFoodFacts),
-    );
-    await offRepo.saveProduct(
-      _food(name: 'Oat Bread', energy: 250, source: FoodSource.openFoodFacts),
-    );
+    offRepo
+      ..addProduct(
+        _food(name: 'Oat Milk', energy: 45, source: FoodSource.openFoodFacts),
+      )
+      ..addProduct(
+        _food(name: 'Oat Bread', energy: 250, source: FoodSource.openFoodFacts),
+      );
 
     await pumpFoodsTab(tester, baseOverrides(foodRepo, offRepo: offRepo));
 
@@ -254,4 +255,10 @@ class _ThrowingOffRepository implements OffRepository {
 
   @override
   Future<bool> login(String userId, String password) async => false;
+
+  @override
+  void restoreCredentials(String userId, String password) {}
+
+  @override
+  void clearCredentials() {}
 }

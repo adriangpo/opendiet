@@ -21,20 +21,20 @@ Order for **every** change: **tests -> docs -> code.**
 
 Writing code before a failing test, or tests and code together without seeing red, is **not** TDD — call it out. The test is the spec.
 
-Keep the test loop targeted while developing: run the new or affected test once to prove red, then the same targeted test(s) to prove green. Let the pre-push hook be the single full local `tool/flutter_safe test` gate before pushing; do not manually run a full suite immediately before `git push` unless the change is broad/risky, conflict-heavy, or you are not pushing.
+Keep the test loop targeted while developing: run the new or affected test once to prove red, then the same targeted test(s) to prove green. Let the pre-push hook be the single full local `tool/flutter_safe test` gate before pushing; it can skip the expensive gate only when the exact current Git tree already passed locally, which covers commit-message-only pushes. Do not manually run a full suite immediately before `git push` unless the change is broad/risky, conflict-heavy, or you are not pushing.
 
 **Edge cases are mandatory — one happy-path test is never enough.** For each unit/flow cover, and only stop when each is tested or justified N/A: **happy path + boundaries** (zero, one, max, empty, exactly-at-limit); **invalid input** (wrong type, missing/null, malformed — e.g. a malformed CSV row, an OFF product with missing nutriment fields); **failure modes** (OFF request timeout/offline, empty search result); **state-dependent** behaviour; **lists** (first/last/empty/single, pagination, ordering). Then ask **"what did I miss?"**
 
 ## Commands
 - Run Flutter through `tool/flutter_safe` in agent/worktree sessions; it clears Git worktree variables and serializes Flutter SDK cache access so parallel agents do not poison `bin/cache/flutter.version.json`.
 - Install: `tool/flutter_safe pub get` (if Flutter reports SDK version `0.0.0-unknown`, check the Flutter SDK cache and rerun through the wrapper).
-- Codegen: `dart run build_runner build --delete-conflicting-outputs` (watch: `... watch`). Drift, Riverpod, freezed, and json_serializable all generate.
+- Codegen: `tool/dart_safe run build_runner build --delete-conflicting-outputs` (watch: `tool/dart_safe run build_runner watch --delete-conflicting-outputs`). Drift, Riverpod, freezed, and json_serializable all generate.
 - Run: `tool/flutter_safe run`
 - Test: `tool/flutter_safe test`   single: `tool/flutter_safe test test/path_test.dart --plain-name "<name>"`
-- Analyze: `tool/flutter_safe analyze`   Format: `dart format .`
-- **Done = a failing test was written first, docs updated, then codegen current + `dart format` clean + `tool/flutter_safe analyze` clean + `tool/flutter_safe test` green.** Never leave generated output stale.
-- **Pre-commit hook**: `dart format .` + `tool/flutter_safe analyze` -- runs before every commit (`.githooks/pre-commit`). Auto-formats in place and stages formatting fixes; skips tests for speed. Pre-push covers the full gate.
-- **Pre-push gate (hard)**: `dart format --set-exit-if-changed .` + `tool/flutter_safe analyze` + `tool/flutter_safe test` must all pass before pushing (`.githooks/pre-push`). If a check can't run, say so — never claim it passed.
+- Analyze: `tool/flutter_safe analyze`   Format: `tool/dart_safe format .`
+- **Done = a failing test was written first, docs updated, then codegen current + `tool/dart_safe format .` clean + `tool/flutter_safe analyze` clean + `tool/flutter_safe test` green.** Never leave generated output stale.
+- **Pre-commit hook**: `tool/dart_safe format .` + `tool/flutter_safe analyze` -- runs before every commit (`.githooks/pre-commit`). Auto-formats in place and stages formatting fixes; skips tests for speed. Pre-push covers the full gate.
+- **Pre-push gate (hard)**: `tool/dart_safe format --set-exit-if-changed .` + `tool/flutter_safe analyze` + `tool/flutter_safe test` must all pass before pushing (`.githooks/pre-push`). The hook records the passing Git tree and can skip the expensive gate when a later push has the same tree, such as after amending only the commit message. If a check can't run, say so — never claim it passed.
 
 ## Structure
 Feature-first: `lib/features/<feature>/{data,domain,presentation}` with shared code in `lib/core/`.
@@ -60,7 +60,7 @@ Feature-first: `lib/features/<feature>/{data,domain,presentation}` with shared c
 - **All user-facing strings via gen-l10n** — English is the base/template locale (`lib/l10n/app_en.arb`); pt-BR is a translation. No hardcoded UI strings; adding a language = adding an ARB. The brand name "OpenDiet" is a proper noun and is not translated.
 - **ASCII-only** in tracked non-`.md` files and in commit/PR text (use `-`, `"`, `'`, `...`, `->`). **Exception:** user-facing string *values* in localization files (`lib/l10n/*.arb`) may use the target language's letters where the language requires them (accented vowels, `ç`, etc.) -- this covers letters only; typographic punctuation (em/en dashes, smart quotes, the ellipsis character, arrows) stays ASCII even there, and ARB keys/`@`-metadata stay ASCII. Tracked `.md` files exempt. <!-- OPINIONATED -->
 - **No backticks in non-`.md` files** — they render as nothing. Exception: Dart `///` dartdoc comments (which render Markdown) and Dart string interpolation, both allowed. <!-- OPINIONATED -->
-- **Commit messages follow the [Conventional Commits](https://www.conventionalcommits.org/) format**: `type(scope): description (#PR)`. Types: `feat`, `fix`, `refactor`, `chore`, `test`, `docs`, `revert`. The PR number is always the last element. Squash-merge titles follow the same rule. <!-- OPINIONATED -->
+- **Commit messages follow the [Conventional Commits](https://www.conventionalcommits.org/) format**: `type(scope): description`. Types: `feat`, `fix`, `refactor`, `chore`, `test`, `docs`, `revert`. Branch commit messages and PR titles do NOT include `(#PR)`. Only the final squash-merge commit title, entered at merge time after the PR number exists, appends the PR number as the last element: `type(scope): description (#PR)`. Do not edit a PR title after publishing just to add its PR number. <!-- OPINIONATED -->
 - **Branch prefix follows the work type.** Use `feature/` only when the branch is a feature; use another clear prefix such as `docs/`, `fix/`, `chore/`, or `test/` for non-feature work. Never use `feat/` as a branch prefix: commit messages use `feat:`, but feature branches spell the namespace out, for example `feature/quantity-field`. <!-- OPINIONATED -->
 
 ## Guardrails
@@ -72,7 +72,7 @@ Feature-first: `lib/features/<feature>/{data,domain,presentation}` with shared c
 - **No AI attribution** in commits or PR bodies (no `Co-Authored-By: <model>`, no "Generated with" line); commit identity = the configured git user only. <!-- OPINIONATED -->
 - **Subagent work**: give a detailed prompt, then verify the actual diff — not the summary.
 - **No `TODO` without a linked issue.**
-- **Enable hooks** with `git config core.hooksPath .githooks` (already set for this repo). Both `pre-commit` (lint) and `pre-push` (format + analyze + test) are enforced locally. Keep `tool/flutter_safe` in both hooks; Flutter is itself a Git checkout, and leaked worktree variables or parallel cache writes can make Pub see the SDK as `0.0.0-unknown`.
+- **Enable hooks** with `git config core.hooksPath .githooks` (already set for this repo). Both `pre-commit` (lint) and `pre-push` (format + analyze + test) are enforced locally. Keep `tool/dart_safe` for Dart commands and `tool/flutter_safe` for Flutter commands in hooks; Flutter is itself a Git checkout, and leaked worktree variables or parallel cache writes can make Pub see the SDK as `0.0.0-unknown`.
 - Do not invent Open Food Facts endpoints, fields, or values — confirm against its API docs first.
 - **Never bundle or redistribute TACO/TBCA data** (restricted-use licence) — Brazilian foods enter only via the user's own imported file.
 - **Never hardcode %VD reference values or the ANVISA nutrient set in prose/comments** — hold each in one test-verified table citing the regulation (`agent_docs/brazilian_nutrition.md`).
@@ -109,7 +109,7 @@ Feature-first: `lib/features/<feature>/{data,domain,presentation}` with shared c
 </important>
 
 <important if="you change Drift tables, freezed models, or @riverpod providers">
-- Re-run `dart run build_runner build --delete-conflicting-outputs`; commit the generated `*.g.dart` / `*.freezed.dart` alongside the source and keep them excluded from the analyzer.
+- Re-run `tool/dart_safe run build_runner build --delete-conflicting-outputs`; commit the generated `*.g.dart` / `*.freezed.dart` alongside the source and keep them excluded from the analyzer.
 - If codegen fails on analyzer/version conflicts, stop and reconcile the matched dependency set — do not "fix" it by upgrading random packages.
 </important>
 

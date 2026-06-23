@@ -3,6 +3,7 @@
 set -e
 
 hook_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+dart_safe="$hook_dir/../tool/dart_safe"
 flutter_safe="$hook_dir/../tool/flutter_safe"
 
 if ! command -v flutter >/dev/null 2>&1 || ! command -v dart >/dev/null 2>&1; then
@@ -39,7 +40,7 @@ for tool in dart flutter; do
 done
 
 echo "[pre-commit] dart format ."
-dart format --output=none .
+"$dart_safe" format --output=none .
 
 echo "[pre-commit] git add -u (stage formatting fixes)"
 git add -u

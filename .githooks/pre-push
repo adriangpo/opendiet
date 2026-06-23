@@ -4,7 +4,19 @@
 set -e
 
 hook_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+dart_safe="$hook_dir/../tool/dart_safe"
 flutter_safe="$hook_dir/../tool/flutter_safe"
+
+git_dir="$(git rev-parse --git-dir 2>/dev/null || :)"
+current_tree="$(git rev-parse 'HEAD^{tree}' 2>/dev/null || :)"
+cache_file=''
+if [ -n "$git_dir" ] && [ -n "$current_tree" ]; then
+  cache_file="$git_dir/opendiet/pre-push-passed-tree"
+  if [ -r "$cache_file" ] && [ "$(cat "$cache_file")" = "$current_tree" ]; then
+    echo "[pre-push] current tree already passed locally; skipping format/analyze/test"
+    exit 0
+  fi
+fi
 
 # IDEs and git GUIs invoke hooks without sourcing the user's shell profile, so
 # tool dirs like the Flutter SDK are absent from PATH and dart/flutter fail to
@@ -45,12 +57,20 @@ for tool in dart flutter; do
 done
 
 echo "[pre-push] dart format --set-exit-if-changed ."
-dart format --output=none --set-exit-if-changed .
+"$dart_safe" format --output=none --set-exit-if-changed .
 
 echo "[pre-push] flutter analyze"
 "$flutter_safe" analyze
 
 echo "[pre-push] flutter test"
 "$flutter_safe" test
+
+if [ -n "$cache_file" ]; then
+  cache_dir="$(dirname "$cache_file")"
+  mkdir -p "$cache_dir"
+  tmp_file="$(mktemp "$cache_dir/pre-push-passed-tree.XXXXXXXX")"
+  printf '%s\n' "$current_tree" > "$tmp_file"
+  mv "$tmp_file" "$cache_file"
+fi
 
 echo "[pre-push] OK"

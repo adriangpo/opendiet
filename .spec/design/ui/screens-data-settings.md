@@ -52,8 +52,8 @@ Step 3 Preview          | [ Back ]          [ Next > ]|
 +-----------------------------------+
 ```
 
-- **Interactions:** Export writes one backup file to a user location (FR-005); Restore asks merge/replace and confirms before overwriting (FR-006).
-- **States:** *Restore of malformed file* -> rejected with a clear message, no partial corruption (FR-006, NFR-004); round-trip is lossless (NFR-003).
+- **Interactions:** Export writes one backup file to a user location (FR-005); Restore confirms before replacing current data (FR-006).
+- **States:** *Export in progress* -> actions disabled with inline status; *Export failed* -> clear retryable message and actions re-enabled; *Restore confirmation canceled* -> no data change; *Restore of malformed file* -> rejected with a clear message, no partial corruption (FR-006, NFR-004); round-trip is lossless (NFR-003).
 
 ---
 
@@ -158,7 +158,11 @@ Step 3 Preview          | [ Back ]          [ Next > ]|
 ```
 
 - **Interactions:** sign in with the user's own OFF account; contribute/correct products only when authenticated (FR-012). Credentials go to secure storage (NFR-008).
-- **States:** *Signed out* hides contribute actions; *Submit offline/failed* keeps entered data and reports clearly (NFR-006).
+- **States:** *Signed out* hides contribute actions and shows username/password
+  fields; *Signed in* shows the username plus Add product, Suggest correction,
+  and Sign out actions; *Sign-in failed* keeps the entered form values and
+  reports clearly; *Submit offline/failed* keeps entered contribution data and
+  reports clearly (NFR-006).
 
 ---
 

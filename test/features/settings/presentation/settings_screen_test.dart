@@ -65,4 +65,41 @@ void main() {
 
     expect(find.text('First-run setup'), findsOneWidget);
   });
+
+  testWidgets('shows the Meal slots row (FR-019)', (tester) async {
+    final repository = FakeSettingsRepository();
+    await pumpApp(
+      tester,
+      const SettingsScreen(),
+      overrides: [settingsRepositoryProvider.overrideWithValue(repository)],
+    );
+
+    expect(find.text('Meal slots'), findsOneWidget);
+  });
+
+  testWidgets('shows the Open Food Facts account row (FR-012)', (
+    tester,
+  ) async {
+    final repository = FakeSettingsRepository();
+    await pumpApp(
+      tester,
+      const SettingsScreen(),
+      overrides: [settingsRepositoryProvider.overrideWithValue(repository)],
+    );
+
+    expect(find.text('Open Food Facts account'), findsOneWidget);
+  });
+
+  testWidgets('shows the Backup and restore row (FR-005, FR-006)', (
+    tester,
+  ) async {
+    final repository = FakeSettingsRepository();
+    await pumpApp(
+      tester,
+      const SettingsScreen(),
+      overrides: [settingsRepositoryProvider.overrideWithValue(repository)],
+    );
+
+    expect(find.text('Backup and restore'), findsOneWidget);
+  });
 }

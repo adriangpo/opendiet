@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:opendiet/features/diary/data/diary_providers.dart';
+import 'package:opendiet/features/diary/domain/meal_slot.dart';
 import 'package:opendiet/features/foods/data/food_providers.dart';
 import 'package:opendiet/features/settings/data/settings_providers.dart';
 import 'package:opendiet/features/settings/domain/app_settings.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../support/fake_food_repository.dart';
+import '../../support/fake_meal_slot_repository.dart';
 import '../../support/fake_settings_repository.dart';
 import '../../support/test_app.dart';
 
@@ -113,5 +115,23 @@ void main() {
     await tester.pump();
 
     expect(find.text('Welcome to OpenDiet'), findsOneWidget);
+  });
+
+  testWidgets('opens the meal slots settings route', (tester) async {
+    final mealSlots = FakeMealSlotRepository();
+    await mealSlots.saveMealSlot(
+      const MealSlot(id: 'breakfast', name: 'Breakfast', position: 0),
+    );
+    await pumpAppShell(
+      tester,
+      overrides: [
+        ...overrides(),
+        mealSlotRepositoryProvider.overrideWithValue(mealSlots),
+      ],
+      initialRoute: '/settings/meals',
+    );
+
+    expect(find.text('Meal slots'), findsOneWidget);
+    expect(find.byKey(const Key('meal-slot-name-breakfast')), findsOneWidget);
   });
 }

@@ -26,13 +26,22 @@ OpenDiet shall allow a user who is signed in to their Open Food Facts account to
 
 ## Implementation Notes
 
-<!-- Engineers add notes here during implementation -->
+- The Open Food Facts account state is restored from platform secure storage
+  when the S-17 settings screen loads. Restoring a stored account configures
+  the OFF client for authenticated write operations without calling the live
+  login API on every screen open.
+- Sign-in validates the user's own OFF username/password against the OFF
+  repository before credentials are persisted. Contribution actions remain
+  hidden until an account is signed in.
+- Sign-out deletes the secure-storage entry and clears the OFF client account
+  used for write operations.
 
 ## Test Cases
 
-<!-- QA adds test case references here -->
+- `test/features/foods/data/off_account_repository_test.dart`
+- `test/features/settings/presentation/off_account_screen_test.dart`
 
 ---
 *Created: 2026-06-19*
-*Last Updated: 2026-06-19*
+*Last Updated: 2026-06-21*
 *Author: Problem-Based SRS*

@@ -33,8 +33,12 @@ OpenDiet shall store Open Food Facts credentials in platform secure storage and 
 
 ## Implementation Notes
 
-<!-- Engineers add notes here during implementation -->
+- OFF credentials are owned by `OffCredentialStore`, whose production adapter
+  writes only to `FlutterSecureStorage`. They are not part of Drift settings,
+  backup documents, fixtures, source code, or localization strings.
+- UI/controller state exposes only the signed-in username. Passwords are used
+  only inside the account repository and OFF repository authentication methods.
 
 ---
 *Created: 2026-06-19*
-*Last Updated: 2026-06-19*
+*Last Updated: 2026-06-21*

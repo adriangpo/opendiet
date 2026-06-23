@@ -3,6 +3,7 @@ import 'package:opendiet/core/time/clock.dart';
 import 'package:opendiet/core/time/time_providers.dart';
 import 'package:opendiet/core/widgets/app_scaffold.dart';
 import 'package:opendiet/features/add_food/presentation/add_log_hub_screen.dart';
+import 'package:opendiet/features/backup/presentation/backup_restore_screen.dart';
 import 'package:opendiet/features/diary/presentation/diary_screen.dart';
 import 'package:opendiet/features/diary/presentation/quick_add_screen.dart';
 import 'package:opendiet/features/foods/presentation/csv_import/csv_import_screen.dart';
@@ -16,6 +17,9 @@ import 'package:opendiet/features/reminders/presentation/reminders_screen.dart';
 import 'package:opendiet/features/settings/data/settings_providers.dart';
 import 'package:opendiet/features/settings/domain/settings_repository.dart';
 import 'package:opendiet/features/settings/presentation/daily_target_screen.dart';
+import 'package:opendiet/features/settings/presentation/meal_slots_screen.dart';
+import 'package:opendiet/features/settings/presentation/off_account_screen.dart';
+import 'package:opendiet/features/settings/presentation/off_contribution_screen.dart';
 import 'package:opendiet/features/settings/presentation/settings_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -152,8 +156,34 @@ GoRouter buildAppRouter({
                   builder: (context, state) => const DailyTargetScreen(),
                 ),
                 GoRoute(
+                  path: 'meals',
+                  builder: (context, state) => const MealSlotsScreen(),
+                ),
+                GoRoute(
                   path: 'reminders',
                   builder: (context, state) => const RemindersScreen(),
+                ),
+                GoRoute(
+                  path: 'open-food-facts',
+                  builder: (context, state) => const OffAccountScreen(),
+                  routes: [
+                    GoRoute(
+                      path: 'add',
+                      builder: (context, state) => const OffContributionScreen(
+                        mode: OffContributionMode.addProduct,
+                      ),
+                    ),
+                    GoRoute(
+                      path: 'correction',
+                      builder: (context, state) => const OffContributionScreen(
+                        mode: OffContributionMode.suggestCorrection,
+                      ),
+                    ),
+                  ],
+                ),
+                GoRoute(
+                  path: 'backup',
+                  builder: (context, state) => const BackupRestoreScreen(),
                 ),
               ],
             ),

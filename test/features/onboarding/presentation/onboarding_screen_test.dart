@@ -222,4 +222,10 @@ class FakeOffRepository implements OffRepository {
   }) async {
     return OffSearchResult(products: const [], totalCount: 0);
   }
+
+  @override
+  void clearCredentials() {}
+
+  @override
+  void restoreCredentials(String userId, String password) {}
 }

@@ -116,6 +116,158 @@
   "@onboardingTargetPartial": {
     "description": "Error shown when only some daily target fields are filled."
   },
+  "settingsMealSlots": "Meal slots",
+  "@settingsMealSlots": {
+    "description": "Settings hub row that opens meal-slot management."
+  },
+  "mealSlotsTitle": "Meal slots",
+  "@mealSlotsTitle": {
+    "description": "Title of the meal-slot management screen (S-14)."
+  },
+  "mealSlotsAdd": "+ Add slot",
+  "@mealSlotsAdd": {
+    "description": "Button to add a meal slot."
+  },
+  "mealSlotsResetDefault": "Reset to default template",
+  "@mealSlotsResetDefault": {
+    "description": "Button to replace current meal slots with the default template."
+  },
+  "mealSlotsEmpty": "No meal slots yet.",
+  "@mealSlotsEmpty": {
+    "description": "Empty state when the user has no meal slots."
+  },
+  "mealSlotsLoadError": "Could not load meal slots.",
+  "@mealSlotsLoadError": {
+    "description": "Shown when meal slots cannot be loaded."
+  },
+  "mealSlotsSaveError": "Could not save meal slots.",
+  "@mealSlotsSaveError": {
+    "description": "Shown when meal-slot changes cannot be saved."
+  },
+  "mealSlotsAddDialogTitle": "Add meal slot",
+  "@mealSlotsAddDialogTitle": {
+    "description": "Title of the dialog for adding a meal slot."
+  },
+  "mealSlotNameLabel": "Name",
+  "@mealSlotNameLabel": {
+    "description": "Label for a meal-slot name field."
+  },
+  "mealSlotNameRequired": "Enter a slot name",
+  "@mealSlotNameRequired": {
+    "description": "Validation error when a meal slot name is empty."
+  },
+  "mealSlotNamesUnique": "Meal slot names must be unique.",
+  "@mealSlotNamesUnique": {
+    "description": "Validation error when meal slot names are duplicated."
+  },
+  "mealSlotMoveUp": "Move up",
+  "@mealSlotMoveUp": {
+    "description": "Tooltip for moving a meal slot earlier in the list."
+  },
+  "mealSlotMoveDown": "Move down",
+  "@mealSlotMoveDown": {
+    "description": "Tooltip for moving a meal slot later in the list."
+  },
+  "mealSlotDelete": "Remove slot",
+  "@mealSlotDelete": {
+    "description": "Tooltip for the meal-slot remove button."
+  },
+  "mealSlotRemoveTitle": "Remove meal slot?",
+  "@mealSlotRemoveTitle": {
+    "description": "Title of the confirmation dialog for removing a meal slot."
+  },
+  "mealSlotRemoveMessage": "Remove {slotName}? Existing diary data is kept; confirm before removing the slot.",
+  "@mealSlotRemoveMessage": {
+    "description": "Confirmation message before removing a meal slot.",
+    "placeholders": {
+      "slotName": {
+        "type": "String",
+        "example": "Breakfast"
+      }
+    }
+  },
+  "mealSlotRemoveConfirm": "Remove",
+  "@mealSlotRemoveConfirm": {
+    "description": "Confirmation action to remove a meal slot."
+  },
+  "settingsOpenFoodFactsAccount": "Open Food Facts account",
+  "@settingsOpenFoodFactsAccount": {
+    "description": "Settings hub row that opens the Open Food Facts account screen."
+  },
+  "offAccountTitle": "Open Food Facts",
+  "@offAccountTitle": {
+    "description": "Title of the Open Food Facts account screen."
+  },
+  "offAccountSignedOutStatus": "Status: not signed in",
+  "@offAccountSignedOutStatus": {
+    "description": "Open Food Facts account status shown when no account is signed in."
+  },
+  "offAccountSignInHelp": "Sign in to contribute products.",
+  "@offAccountSignInHelp": {
+    "description": "Explains why the user can sign in to Open Food Facts."
+  },
+  "offAccountUsername": "Username",
+  "@offAccountUsername": {
+    "description": "Open Food Facts username field label."
+  },
+  "offAccountPassword": "Password",
+  "@offAccountPassword": {
+    "description": "Open Food Facts password field label."
+  },
+  "offAccountSignInAction": "Sign in",
+  "@offAccountSignInAction": {
+    "description": "Button that signs into Open Food Facts."
+  },
+  "offAccountSignOutAction": "Sign out",
+  "@offAccountSignOutAction": {
+    "description": "Button that signs out of Open Food Facts."
+  },
+  "offAccountSignedIn": "Signed in: {userId}",
+  "@offAccountSignedIn": {
+    "description": "Open Food Facts account status shown when signed in.",
+    "placeholders": {
+      "userId": {
+        "type": "String",
+        "example": "alice"
+      }
+    }
+  },
+  "offAccountSignInFailed": "Could not sign in. Check the account and try again.",
+  "@offAccountSignInFailed": {
+    "description": "Error shown when Open Food Facts rejects sign-in."
+  },
+  "offAccountLoadError": "Could not load Open Food Facts account.",
+  "@offAccountLoadError": {
+    "description": "Error shown when saved Open Food Facts account state cannot load."
+  },
+  "offContributionAddProduct": "Add a product",
+  "@offContributionAddProduct": {
+    "description": "Action to submit a new Open Food Facts product."
+  },
+  "offContributionSuggestCorrection": "Suggest a correction",
+  "@offContributionSuggestCorrection": {
+    "description": "Action to submit a correction for an Open Food Facts product."
+  },
+  "offContributionSubmit": "Submit",
+  "@offContributionSubmit": {
+    "description": "Button that submits an Open Food Facts contribution."
+  },
+  "offProductName": "Product name",
+  "@offProductName": {
+    "description": "Open Food Facts contribution product name field."
+  },
+  "offContributionNameRequired": "Enter a product name",
+  "@offContributionNameRequired": {
+    "description": "Validation error for missing Open Food Facts product name."
+  },
+  "offContributionSubmitted": "Contribution submitted.",
+  "@offContributionSubmitted": {
+    "description": "Success message after an Open Food Facts contribution is submitted."
+  },
+  "offContributionSubmitFailed": "Could not submit. Your product details are still here.",
+  "@offContributionSubmitFailed": {
+    "description": "Error shown when an Open Food Facts contribution fails without clearing the form."
+  },
   "vdRegionBrazil": "Brazil",
   "@vdRegionBrazil": {
     "description": "Percent-daily-value reference region option for Brazil."
@@ -489,6 +641,84 @@
   "settingsReminders": "Reminders",
   "@settingsReminders": {
     "description": "Settings hub row that opens reminder configuration."
+  },
+  "settingsBackupRestore": "Backup and restore",
+  "@settingsBackupRestore": {
+    "description": "Settings hub row that opens backup export and restore."
+  },
+  "backupTitle": "Backup and restore",
+  "@backupTitle": {
+    "description": "Title of the backup export and restore screen."
+  },
+  "backupDescription": "Your data lives only on this device. Back it up to a file you can store outside OpenDiet.",
+  "@backupDescription": {
+    "description": "Intro text explaining local-only data and backup."
+  },
+  "backupExport": "Export backup",
+  "@backupExport": {
+    "description": "Button to export a backup file."
+  },
+  "backupExportInProgress": "Exporting...",
+  "@backupExportInProgress": {
+    "description": "Disabled export button label while exporting."
+  },
+  "backupLastExport": "Last export: {path}",
+  "@backupLastExport": {
+    "description": "Shows the most recent exported backup file path or 'never'.",
+    "placeholders": {
+      "path": { "type": "String", "example": "opendiet-backup.json" }
+    }
+  },
+  "backupNever": "never",
+  "@backupNever": {
+    "description": "Shown when no backup has been exported in the current session."
+  },
+  "backupExportSuccess": "Backup exported to {path}.",
+  "@backupExportSuccess": {
+    "description": "Success message after exporting a backup.",
+    "placeholders": {
+      "path": { "type": "String", "example": "opendiet-backup.json" }
+    }
+  },
+  "backupExportError": "Could not export backup. Try another location.",
+  "@backupExportError": {
+    "description": "Error message after backup export fails."
+  },
+  "backupRestore": "Restore from file",
+  "@backupRestore": {
+    "description": "Button to choose and restore a backup file."
+  },
+  "backupRestoreInProgress": "Restoring...",
+  "@backupRestoreInProgress": {
+    "description": "Disabled restore button label while restoring."
+  },
+  "backupRestoreWarning": "Restoring affects current data.",
+  "@backupRestoreWarning": {
+    "description": "Warning shown before the restore action."
+  },
+  "backupRestoreConfirmTitle": "Replace current data?",
+  "@backupRestoreConfirmTitle": {
+    "description": "Title of the restore confirmation dialog."
+  },
+  "backupRestoreConfirmMessage": "This will replace your current OpenDiet data with the selected backup file.",
+  "@backupRestoreConfirmMessage": {
+    "description": "Restore confirmation dialog body."
+  },
+  "backupRestoreConfirmAction": "Restore",
+  "@backupRestoreConfirmAction": {
+    "description": "Confirmation action in the restore dialog."
+  },
+  "backupRestoreSuccess": "Backup restored.",
+  "@backupRestoreSuccess": {
+    "description": "Success message after restoring a backup."
+  },
+  "backupMalformedError": "Backup file is malformed or incompatible. No data was changed.",
+  "@backupMalformedError": {
+    "description": "Error shown when a selected backup file cannot be parsed or is incompatible."
+  },
+  "backupRestoreError": "Could not restore backup. No data was changed.",
+  "@backupRestoreError": {
+    "description": "Error shown when restore fails after parsing."
   },
   "remindersTitle": "Reminders",
   "@remindersTitle": {

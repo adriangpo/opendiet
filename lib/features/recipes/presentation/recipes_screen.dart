@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:opendiet/core/nutrition/nutrients.dart';
@@ -29,7 +30,7 @@ class RecipesScreen extends ConsumerWidget {
         data: (recipes) {
           if (recipes.isEmpty) {
             return EmptyState(
-              icon: Icons.menu_book_outlined,
+              icon: Boxicons.bx_book_open,
               message: l10n.recipesEmptyMessage,
             );
           }
@@ -48,7 +49,7 @@ class RecipesScreen extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/recipes/new'),
         tooltip: l10n.recipeEditorNewTitle,
-        child: const Icon(Icons.add),
+        child: const Icon(Boxicons.bx_plus),
       ),
     );
   }

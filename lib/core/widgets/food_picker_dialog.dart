@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:opendiet/features/foods/data/food_providers.dart';
 import 'package:opendiet/features/foods/domain/food.dart';
@@ -48,7 +49,7 @@ class _FoodPickerDialogState extends ConsumerState<FoodPickerDialog> {
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: l10n.foodPickerSearchHint,
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: const Icon(Boxicons.bx_search),
               ),
               onChanged: (value) =>
                   setState(() => _query = value.toLowerCase()),

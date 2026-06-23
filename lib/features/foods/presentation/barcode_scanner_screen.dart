@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 /// A full-screen barcode scanner (FR-010).
@@ -41,7 +42,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
       appBar: AppBar(
         title: const Text('Scan Barcode'),
         leading: IconButton(
-          icon: const Icon(Icons.close),
+          icon: const Icon(Boxicons.bx_x),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),

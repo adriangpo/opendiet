@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:opendiet/core/widgets/empty_state.dart';
@@ -65,7 +66,7 @@ class FoodDetailScreen extends ConsumerWidget {
                     ? l10n.foodDetailFavoriteRemove
                     : l10n.foodDetailFavoriteAdd,
                 icon: Icon(
-                  food.isFavorite ? Icons.favorite : Icons.favorite_border,
+                  food.isFavorite ? Boxicons.bxs_heart : Boxicons.bx_heart,
                 ),
                 onPressed: () => unawaited(
                   ref.read(foodRepositoryProvider).toggleFavorite(food.id),
@@ -191,7 +192,7 @@ class _NotFoundScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.foodsTitle)),
       body: EmptyState(
-        icon: Icons.restaurant_outlined,
+        icon: Boxicons.bx_food_menu,
         message: l10n.foodDetailNotFound,
       ),
     );

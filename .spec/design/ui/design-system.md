@@ -4,7 +4,7 @@
 
 ## Color
 
-- **Brand seed:** `#2E7D32` (green) — adjustable. <!-- TODO: confirm final brand color. -->
+- **Brand seed:** `#0066CC` (Ocean blue).
 - Palette is generated from the seed via Material 3 `ColorScheme.fromSeed` for both light and dark.
 - Use **semantic color roles**, never hardcoded colors: `primary` (primary actions, FAB), `surface`/`surfaceContainer` (cards, sheets), `onSurfaceVariant` (secondary text), `error` (validation/destructive), `tertiary` (accents such as the over-target state).
 - **Nutrient accents** (used consistently in charts/rings and totals): energy = primary; protein, carbs, fat = three fixed tonal roles defined once in the theme. Do not invent per-screen colors.
@@ -12,6 +12,7 @@
 
 ## Typography & shape
 
+- **Typeface:** Inter (bundled as local asset — Regular 400, Medium 500, SemiBold 600, Bold 700).
 - Material 3 type scale. Numbers in totals/targets use the tabular/`titleLarge`/`headlineSmall` roles for alignment.
 - Default component shapes from Material 3 (rounded cards, full-width filled buttons). No custom radii unless added here.
 
@@ -31,7 +32,7 @@
 | `QuantityField` | Quantity entry, recipe ingredients | Amount + unit toggle (servings vs g/ml); respects unit system (FR-024). |
 | `NutrientForm` | Custom food, CSV mapping preview | The ten ANVISA nutrients (incl. added sugars, trans fat) + micronutrients; blanks allowed (FR-008, FR-028). |
 | `NutritionTableBR` | Food/recipe detail | ANVISA table: per-100 g/ml + per-porção + %VD columns; trans fat shows no %VD (FR-026). |
-| `EmptyState` | Any empty list | Icon + one-line explainer + primary action. |
+| `EmptyState` | Any empty list | Icon (Boxicons, `package:flutter_boxicons`) + one-line explainer + primary action. |
 | `ErrorBanner` | OFF/network/import errors | Dismissible, non-blocking; never blocks local actions (NFR-006). |
 
 ## State conventions (every data-backed screen specifies all four)

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:opendiet/core/nutrition/nutrients.dart';
 import 'package:opendiet/features/foods/data/food_providers.dart';
@@ -28,7 +29,7 @@ void main() {
     await tester.pump();
 
     expect(_energyText(tester), '40');
-    expect(find.byIcon(Icons.functions), findsOneWidget);
+    expect(find.byIcon(Boxicons.bx_calculator), findsOneWidget);
   });
 
   testWidgets('editing energy switches it to manual and stops auto-calc', (
@@ -42,8 +43,8 @@ void main() {
     await tester.enterText(find.byKey(const Key('field-energy')), '999');
     await tester.pump();
 
-    expect(find.byIcon(Icons.lock_outline), findsOneWidget);
-    expect(find.byIcon(Icons.functions), findsNothing);
+    expect(find.byIcon(Boxicons.bx_lock), findsOneWidget);
+    expect(find.byIcon(Boxicons.bx_calculator), findsNothing);
 
     await tester.enterText(find.byKey(const Key('field-carbohydrates')), '20');
     await tester.pump();
@@ -67,7 +68,7 @@ void main() {
     await tester.pump();
 
     expect(_energyText(tester), '80');
-    expect(find.byIcon(Icons.functions), findsOneWidget);
+    expect(find.byIcon(Boxicons.bx_calculator), findsOneWidget);
   });
 
   testWidgets('a blank name blocks saving', (tester) async {
@@ -217,7 +218,7 @@ void main() {
   testWidgets('barcode field has a scan icon', (tester) async {
     await _pumpEditor(tester, FakeFoodRepository());
 
-    expect(find.byIcon(Icons.qr_code_scanner), findsOneWidget);
+    expect(find.byIcon(Boxicons.bx_qr), findsOneWidget);
 
     final barcodeField = tester.widget<TextField>(
       find.byKey(const Key('field-barcode')),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:opendiet/core/nutrition/nutrients.dart';
 import 'package:opendiet/core/nutrition/quantity.dart';
@@ -105,7 +106,7 @@ class RecipeDetailScreen extends ConsumerWidget {
               FilledButton.icon(
                 key: const Key('recipe-detail-log-button'),
                 onPressed: () {},
-                icon: const Icon(Icons.add),
+                icon: const Icon(Boxicons.bx_plus),
                 label: Text(l10n.recipeDetailLogServings),
               ),
             ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:opendiet/core/identifiers/identifier_providers.dart';
@@ -106,7 +107,7 @@ class _QuickAddScreenState extends ConsumerState<QuickAddScreen> {
       appBar: AppBar(
         title: Text(l10n.logAddToSlot(slotName)),
         leading: IconButton(
-          icon: const Icon(Icons.close),
+          icon: const Icon(Boxicons.bx_x),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),

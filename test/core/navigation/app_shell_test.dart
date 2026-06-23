@@ -24,16 +24,10 @@ void main() {
   testWidgets('renders the four bottom-navigation tabs', (tester) async {
     await pumpAppShell(tester, overrides: overrides());
 
-    expect(find.widgetWithText(NavigationDestination, 'Diary'), findsOneWidget);
-    expect(find.widgetWithText(NavigationDestination, 'Foods'), findsOneWidget);
-    expect(
-      find.widgetWithText(NavigationDestination, 'Recipes'),
-      findsOneWidget,
-    );
-    expect(
-      find.widgetWithText(NavigationDestination, 'Settings'),
-      findsOneWidget,
-    );
+    expect(find.byKey(const ValueKey('nav-diary')), findsOneWidget);
+    expect(find.byKey(const ValueKey('nav-foods')), findsOneWidget);
+    expect(find.byKey(const ValueKey('nav-recipes')), findsOneWidget);
+    expect(find.byKey(const ValueKey('nav-settings')), findsOneWidget);
   });
 
   testWidgets('starts on the Diary tab', (tester) async {
@@ -48,7 +42,7 @@ void main() {
   testWidgets('switches to the Foods tab when tapped', (tester) async {
     await pumpAppShell(tester, overrides: overrides());
 
-    await tester.tap(find.widgetWithText(NavigationDestination, 'Foods'));
+    await tester.tap(find.byKey(const ValueKey('nav-foods')));
     await tester.pump();
     await tester.pump();
 
@@ -63,7 +57,7 @@ void main() {
   ) async {
     await pumpAppShell(tester, overrides: overrides());
 
-    await tester.tap(find.widgetWithText(NavigationDestination, 'Settings'));
+    await tester.tap(find.byKey(const ValueKey('nav-settings')));
     await tester.pump();
     await tester.pump();
 
@@ -75,7 +69,7 @@ void main() {
   testWidgets('opens the food editor from the Foods tab', (tester) async {
     await pumpAppShell(tester, overrides: overrides());
 
-    await tester.tap(find.widgetWithText(NavigationDestination, 'Foods'));
+    await tester.tap(find.byKey(const ValueKey('nav-foods')));
     await tester.pump();
     await tester.pump();
 
@@ -101,7 +95,7 @@ void main() {
     );
 
     expect(find.text('Welcome to OpenDiet'), findsOneWidget);
-    expect(find.byType(NavigationBar), findsNothing);
+    expect(find.byKey(const ValueKey('nav-diary')), findsNothing);
   });
 
   testWidgets('Settings can re-run onboarding after first launch', (
@@ -109,7 +103,7 @@ void main() {
   ) async {
     await pumpAppShell(tester, overrides: overrides());
 
-    await tester.tap(find.widgetWithText(NavigationDestination, 'Settings'));
+    await tester.tap(find.byKey(const ValueKey('nav-settings')));
     await tester.pump();
     await tester.pump();
 

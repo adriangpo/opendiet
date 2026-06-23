@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:opendiet/features/foods/data/csv_import/csv_import_providers.dart';
 import 'package:opendiet/features/foods/data/csv_import/csv_import_service.dart';
@@ -83,14 +84,14 @@ class _CsvImportScreenState extends ConsumerState<CsvImportScreen> {
             child: Column(
               children: [
                 Icon(
-                  Icons.upload_file,
+                  Boxicons.bx_upload,
                   size: 64,
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 const SizedBox(height: 16),
                 FilledButton.icon(
                   onPressed: _pickFile,
-                  icon: const Icon(Icons.file_open),
+                  icon: const Icon(Boxicons.bx_folder_open),
                   label: Text(l10n.csvImportChooseFile),
                 ),
               ],
@@ -103,7 +104,7 @@ class _CsvImportScreenState extends ConsumerState<CsvImportScreen> {
                 padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
-                    const Icon(Icons.description),
+                    const Icon(Boxicons.bx_file),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -383,8 +384,8 @@ class _CsvImportScreenState extends ConsumerState<CsvImportScreen> {
           const Spacer(),
           Icon(
             result.rejectedCount == 0
-                ? Icons.check_circle
-                : Icons.warning_amber_rounded,
+                ? Boxicons.bxs_check_circle
+                : Boxicons.bx_info_circle,
             size: 64,
             color: result.rejectedCount == 0
                 ? Theme.of(context).colorScheme.primary

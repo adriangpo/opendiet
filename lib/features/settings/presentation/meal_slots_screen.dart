@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:opendiet/core/identifiers/identifier_providers.dart';
 import 'package:opendiet/features/diary/data/diary_providers.dart';
@@ -237,12 +238,12 @@ class _MealSlotsScreenState extends ConsumerState<MealSlotsScreen> {
         const SizedBox(height: 8),
         OutlinedButton.icon(
           onPressed: _addSlot,
-          icon: const Icon(Icons.add),
+          icon: const Icon(Boxicons.bx_plus),
           label: Text(l10n.mealSlotsAdd),
         ),
         TextButton.icon(
           onPressed: () => _resetToDefault(l10n),
-          icon: const Icon(Icons.restart_alt),
+          icon: const Icon(Boxicons.bx_reset),
           label: Text(l10n.mealSlotsResetDefault),
         ),
       ],
@@ -287,7 +288,7 @@ class _MealSlotRow extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         children: [
-          const Icon(Icons.drag_handle),
+          const Icon(Boxicons.bx_dots_vertical_rounded),
           const SizedBox(width: 8),
           Expanded(
             child: TextField(
@@ -301,19 +302,19 @@ class _MealSlotRow extends StatelessWidget {
             key: Key('meal-slot-move-up-${slot.id}'),
             onPressed: isFirst ? null : onMoveUp,
             tooltip: l10n.mealSlotMoveUp,
-            icon: const Icon(Icons.keyboard_arrow_up),
+            icon: const Icon(Boxicons.bx_chevron_up),
           ),
           IconButton(
             key: Key('meal-slot-move-down-${slot.id}'),
             onPressed: isLast ? null : onMoveDown,
             tooltip: l10n.mealSlotMoveDown,
-            icon: const Icon(Icons.keyboard_arrow_down),
+            icon: const Icon(Boxicons.bx_chevron_down),
           ),
           IconButton(
             key: Key('meal-slot-delete-${slot.id}'),
             onPressed: onRemove,
             tooltip: l10n.mealSlotDelete,
-            icon: const Icon(Icons.close),
+            icon: const Icon(Boxicons.bx_x),
           ),
         ],
       ),

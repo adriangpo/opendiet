@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:opendiet/core/nutrition/nutrients.dart';
@@ -47,7 +48,7 @@ class MealSlotDetailScreen extends ConsumerWidget {
                   const SizedBox(height: 16),
                   FilledButton.icon(
                     onPressed: () => context.push('/diary/add/$mealSlotId'),
-                    icon: const Icon(Icons.add),
+                    icon: const Icon(Boxicons.bx_plus),
                     label: Text(l10n.diaryAddToSlot(slot?.name ?? '')),
                   ),
                 ],

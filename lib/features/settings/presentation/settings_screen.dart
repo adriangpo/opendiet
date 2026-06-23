@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:opendiet/core/nutrition/nutrients.dart';
@@ -46,32 +47,32 @@ class _SettingsList extends ConsumerWidget {
         ListTile(
           title: Text(l10n.settingsDailyTarget),
           subtitle: Text(_dailyTargetSubtitle(l10n, settings.dailyTarget)),
-          trailing: const Icon(Icons.chevron_right),
+          trailing: const Icon(Boxicons.bx_chevron_right),
           onTap: () => context.push('/settings/target'),
         ),
         ListTile(
           title: Text(l10n.settingsFirstRunSetup),
-          trailing: const Icon(Icons.chevron_right),
+          trailing: const Icon(Boxicons.bx_chevron_right),
           onTap: () => context.push('/onboarding?rerun=true'),
         ),
         ListTile(
           title: Text(l10n.settingsMealSlots),
-          trailing: const Icon(Icons.chevron_right),
+          trailing: const Icon(Boxicons.bx_chevron_right),
           onTap: () => context.push('/settings/meals'),
         ),
         ListTile(
           title: Text(l10n.settingsReminders),
-          trailing: const Icon(Icons.chevron_right),
+          trailing: const Icon(Boxicons.bx_chevron_right),
           onTap: () => context.push('/settings/reminders'),
         ),
         ListTile(
           title: Text(l10n.settingsOpenFoodFactsAccount),
-          trailing: const Icon(Icons.chevron_right),
+          trailing: const Icon(Boxicons.bx_chevron_right),
           onTap: () => context.push('/settings/account'),
         ),
         ListTile(
           title: Text(l10n.settingsBackupRestore),
-          trailing: const Icon(Icons.chevron_right),
+          trailing: const Icon(Boxicons.bx_chevron_right),
           onTap: () => context.push('/settings/backup'),
         ),
         const Divider(),

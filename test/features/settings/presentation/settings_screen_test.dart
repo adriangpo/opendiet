@@ -53,6 +53,19 @@ void main() {
     expect(find.text('Daily target'), findsOneWidget);
   });
 
+  testWidgets('shows the Open Food Facts account row (FR-012)', (
+    tester,
+  ) async {
+    final repository = FakeSettingsRepository();
+    await pumpApp(
+      tester,
+      const SettingsScreen(),
+      overrides: [settingsRepositoryProvider.overrideWithValue(repository)],
+    );
+
+    expect(find.text('Open Food Facts account'), findsOneWidget);
+  });
+
   testWidgets('shows the Backup and restore row (FR-005, FR-006)', (
     tester,
   ) async {

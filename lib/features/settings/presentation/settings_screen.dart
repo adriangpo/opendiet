@@ -55,6 +55,11 @@ class _SettingsList extends ConsumerWidget {
           onTap: () => context.push('/settings/reminders'),
         ),
         ListTile(
+          title: Text(l10n.settingsOpenFoodFactsAccount),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => context.push('/settings/open-food-facts'),
+        ),
+        ListTile(
           title: Text(l10n.settingsBackupRestore),
           trailing: const Icon(Icons.chevron_right),
           onTap: () => context.push('/settings/backup'),

@@ -158,7 +158,11 @@ Step 3 Preview          | [ Back ]          [ Next > ]|
 ```
 
 - **Interactions:** sign in with the user's own OFF account; contribute/correct products only when authenticated (FR-012). Credentials go to secure storage (NFR-008).
-- **States:** *Signed out* hides contribute actions; *Submit offline/failed* keeps entered data and reports clearly (NFR-006).
+- **States:** *Signed out* hides contribute actions and shows username/password
+  fields; *Signed in* shows the username plus Add product, Suggest correction,
+  and Sign out actions; *Sign-in failed* keeps the entered form values and
+  reports clearly; *Submit offline/failed* keeps entered contribution data and
+  reports clearly (NFR-006).
 
 ---
 

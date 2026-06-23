@@ -14,6 +14,7 @@ import 'package:opendiet/features/recipes/presentation/recipe_editor_screen.dart
 import 'package:opendiet/features/recipes/presentation/recipes_screen.dart';
 import 'package:opendiet/features/reminders/presentation/reminders_screen.dart';
 import 'package:opendiet/features/settings/presentation/daily_target_screen.dart';
+import 'package:opendiet/features/settings/presentation/meal_slots_screen.dart';
 import 'package:opendiet/features/settings/presentation/off_account_screen.dart';
 import 'package:opendiet/features/settings/presentation/off_contribution_screen.dart';
 import 'package:opendiet/features/settings/presentation/settings_screen.dart';
@@ -121,6 +122,10 @@ GoRouter buildAppRouter({Clock clock = const SystemClock()}) => GoRouter(
                 GoRoute(
                   path: 'target',
                   builder: (context, state) => const DailyTargetScreen(),
+                ),
+                GoRoute(
+                  path: 'meals',
+                  builder: (context, state) => const MealSlotsScreen(),
                 ),
                 GoRoute(
                   path: 'reminders',

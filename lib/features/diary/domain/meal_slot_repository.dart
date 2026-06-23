@@ -10,4 +10,13 @@ abstract interface class MealSlotRepository {
 
   /// Removes the meal slot with [id].
   Future<void> deleteMealSlot(String id);
+
+  /// Atomically deletes [deletedIds] then inserts or updates [slots].
+  ///
+  /// Either the whole set is replaced or the store is left unchanged
+  /// (FR-019, NFR-004).
+  Future<void> replaceAll({
+    required Set<String> deletedIds,
+    required List<MealSlot> slots,
+  });
 }

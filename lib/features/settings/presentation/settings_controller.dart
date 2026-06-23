@@ -37,6 +37,10 @@ class SettingsController extends _$SettingsController {
     ),
   );
 
+  /// Sets (or clears) the UI language code (null = device default).
+  Future<void> setLanguageCode(String? languageCode) =>
+      _update((settings) => settings.copyWith(languageCode: languageCode));
+
   /// Skips S-18 without changing optional setup values.
   Future<void> skipOnboarding() =>
       _update((settings) => settings.copyWith(onboardingCompleted: true));

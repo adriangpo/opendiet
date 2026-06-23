@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:opendiet/core/locale_provider.dart';
 import 'package:opendiet/core/navigation/app_router.dart';
 import 'package:opendiet/core/theme/app_theme.dart';
 import 'package:opendiet/l10n/app_localizations.dart';
@@ -25,7 +26,9 @@ class OpenDietApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
     return MaterialApp.router(
+      locale: locale,
       onGenerateTitle: (context) => 'OpenDiet',
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,

@@ -56,12 +56,22 @@ enum VdRegion {
 /// A nutrient absent from the map has no reference value in this region and
 /// therefore shows no %VD (e.g. trans fat everywhere). Each value is in the
 /// nutrient's canonical unit (kcal / g / mg).
+///
+/// Micronutrient references are held in a separate string-keyed map using the
+/// same keys as [Nutrients.micronutrients].
 class VdReferenceSet {
-  const VdReferenceSet(this.region, this._references);
+  const VdReferenceSet(
+    this.region,
+    this._references, {
+    this.micronutrientReferences = const {},
+  });
 
   /// The region this set belongs to.
   final VdRegion region;
   final Map<Nutrient, double> _references;
+
+  /// String-keyed micronutrient reference values (e.g. "calcium_mg" -> 800).
+  final Map<String, double> micronutrientReferences;
 
   /// The reference value for [nutrient], or null when the region defines none.
   double? referenceFor(Nutrient nutrient) => _references[nutrient];
@@ -71,6 +81,13 @@ class VdReferenceSet {
   /// Returns null when the amount is absent or the nutrient has no reference.
   double? percentOf(double? amount, Nutrient nutrient) {
     final reference = _references[nutrient];
+    if (amount == null || reference == null) return null;
+    return amount / reference * 100;
+  }
+
+  /// The %VD for a micronutrient key, or null when absent or no reference.
+  double? micronutrientPercentOf(double? amount, String key) {
+    final reference = micronutrientReferences[key];
     if (amount == null || reference == null) return null;
     return amount / reference * 100;
   }
@@ -97,16 +114,30 @@ abstract final class VdReference {
   };
 
   // ANVISA RDC 429/2020 + IN 75/2020, Anexo II (VDR for foods in general).
-  static const VdReferenceSet _brazil = VdReferenceSet(VdRegion.brazil, {
-    Nutrient.energy: 2000,
-    Nutrient.carbohydrates: 300,
-    Nutrient.addedSugars: 50,
-    Nutrient.protein: 50,
-    Nutrient.totalFat: 65,
-    Nutrient.saturatedFat: 20,
-    Nutrient.dietaryFiber: 25,
-    Nutrient.sodium: 2000,
-  });
+  static const VdReferenceSet _brazil = VdReferenceSet(
+    VdRegion.brazil,
+    {
+      Nutrient.energy: 2000,
+      Nutrient.carbohydrates: 300,
+      Nutrient.addedSugars: 50,
+      Nutrient.protein: 50,
+      Nutrient.totalFat: 65,
+      Nutrient.saturatedFat: 20,
+      Nutrient.dietaryFiber: 25,
+      Nutrient.sodium: 2000,
+    },
+    micronutrientReferences: {
+      Nutrients.calciumKey: 800,
+      Nutrients.ironKey: 14,
+      Nutrients.potassiumKey: 4700,
+      Nutrients.magnesiumKey: 300,
+      Nutrients.zincKey: 7,
+      Nutrients.vitaminAKey: 800,
+      Nutrients.vitaminCKey: 45,
+      Nutrients.vitaminDKey: 5,
+      Nutrients.vitaminB12Key: 2.4,
+    },
+  );
 
   // FDA Daily Values, 21 CFR 101.9 (2016 Nutrition Facts label update).
   static const VdReferenceSet _unitedStates = VdReferenceSet(

@@ -6,6 +6,7 @@ import 'package:opendiet/features/backup/presentation/backup_restore_screen.dart
 import 'package:opendiet/features/diary/presentation/add_log_hub_screen.dart';
 import 'package:opendiet/features/diary/presentation/diary_screen.dart';
 import 'package:opendiet/features/diary/presentation/food_quantity_entry_screen.dart';
+import 'package:opendiet/features/diary/presentation/meal_slot_detail_screen.dart';
 import 'package:opendiet/features/diary/presentation/quick_add_screen.dart';
 import 'package:opendiet/features/foods/presentation/csv_import/csv_import_screen.dart';
 import 'package:opendiet/features/foods/presentation/custom_food_editor.dart';
@@ -103,6 +104,12 @@ GoRouter buildAppRouter({
                 GoRoute(
                   path: 'add/:mealSlotId',
                   builder: (context, state) => AddLogHubScreen(
+                    mealSlotId: state.pathParameters['mealSlotId']!,
+                  ),
+                ),
+                GoRoute(
+                  path: 'slot/:mealSlotId',
+                  builder: (context, state) => MealSlotDetailScreen(
                     mealSlotId: state.pathParameters['mealSlotId']!,
                   ),
                 ),

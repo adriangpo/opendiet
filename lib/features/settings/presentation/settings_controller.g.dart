@@ -37,7 +37,7 @@ final class SettingsControllerProvider
 }
 
 String _$settingsControllerHash() =>
-    r'872d824f9e5ab6e9702e2468465aadc3c803db34';
+    r'280a22e3b807634b90ca03cc2d635ebe558d98b3';
 
 /// Exposes the user's settings and applies edits, persisting each change.
 

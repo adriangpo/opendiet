@@ -832,5 +832,94 @@
   "actionCancel": "Cancel",
   "@actionCancel": {
     "description": "Generic cancel action."
-  }
+  },
+  "settingsLanguage": "Language",
+  "@settingsLanguage": {
+    "description": "Settings row label for the UI language selector."
+  },
+  "languageSystemDefault": "System default",
+  "@languageSystemDefault": {
+    "description": "Dropdown option to use the device's default locale."
+  },
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "English language option in the language selector."
+  },
+  "languagePortuguese": "Portuguese",
+  "@languagePortuguese": {
+    "description": "Portuguese language option in the language selector."
+  },
+  "diaryDailyTotal": "Daily total: {kcal} kcal",
+  "@diaryDailyTotal": {
+    "description": "Daily nutrient totals bar shown at the top of the diary.",
+    "placeholders": {
+      "kcal": { "type": "String", "example": "1850" }
+    }
+  },
+  "diarySlotTotal": "Total: {kcal} kcal",
+  "@diarySlotTotal": {
+    "description": "Subtotal shown at the bottom of a meal slot entry list.",
+    "placeholders": {
+      "kcal": { "type": "String", "example": "450" }
+    }
+  },
+  "diarySlotNoEntries": "No entries",
+  "@diarySlotNoEntries": {
+    "description": "Shown in a meal slot section when it has no logged entries."
+  },
+  "unitMicrogram": "mcg",
+  "@unitMicrogram": {
+    "description": "Abbreviation for microgram."
+  },
+  "nutritionTableSectionMacros": "Macronutrients",
+  "@nutritionTableSectionMacros": {
+    "description": "Section header for macronutrients in the nutrition table."
+  },
+  "nutritionTableSectionFats": "Fats",
+  "@nutritionTableSectionFats": {
+    "description": "Section header for fat sub-types in the nutrition table."
+  },
+  "nutritionTableSectionSugars": "Sugars",
+  "@nutritionTableSectionSugars": {
+    "description": "Section header for sugars in the nutrition table."
+  },
+  "nutritionTableSectionMinerals": "Minerals",
+  "@nutritionTableSectionMinerals": {
+    "description": "Section header for minerals in the nutrition table."
+  },
+  "nutritionTableSectionVitamins": "Vitamins",
+  "@nutritionTableSectionVitamins": {
+    "description": "Section header for vitamins in the nutrition table."
+  },
+  "nutritionSubtypeMismatch": "Sum of sub-types ({sum} {unit}) exceeds the declared {parent} ({parentValue} {unit}) by more than 5%",
+  "@nutritionSubtypeMismatch": {
+    "description": "Warning when the sum of sub-types exceeds the declared total nutrient value by more than the 5% tolerance.",
+    "placeholders": {
+      "sum": { "type": "String", "example": "25" },
+      "unit": { "type": "String", "example": "g" },
+      "parent": { "type": "String", "example": "Total sugars" },
+      "parentValue": { "type": "String", "example": "20" }
+    }
+  },
+  "nutrientCalcium": "Calcium",
+  "nutrientIron": "Iron",
+  "nutrientPotassium": "Potassium",
+  "nutrientMagnesium": "Magnesium",
+  "nutrientZinc": "Zinc",
+  "nutrientVitaminA": "Vitamin A",
+  "nutrientVitaminC": "Vitamin C",
+  "nutrientVitaminD": "Vitamin D",
+  "nutrientVitaminB12": "Vitamin B12",
+  "nutrientStarch": "Starch",
+  "nutrientGlucose": "Glucose",
+  "nutrientFructose": "Fructose",
+  "nutrientSucrose": "Sucrose",
+  "nutrientLactose": "Lactose",
+  "nutrientMaltose": "Maltose",
+  "nutrientPolyols": "Polyols",
+  "nutrientMonounsaturated": "Monounsaturated",
+  "nutrientPolyunsaturated": "Polyunsaturated",
+  "nutrientOmega3": "Omega-3",
+  "nutrientOmega6": "Omega-6",
+  "nutrientCholesterol": "Cholesterol"
 }

@@ -37,6 +37,80 @@ abstract class Nutrients with _$Nutrients {
   /// An all-absent profile.
   static const Nutrients empty = Nutrients();
 
+  // ---------------------------------------------------------------------------
+  // Micronutrient map keys
+  // ---------------------------------------------------------------------------
+
+  /// Calcium in milligrams.
+  static const String calciumKey = 'calcium_mg';
+
+  /// Iron in milligrams.
+  static const String ironKey = 'iron_mg';
+
+  /// Potassium in milligrams.
+  static const String potassiumKey = 'potassium_mg';
+
+  /// Magnesium in milligrams.
+  static const String magnesiumKey = 'magnesium_mg';
+
+  /// Zinc in milligrams.
+  static const String zincKey = 'zinc_mg';
+
+  /// Vitamin A in micrograms.
+  static const String vitaminAKey = 'vitamin_a_mcg';
+
+  /// Vitamin C in milligrams.
+  static const String vitaminCKey = 'vitamin_c_mg';
+
+  /// Vitamin D in micrograms.
+  static const String vitaminDKey = 'vitamin_d_mcg';
+
+  /// Vitamin B12 in micrograms.
+  static const String vitaminB12Key = 'vitamin_b12_mcg';
+
+  // ---------------------------------------------------------------------------
+  // Sugar sub-type keys (in grams, parent: totalSugars)
+  // ---------------------------------------------------------------------------
+
+  static const String starchKey = 'starch_g';
+  static const String glucoseKey = 'glucose_g';
+  static const String fructoseKey = 'fructose_g';
+  static const String sucroseKey = 'sucrose_g';
+  static const String lactoseKey = 'lactose_g';
+  static const String maltoseKey = 'maltose_g';
+  static const String polyolsKey = 'polyols_g';
+
+  /// Keys whose sum the tolerance check compares against [totalSugars].
+  static const Set<String> sugarSubTypeKeys = {
+    starchKey,
+    glucoseKey,
+    fructoseKey,
+    sucroseKey,
+    lactoseKey,
+    maltoseKey,
+    polyolsKey,
+  };
+
+  // ---------------------------------------------------------------------------
+  // Fat sub-type keys (in grams, parent: totalFat)
+  // ---------------------------------------------------------------------------
+
+  static const String monounsaturatedKey = 'monounsaturated_g';
+  static const String polyunsaturatedKey = 'polyunsaturated_g';
+  static const String omega3Key = 'omega3_g';
+  static const String omega6Key = 'omega6_g';
+  static const String cholesterolKey = 'cholesterol_mg';
+
+  /// Keys whose sum the tolerance check compares against [totalFat].
+  static const Set<String> fatSubTypeKeys = {
+    monounsaturatedKey,
+    polyunsaturatedKey,
+    omega3Key,
+    omega6Key,
+  };
+
+  // ---------------------------------------------------------------------------
+
   /// The amount of [nutrient], or null when absent.
   double? amountOf(Nutrient nutrient) => switch (nutrient) {
     Nutrient.energy => energyKcal,
@@ -50,6 +124,32 @@ abstract class Nutrients with _$Nutrients {
     Nutrient.dietaryFiber => dietaryFiber,
     Nutrient.sodium => sodiumMilligrams,
   };
+
+  /// The value for a micronutrient key, or null.
+  double? micronutrient(String key) => micronutrients[key];
+
+  /// Sum of the sub-type values whose keys are in [subTypeKeys].
+  double subTypeSum(Set<String> subTypeKeys) {
+    double sum = 0;
+    for (final key in subTypeKeys) {
+      final v = micronutrients[key];
+      if (v != null) sum += v;
+    }
+    return sum;
+  }
+
+  /// Whether the sum of [subTypeKeys] exceeds [parentValue] by more than
+  /// [tolerance] (fraction, default 5 %).
+  bool hasSubTypeMismatch(
+    double? parentValue,
+    Set<String> subTypeKeys, {
+    double tolerance = 0.05,
+  }) {
+    if (parentValue == null) return false;
+    final sum = subTypeSum(subTypeKeys);
+    if (sum == 0) return false;
+    return sum > parentValue * (1 + tolerance);
+  }
 
   /// Multiplies every present value by [factor], leaving absent values absent.
   ///

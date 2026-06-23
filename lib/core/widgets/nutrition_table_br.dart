@@ -16,6 +16,9 @@ import 'package:opendiet/l10n/app_localizations.dart';
 /// selected [vdRegion]. A nutrient the source did not provide reads "not
 /// informed", never zero; a nutrient with no reference value in the region
 /// (trans fat everywhere) shows no %VD.
+///
+/// Nutrients are grouped into five sections: Macronutrients, Fats, Sugars,
+/// Minerals, and Vitamins.
 class NutritionTableBR extends StatelessWidget {
   /// Creates the table from already-resolved per-100 and per-serving profiles.
   ///
@@ -101,7 +104,75 @@ class NutritionTableBR extends StatelessWidget {
     Nutrient.transFat,
   };
 
+  /// Micronutrient keys indented under their parent section.
+  static const Set<String> _indentedMicroKeys = {
+    Nutrients.cholesterolKey,
+    ...Nutrients.fatSubTypeKeys,
+    ...Nutrients.sugarSubTypeKeys,
+  };
+
   static const String _noReference = '-';
+
+  // ---------------------------------------------------------------------------
+  // Section definitions
+  // ---------------------------------------------------------------------------
+
+  /// Macronutrients (Nutrient enum) in the Macronutrients section.
+  static const List<Nutrient> _macroNutrients = [
+    Nutrient.energy,
+    Nutrient.carbohydrates,
+    Nutrient.protein,
+    Nutrient.totalFat,
+    Nutrient.saturatedFat,
+    Nutrient.transFat,
+    Nutrient.dietaryFiber,
+    Nutrient.sodium,
+  ];
+
+  /// Nutrient enum values in the Sugars section.
+  static const List<Nutrient> _sugarNutrients = [
+    Nutrient.totalSugars,
+    Nutrient.addedSugars,
+  ];
+
+  /// Fat sub-type micronutrient keys.
+  static const List<String> _fatSubTypeKeys = [
+    Nutrients.monounsaturatedKey,
+    Nutrients.polyunsaturatedKey,
+    Nutrients.omega3Key,
+    Nutrients.omega6Key,
+    Nutrients.cholesterolKey,
+  ];
+
+  /// Sugar sub-type micronutrient keys.
+  static const List<String> _sugarSubTypeKeys = [
+    Nutrients.starchKey,
+    Nutrients.glucoseKey,
+    Nutrients.fructoseKey,
+    Nutrients.sucroseKey,
+    Nutrients.lactoseKey,
+    Nutrients.maltoseKey,
+    Nutrients.polyolsKey,
+  ];
+
+  /// Mineral micronutrient keys.
+  static const List<String> _mineralKeys = [
+    Nutrients.calciumKey,
+    Nutrients.ironKey,
+    Nutrients.potassiumKey,
+    Nutrients.magnesiumKey,
+    Nutrients.zincKey,
+  ];
+
+  /// Vitamin micronutrient keys.
+  static const List<String> _vitaminKeys = [
+    Nutrients.vitaminAKey,
+    Nutrients.vitaminCKey,
+    Nutrients.vitaminDKey,
+    Nutrients.vitaminB12Key,
+  ];
+
+  // ---------------------------------------------------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -109,24 +180,62 @@ class NutritionTableBR extends StatelessWidget {
     final theme = Theme.of(context);
     final references = VdReference.forRegion(vdRegion);
     final servingDescriptor = _servingDescriptor(l10n);
+    final header = _headerRow(l10n, theme, servingDescriptor);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(l10n.nutritionTableTitle, style: theme.textTheme.titleMedium),
         const SizedBox(height: 8),
-        Table(
-          columnWidths: const {
-            0: FlexColumnWidth(1.6),
-            1: FlexColumnWidth(),
-            2: FlexColumnWidth(),
-            3: FlexColumnWidth(0.8),
-          },
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: [
-            _headerRow(l10n, theme, servingDescriptor),
-            for (final nutrient in Nutrient.values)
+        // 1. Macronutrients
+        _sectionHeader(l10n.nutritionTableSectionMacros, theme),
+        _buildTable(
+          header: header,
+          rows: [
+            for (final nutrient in _macroNutrients)
               _nutrientRow(l10n, theme, references, nutrient),
+          ],
+        ),
+        const SizedBox(height: 6),
+        // 2. Fats
+        _sectionHeader(l10n.nutritionTableSectionFats, theme),
+        _buildTable(
+          header: header,
+          rows: [
+            for (final key in _fatSubTypeKeys)
+              _micronutrientRow(l10n, theme, references, key),
+          ],
+        ),
+        const SizedBox(height: 6),
+        // 3. Sugars
+        _sectionHeader(l10n.nutritionTableSectionSugars, theme),
+        _buildTable(
+          header: header,
+          rows: [
+            for (final nutrient in _sugarNutrients)
+              _nutrientRow(l10n, theme, references, nutrient),
+            for (final key in _sugarSubTypeKeys)
+              _micronutrientRow(l10n, theme, references, key),
+          ],
+        ),
+        const SizedBox(height: 6),
+        // 4. Minerals
+        _sectionHeader(l10n.nutritionTableSectionMinerals, theme),
+        _buildTable(
+          header: header,
+          rows: [
+            for (final key in _mineralKeys)
+              _micronutrientRow(l10n, theme, references, key),
+          ],
+        ),
+        const SizedBox(height: 6),
+        // 5. Vitamins
+        _sectionHeader(l10n.nutritionTableSectionVitamins, theme),
+        _buildTable(
+          header: header,
+          rows: [
+            for (final key in _vitaminKeys)
+              _micronutrientRow(l10n, theme, references, key),
           ],
         ),
         const SizedBox(height: 8),
@@ -137,6 +246,36 @@ class NutritionTableBR extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  /// A section header label between table sections.
+  Widget _sectionHeader(String label, ThemeData theme) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8, bottom: 4),
+      child: Text(
+        label,
+        style: theme.textTheme.titleSmall?.copyWith(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  /// Builds a [Table] with [header] as the first row followed by [rows].
+  Widget _buildTable({
+    required TableRow header,
+    required List<TableRow> rows,
+  }) {
+    return Table(
+      columnWidths: const {
+        0: FlexColumnWidth(1.6),
+        1: FlexColumnWidth(),
+        2: FlexColumnWidth(),
+        3: FlexColumnWidth(0.8),
+      },
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      children: [header, ...rows],
     );
   }
 
@@ -218,6 +357,36 @@ class NutritionTableBR extends StatelessWidget {
     );
   }
 
+  /// A row for a micronutrient identified by [key].
+  TableRow _micronutrientRow(
+    AppLocalizations l10n,
+    ThemeData theme,
+    VdReferenceSet references,
+    String key,
+  ) {
+    final indent = _indentedMicroKeys.contains(key) ? 16.0 : 0.0;
+    return TableRow(
+      children: [
+        Padding(
+          padding: EdgeInsets.fromLTRB(indent, 6, 4, 6),
+          child: Text(_micronutrientLabel(l10n, key)),
+        ),
+        _valueCell(
+          Key('nutrition-$key-per100'),
+          _micronutrientAmountText(l10n, per100, key),
+        ),
+        _valueCell(
+          Key('nutrition-$key-perServing'),
+          _micronutrientAmountText(l10n, perServing, key),
+        ),
+        _valueCell(
+          Key('nutrition-$key-vd'),
+          _micronutrientPercentText(references, key),
+        ),
+      ],
+    );
+  }
+
   Widget _headerCell(Widget child) =>
       Padding(padding: const EdgeInsets.fromLTRB(4, 0, 4, 8), child: child);
 
@@ -237,12 +406,34 @@ class NutritionTableBR extends StatelessWidget {
     return '${_formatNumber(value)} ${_unitLabel(l10n, nutrient.unit)}';
   }
 
+  /// The amount of micronutrient [key] in [source] with its unit, or
+  /// "not informed".
+  String _micronutrientAmountText(
+    AppLocalizations l10n,
+    Nutrients? source,
+    String key,
+  ) {
+    final value = source?.micronutrient(key);
+    if (value == null) return l10n.nutritionTableNotInformed;
+    return '${_formatNumber(value)} ${_micronutrientUnitLabel(l10n, key)}';
+  }
+
   /// The %VD of [nutrient] from the per-serving amount, or a dash when the
   /// region defines no reference (trans fat) or the amount is absent.
   String _percentText(VdReferenceSet references, Nutrient nutrient) {
     final percent = references.percentOf(
       perServing?.amountOf(nutrient),
       nutrient,
+    );
+    if (percent == null) return _noReference;
+    return '${percent.round()}%';
+  }
+
+  /// The %VD for a micronutrient [key], or a dash when absent or no reference.
+  String _micronutrientPercentText(VdReferenceSet references, String key) {
+    final percent = references.micronutrientPercentOf(
+      perServing?.micronutrient(key),
+      key,
     );
     if (percent == null) return _noReference;
     return '${percent.round()}%';
@@ -304,4 +495,39 @@ class NutritionTableBR extends StatelessWidget {
         Nutrient.dietaryFiber => l10n.nutrientDietaryFiber,
         Nutrient.sodium => l10n.nutrientSodium,
       };
+
+  /// The label for a micronutrient identified by [key].
+  static String _micronutrientLabel(AppLocalizations l10n, String key) =>
+      switch (key) {
+        Nutrients.calciumKey => l10n.nutrientCalcium,
+        Nutrients.ironKey => l10n.nutrientIron,
+        Nutrients.potassiumKey => l10n.nutrientPotassium,
+        Nutrients.magnesiumKey => l10n.nutrientMagnesium,
+        Nutrients.zincKey => l10n.nutrientZinc,
+        Nutrients.vitaminAKey => l10n.nutrientVitaminA,
+        Nutrients.vitaminCKey => l10n.nutrientVitaminC,
+        Nutrients.vitaminDKey => l10n.nutrientVitaminD,
+        Nutrients.vitaminB12Key => l10n.nutrientVitaminB12,
+        Nutrients.starchKey => l10n.nutrientStarch,
+        Nutrients.glucoseKey => l10n.nutrientGlucose,
+        Nutrients.fructoseKey => l10n.nutrientFructose,
+        Nutrients.sucroseKey => l10n.nutrientSucrose,
+        Nutrients.lactoseKey => l10n.nutrientLactose,
+        Nutrients.maltoseKey => l10n.nutrientMaltose,
+        Nutrients.polyolsKey => l10n.nutrientPolyols,
+        Nutrients.monounsaturatedKey => l10n.nutrientMonounsaturated,
+        Nutrients.polyunsaturatedKey => l10n.nutrientPolyunsaturated,
+        Nutrients.omega3Key => l10n.nutrientOmega3,
+        Nutrients.omega6Key => l10n.nutrientOmega6,
+        Nutrients.cholesterolKey => l10n.nutrientCholesterol,
+        _ => key,
+      };
+
+  /// The unit label for a micronutrient key based on its suffix.
+  static String _micronutrientUnitLabel(AppLocalizations l10n, String key) {
+    if (key.endsWith('_g')) return l10n.unitGram;
+    if (key.endsWith('_mg')) return l10n.unitMilligram;
+    if (key.endsWith('_mcg')) return l10n.unitMicrogram;
+    return '';
+  }
 }

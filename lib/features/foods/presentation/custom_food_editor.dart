@@ -8,6 +8,7 @@ import 'package:opendiet/core/time/time_providers.dart';
 import 'package:opendiet/core/units/measurement_unit.dart';
 import 'package:opendiet/features/foods/data/food_providers.dart';
 import 'package:opendiet/features/foods/domain/food.dart';
+import 'package:opendiet/features/foods/presentation/barcode_scanner_screen.dart';
 import 'package:opendiet/l10n/app_localizations.dart';
 
 /// The custom-food editor (S-05, FR-008/FR-024/FR-028).
@@ -43,6 +44,46 @@ const List<Nutrient> _macroNutrients = [
   Nutrient.sodium,
 ];
 
+/// Micronutrient keys displayed in the optional nutrients section.
+const List<String> _micronutrientKeys = [
+  Nutrients.cholesterolKey,
+  Nutrients.calciumKey,
+  Nutrients.ironKey,
+  Nutrients.potassiumKey,
+  Nutrients.magnesiumKey,
+  Nutrients.zincKey,
+  Nutrients.vitaminAKey,
+  Nutrients.vitaminCKey,
+  Nutrients.vitaminDKey,
+  Nutrients.vitaminB12Key,
+];
+
+/// Sugar sub-type keys displayed under the "Sugars" sub-section header.
+const List<String> _sugarSubTypeKeys = [
+  Nutrients.starchKey,
+  Nutrients.glucoseKey,
+  Nutrients.fructoseKey,
+  Nutrients.sucroseKey,
+  Nutrients.lactoseKey,
+  Nutrients.maltoseKey,
+  Nutrients.polyolsKey,
+];
+
+/// Fat sub-type keys displayed under the "Fats" sub-section header.
+const List<String> _fatSubTypeKeys = [
+  Nutrients.monounsaturatedKey,
+  Nutrients.polyunsaturatedKey,
+  Nutrients.omega3Key,
+  Nutrients.omega6Key,
+];
+
+/// Every key tracked in the micronutrient-controllers map.
+const List<String> _allOptionalKeys = [
+  ..._micronutrientKeys,
+  ..._sugarSubTypeKeys,
+  ..._fatSubTypeKeys,
+];
+
 class _CustomFoodEditorState extends ConsumerState<CustomFoodEditor> {
   late final TextEditingController _name;
   late final TextEditingController _brand;
@@ -51,7 +92,9 @@ class _CustomFoodEditorState extends ConsumerState<CustomFoodEditor> {
   late final TextEditingController _householdMeasure;
   late final TextEditingController _energy;
   late final Map<Nutrient, TextEditingController> _macros;
+  late final Map<String, TextEditingController> _micronutrientControllers;
 
+  bool _optionalExpanded = false;
   late NutrientBasis _basis;
   late ServingUnit _servingUnit;
   late bool _energyIsManual;
@@ -83,6 +126,12 @@ class _CustomFoodEditorState extends ConsumerState<CustomFoodEditor> {
           text: _format(nutrients.amountOf(nutrient)),
         )..addListener(_onMacrosEdited),
     };
+    _micronutrientControllers = {
+      for (final key in _allOptionalKeys)
+        key: TextEditingController(
+          text: _format(nutrients.micronutrients[key]),
+        ),
+    };
   }
 
   @override
@@ -96,6 +145,9 @@ class _CustomFoodEditorState extends ConsumerState<CustomFoodEditor> {
       _energy,
       ..._macros.values,
     ]) {
+      controller.dispose();
+    }
+    for (final controller in _micronutrientControllers.values) {
       controller.dispose();
     }
     super.dispose();
@@ -112,7 +164,7 @@ class _CustomFoodEditorState extends ConsumerState<CustomFoodEditor> {
   }
 
   void _toggleEnergyMode() {
-    if (!_energyIsManual) return; // already automatic; nothing to revert
+    if (!_energyIsManual) return;
     setState(() => _energyIsManual = false);
     _writeEnergyField(EnergyEstimator.fromMacros(_readMacros()));
   }
@@ -121,6 +173,17 @@ class _CustomFoodEditorState extends ConsumerState<CustomFoodEditor> {
     _suppressEnergyListener = true;
     _energy.text = _format(value);
     _suppressEnergyListener = false;
+  }
+
+  Future<void> _scanBarcode() async {
+    final barcode = await Navigator.of(context).push<String>(
+      MaterialPageRoute(
+        builder: (_) => const BarcodeScannerScreen(),
+      ),
+    );
+    if (barcode != null && mounted) {
+      _barcode.text = barcode;
+    }
   }
 
   Nutrients _readMacros() => Nutrients(
@@ -143,7 +206,11 @@ class _CustomFoodEditorState extends ConsumerState<CustomFoodEditor> {
       );
       return;
     }
-    final everyField = [_energy.text, ..._macros.values.map((c) => c.text)];
+    final everyField = [
+      _energy.text,
+      ..._macros.values.map((c) => c.text),
+      ..._micronutrientControllers.values.map((c) => c.text),
+    ];
     if (everyField.any((text) => !_parse(text).valid)) {
       setState(
         () => _error = AppLocalizations.of(context).foodErrorInvalidValue,
@@ -155,7 +222,17 @@ class _CustomFoodEditorState extends ConsumerState<CustomFoodEditor> {
     final energy = _energyIsManual
         ? _parse(_energy.text).value
         : EnergyEstimator.fromMacros(macros);
-    final nutrients = macros.copyWith(energyKcal: energy);
+    final micronutrients = <String, double>{};
+    for (final entry in _micronutrientControllers.entries) {
+      final parsed = _parse(entry.value.text);
+      if (parsed.valid && parsed.value != null) {
+        micronutrients[entry.key] = parsed.value!;
+      }
+    }
+    final nutrients = macros.copyWith(
+      energyKcal: energy,
+      micronutrients: micronutrients,
+    );
 
     final now = ref.read(clockProvider).now();
     final existing = widget.initialFood;
@@ -206,7 +283,9 @@ class _CustomFoodEditorState extends ConsumerState<CustomFoodEditor> {
           TextField(
             key: const Key('field-name'),
             controller: _name,
-            decoration: InputDecoration(labelText: l10n.foodFieldName),
+            decoration: InputDecoration(
+              labelText: '${l10n.foodFieldName} *',
+            ),
           ),
           const SizedBox(height: 12),
           TextField(
@@ -215,41 +294,110 @@ class _CustomFoodEditorState extends ConsumerState<CustomFoodEditor> {
           ),
           const SizedBox(height: 12),
           TextField(
+            key: const Key('field-barcode'),
             controller: _barcode,
-            decoration: InputDecoration(labelText: l10n.foodFieldBarcode),
+            decoration: InputDecoration(
+              labelText: l10n.foodFieldBarcode,
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.qr_code_scanner),
+                onPressed: _scanBarcode,
+              ),
+            ),
           ),
           const SizedBox(height: 16),
           _basisSelector(l10n),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _servingSize,
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  decoration: InputDecoration(
-                    labelText: l10n.foodFieldServingSize,
+          if (_basis == NutrientBasis.perServing) ...[
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _servingSize,
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    decoration: InputDecoration(
+                      labelText: l10n.foodFieldServingSize,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              _servingUnitSelector(l10n),
-            ],
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _householdMeasure,
-            decoration: InputDecoration(
-              labelText: l10n.foodFieldHouseholdMeasure,
+                const SizedBox(width: 12),
+                _servingUnitSelector(l10n),
+              ],
             ),
-          ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _householdMeasure,
+              decoration: InputDecoration(
+                labelText: l10n.foodFieldHouseholdMeasure,
+              ),
+            ),
+          ],
           const SizedBox(height: 16),
           _energyField(l10n),
           for (final nutrient in _macroNutrients) ...[
             const SizedBox(height: 12),
             _nutrientField(l10n, nutrient),
+          ],
+          const SizedBox(height: 12),
+          InkWell(
+            key: const Key('optional-nutrients-section'),
+            onTap: () => setState(() => _optionalExpanded = !_optionalExpanded),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      l10n.logOptionalNutrients,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Icon(
+                    _optionalExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (_optionalExpanded) ...[
+            for (final key in _micronutrientKeys)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: _micronutrientField(l10n, key),
+              ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 4),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  l10n.nutritionTableSectionSugars,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            for (final key in _sugarSubTypeKeys)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: _micronutrientField(l10n, key),
+              ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 4),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  l10n.nutritionTableSectionFats,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            for (final key in _fatSubTypeKeys)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: _micronutrientField(l10n, key),
+              ),
           ],
         ],
       ),
@@ -307,7 +455,7 @@ class _CustomFoodEditorState extends ConsumerState<CustomFoodEditor> {
           controller: _energy,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           decoration: InputDecoration(
-            labelText: l10n.nutrientEnergy,
+            labelText: '${l10n.nutrientEnergy} *',
             suffixText: l10n.unitKilocalorie,
           ),
         ),
@@ -330,6 +478,16 @@ class _CustomFoodEditorState extends ConsumerState<CustomFoodEditor> {
     decoration: InputDecoration(
       labelText: _nutrientLabel(l10n, nutrient),
       suffixText: _unitLabel(l10n, nutrient.unit),
+    ),
+  );
+
+  Widget _micronutrientField(AppLocalizations l10n, String key) => TextField(
+    key: Key('field-$key'),
+    controller: _micronutrientControllers[key],
+    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+    decoration: InputDecoration(
+      labelText: _micronutrientLabel(l10n, key),
+      suffixText: _unitForKey(l10n, key),
     ),
   );
 
@@ -373,4 +531,36 @@ class _CustomFoodEditorState extends ConsumerState<CustomFoodEditor> {
         NutrientUnit.gram => l10n.unitGram,
         NutrientUnit.milligram => l10n.unitMilligram,
       };
+
+  static String _micronutrientLabel(AppLocalizations l10n, String key) =>
+      switch (key) {
+        Nutrients.cholesterolKey => l10n.nutrientCholesterol,
+        Nutrients.calciumKey => l10n.nutrientCalcium,
+        Nutrients.ironKey => l10n.nutrientIron,
+        Nutrients.potassiumKey => l10n.nutrientPotassium,
+        Nutrients.magnesiumKey => l10n.nutrientMagnesium,
+        Nutrients.zincKey => l10n.nutrientZinc,
+        Nutrients.vitaminAKey => l10n.nutrientVitaminA,
+        Nutrients.vitaminCKey => l10n.nutrientVitaminC,
+        Nutrients.vitaminDKey => l10n.nutrientVitaminD,
+        Nutrients.vitaminB12Key => l10n.nutrientVitaminB12,
+        Nutrients.starchKey => l10n.nutrientStarch,
+        Nutrients.glucoseKey => l10n.nutrientGlucose,
+        Nutrients.fructoseKey => l10n.nutrientFructose,
+        Nutrients.sucroseKey => l10n.nutrientSucrose,
+        Nutrients.lactoseKey => l10n.nutrientLactose,
+        Nutrients.maltoseKey => l10n.nutrientMaltose,
+        Nutrients.polyolsKey => l10n.nutrientPolyols,
+        Nutrients.monounsaturatedKey => l10n.nutrientMonounsaturated,
+        Nutrients.polyunsaturatedKey => l10n.nutrientPolyunsaturated,
+        Nutrients.omega3Key => l10n.nutrientOmega3,
+        Nutrients.omega6Key => l10n.nutrientOmega6,
+        _ => key,
+      };
+
+  static String _unitForKey(AppLocalizations l10n, String key) {
+    if (key.endsWith('_mg')) return l10n.unitMilligram;
+    if (key.endsWith('_mcg')) return l10n.unitMicrogram;
+    return l10n.unitGram;
+  }
 }

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:opendiet/core/time/clock.dart';
 import 'package:opendiet/core/time/time_providers.dart';
 import 'package:opendiet/features/diary/data/diary_providers.dart';
+import 'package:opendiet/features/diary/domain/diary_repository.dart';
 import 'package:opendiet/features/diary/domain/meal_slot.dart';
 import 'package:opendiet/features/foods/data/food_providers.dart';
 import 'package:opendiet/features/settings/data/settings_providers.dart';
@@ -15,7 +16,13 @@ import '../../../support/fake_settings_repository.dart';
 import '../../../support/test_app.dart';
 
 void main() {
-  List<Override> baseOverrides({Clock? clock}) => [
+  List<Override> baseOverrides({
+    Clock? clock,
+    DiaryRepository? diaryRepository,
+  }) => [
+    diaryRepositoryProvider.overrideWithValue(
+      diaryRepository ?? FakeDiaryRepository(),
+    ),
     foodRepositoryProvider.overrideWithValue(FakeFoodRepository()),
     settingsRepositoryProvider.overrideWithValue(FakeSettingsRepository()),
     clockProvider.overrideWithValue(
@@ -140,8 +147,8 @@ void main() {
       overrides: [
         ...baseOverrides(
           clock: FixedClock(DateTime.utc(2030, 1, 2, 10, 30)),
+          diaryRepository: repository,
         ),
-        diaryRepositoryProvider.overrideWithValue(repository),
         mealSlotsProvider.overrideWithValue(
           const AsyncData([
             MealSlot(id: 's1', name: 'Breakfast', position: 0),

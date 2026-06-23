@@ -117,6 +117,27 @@ class _SettingsList extends ConsumerWidget {
             ],
           ),
         ),
+        ListTile(
+          title: Text(l10n.settingsLanguage),
+          subtitle: DropdownButton<String?>(
+            value: settings.languageCode,
+            isExpanded: true,
+            onChanged: (code) => unawaited(controller.setLanguageCode(code)),
+            items: [
+              DropdownMenuItem(
+                child: Text(l10n.languageSystemDefault),
+              ),
+              DropdownMenuItem(
+                value: 'en',
+                child: Text(l10n.languageEnglish),
+              ),
+              DropdownMenuItem(
+                value: 'pt',
+                child: Text(l10n.languagePortuguese),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

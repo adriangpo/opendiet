@@ -7,6 +7,7 @@ import 'package:opendiet/features/settings/data/settings_providers.dart';
 import 'package:opendiet/features/settings/domain/app_settings.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../support/fake_diary_repository.dart';
 import '../../support/fake_food_repository.dart';
 import '../../support/fake_meal_slot_repository.dart';
 import '../../support/fake_settings_repository.dart';
@@ -14,6 +15,7 @@ import '../../support/test_app.dart';
 
 void main() {
   List<Override> overrides() => [
+    diaryRepositoryProvider.overrideWithValue(FakeDiaryRepository()),
     foodRepositoryProvider.overrideWithValue(FakeFoodRepository()),
     settingsRepositoryProvider.overrideWithValue(FakeSettingsRepository()),
     mealSlotsProvider.overrideWithValue(const AsyncData([])),

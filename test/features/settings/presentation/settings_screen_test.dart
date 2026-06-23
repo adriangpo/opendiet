@@ -102,4 +102,40 @@ void main() {
 
     expect(find.text('Backup and restore'), findsOneWidget);
   });
+
+  testWidgets('shows the Language row (FR-028)', (tester) async {
+    final repository = FakeSettingsRepository();
+    await pumpApp(
+      tester,
+      const SettingsScreen(),
+      overrides: [settingsRepositoryProvider.overrideWithValue(repository)],
+    );
+
+    await tester.scrollUntilVisible(find.text('Language'), 100);
+    await tester.pump();
+
+    expect(find.text('Language'), findsOneWidget);
+    expect(find.text('System default'), findsOneWidget);
+  });
+
+  testWidgets('selecting a language persists the choice', (tester) async {
+    final repository = FakeSettingsRepository();
+    await pumpApp(
+      tester,
+      const SettingsScreen(),
+      overrides: [settingsRepositoryProvider.overrideWithValue(repository)],
+    );
+
+    await tester.scrollUntilVisible(find.text('System default'), 100);
+    await tester.pump();
+
+    expect(repository.current.languageCode, isNull);
+
+    await tester.tap(find.text('System default'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Portuguese'));
+    await tester.pumpAndSettle();
+
+    expect(repository.current.languageCode, 'pt');
+  });
 }

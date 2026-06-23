@@ -56,11 +56,12 @@ Future<void> _pumpTable(WidgetTester tester, NutritionTableBR table) => pumpApp(
 String _cell(WidgetTester tester, String nutrient, String column) =>
     tester.widget<Text>(find.byKey(Key('nutrition-$nutrient-$column'))).data!;
 
+String _microCell(WidgetTester tester, String key, String column) =>
+    tester.widget<Text>(find.byKey(Key('nutrition-$key-$column'))).data!;
+
 void main() {
   group('NutritionTableBR', () {
-    testWidgets('renders the title and the three column headers', (
-      tester,
-    ) async {
+    testWidgets('renders the title and sections', (tester) async {
       await _pumpTable(
         tester,
         NutritionTableBR.forFood(
@@ -70,9 +71,14 @@ void main() {
         ),
       );
       expect(find.text('Nutrition facts'), findsOneWidget);
-      expect(find.text('Per 100 g'), findsOneWidget);
-      expect(find.text('Per serving'), findsOneWidget);
-      expect(find.text('%DV'), findsOneWidget);
+      expect(find.text('Macronutrients'), findsOneWidget);
+      expect(find.text('Fats'), findsOneWidget);
+      expect(find.text('Sugars'), findsOneWidget);
+      expect(find.text('Minerals'), findsOneWidget);
+      expect(find.text('Vitamins'), findsOneWidget);
+      expect(find.text('Per 100 g'), findsAtLeast(1));
+      expect(find.text('Per serving'), findsAtLeast(1));
+      expect(find.text('%DV'), findsAtLeast(1));
     });
 
     testWidgets('scales per-serving from per-100 and computes %VD', (
@@ -91,7 +97,7 @@ void main() {
       expect(_cell(tester, 'carbohydrates', 'vd'), '5%');
     });
 
-    testWidgets('shows the household measure in the serving column', (
+    testWidgets('shows the household measure in each section header', (
       tester,
     ) async {
       await _pumpTable(
@@ -102,7 +108,7 @@ void main() {
           unitSystem: UnitSystem.metric,
         ),
       );
-      expect(find.textContaining('2 colheres'), findsOneWidget);
+      expect(find.textContaining('2 colheres'), findsAtLeast(1));
     });
 
     testWidgets('trans fat shows its amount but no %VD', (tester) async {
@@ -202,7 +208,7 @@ void main() {
           unitSystem: UnitSystem.imperial,
         ),
       );
-      expect(find.textContaining('0.9 oz'), findsOneWidget);
+      expect(find.textContaining('0.9 oz'), findsAtLeast(1));
     });
 
     testWidgets('a per-serving liquid food shows ml basis', (tester) async {
@@ -218,7 +224,7 @@ void main() {
           unitSystem: UnitSystem.metric,
         ),
       );
-      expect(find.text('Per 100 ml'), findsOneWidget);
+      expect(find.text('Per 100 ml'), findsAtLeast(1));
     });
 
     testWidgets('US region uses different dietaryFiber reference than Brazil', (
@@ -256,6 +262,57 @@ void main() {
         ),
       );
       expect(_cell(tester, 'addedSugars', 'vd'), '-');
+    });
+
+    testWidgets('renders micronutrient rows for minerals and vitamins', (
+      tester,
+    ) async {
+      await _pumpTable(
+        tester,
+        NutritionTableBR.forFood(
+          food: _oats(
+            nutrients: const Nutrients(
+              energyKcal: 380,
+              micronutrients: {
+                Nutrients.calciumKey: 20,
+                Nutrients.ironKey: 2,
+                Nutrients.vitaminCKey: 5,
+              },
+            ),
+          ),
+          vdRegion: VdRegion.brazil,
+          unitSystem: UnitSystem.metric,
+        ),
+      );
+      expect(_microCell(tester, Nutrients.calciumKey, 'per100'), '20 mg');
+      expect(_microCell(tester, Nutrients.ironKey, 'per100'), '2 mg');
+      expect(_microCell(tester, Nutrients.vitaminCKey, 'per100'), '5 mg');
+      expect(_microCell(tester, 'vitamin_a_mcg', 'per100'), 'Not informed');
+    });
+
+    testWidgets('micronutrient percent VD computed for known references', (
+      tester,
+    ) async {
+      await _pumpTable(
+        tester,
+        NutritionTableBR.forFood(
+          food: _oats(
+            // 25 g serving -> perServing = per100 / 4
+            // Ca 1600/100g -> 400/serving -> 50% of 800 mg ref
+            // Fe 14/100g -> 3.5/serving -> 25% of 14 mg ref
+            nutrients: const Nutrients(
+              micronutrients: {
+                Nutrients.calciumKey: 1600,
+                Nutrients.ironKey: 14,
+              },
+            ),
+          ),
+          vdRegion: VdRegion.brazil,
+          unitSystem: UnitSystem.metric,
+        ),
+      );
+      expect(_microCell(tester, Nutrients.calciumKey, 'vd'), '50%');
+      expect(_microCell(tester, Nutrients.ironKey, 'vd'), '25%');
     });
   });
 }

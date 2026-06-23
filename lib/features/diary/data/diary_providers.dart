@@ -1,8 +1,11 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:opendiet/core/database/database_providers.dart';
 import 'package:opendiet/core/identifiers/identifier_providers.dart';
 import 'package:opendiet/features/diary/data/drift_diary_repository.dart';
 import 'package:opendiet/features/diary/data/drift_meal_slot_repository.dart';
 import 'package:opendiet/features/diary/domain/default_meal_slots.dart';
+import 'package:opendiet/features/diary/domain/diary_day_providers.dart';
+import 'package:opendiet/features/diary/domain/diary_entry.dart';
 import 'package:opendiet/features/diary/domain/diary_repository.dart';
 import 'package:opendiet/features/diary/domain/meal_slot.dart';
 import 'package:opendiet/features/diary/domain/meal_slot_repository.dart';
@@ -44,3 +47,12 @@ String _defaultName(DefaultMealSlotKind kind) => switch (kind) {
   DefaultMealSlotKind.dinner => 'Dinner',
   DefaultMealSlotKind.snacks => 'Snacks',
 };
+
+/// Diary entries for the currently selected day (FR-004).
+final selectedDayEntriesProvider = FutureProvider<List<DiaryEntry>>((
+  ref,
+) async {
+  final day = ref.watch(diaryDayProvider);
+  final repository = ref.watch(diaryRepositoryProvider);
+  return repository.entriesForDay(day);
+});

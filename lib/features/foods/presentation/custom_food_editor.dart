@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:opendiet/core/identifiers/identifier_providers.dart';
 import 'package:opendiet/core/nutrition/energy_estimator.dart';
@@ -299,7 +300,7 @@ class _CustomFoodEditorState extends ConsumerState<CustomFoodEditor> {
             decoration: InputDecoration(
               labelText: l10n.foodFieldBarcode,
               suffixIcon: IconButton(
-                icon: const Icon(Icons.qr_code_scanner),
+                icon: const Icon(Boxicons.bx_qr),
                 onPressed: _scanBarcode,
               ),
             ),
@@ -355,8 +356,8 @@ class _CustomFoodEditorState extends ConsumerState<CustomFoodEditor> {
                   ),
                   Icon(
                     _optionalExpanded
-                        ? Icons.keyboard_arrow_up
-                        : Icons.keyboard_arrow_down,
+                        ? Boxicons.bx_chevron_up
+                        : Boxicons.bx_chevron_down,
                   ),
                 ],
               ),
@@ -466,7 +467,9 @@ class _CustomFoodEditorState extends ConsumerState<CustomFoodEditor> {
             ? l10n.foodEnergyManualLabel
             : l10n.foodEnergyAutoLabel,
         onPressed: _toggleEnergyMode,
-        icon: Icon(_energyIsManual ? Icons.lock_outline : Icons.functions),
+        icon: Icon(
+          _energyIsManual ? Boxicons.bx_lock : Boxicons.bx_calculator,
+        ),
       ),
     ],
   );

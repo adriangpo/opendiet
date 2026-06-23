@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:opendiet/features/reminders/data/reminder_providers.dart';
@@ -110,7 +111,7 @@ void main() {
 
       await pumpRemindersScreen(tester, repository: repository);
 
-      final deleteButtons = find.byIcon(Icons.delete);
+      final deleteButtons = find.byIcon(Boxicons.bx_trash);
       expect(deleteButtons, findsNWidgets(2));
 
       await tester.tap(deleteButtons.first);

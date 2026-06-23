@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:opendiet/core/units/measurement_unit.dart';
 import 'package:opendiet/features/foods/domain/food.dart';
 import 'package:opendiet/features/foods/domain/food_nutrition.dart';
@@ -15,7 +16,7 @@ class FoodListTile extends StatelessWidget {
   const FoodListTile({
     required this.food,
     required this.onAction,
-    this.actionIcon = Icons.add,
+    this.actionIcon = Boxicons.bx_plus,
     this.actionLabel,
     super.key,
   });

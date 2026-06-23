@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -49,7 +50,7 @@ class DiaryScreen extends ConsumerWidget {
         data: (slots) {
           if (slots.isEmpty) {
             return EmptyState(
-              icon: Icons.book_outlined,
+              icon: Boxicons.bx_book_alt,
               message: l10n.diaryEmptyMessage,
             );
           }
@@ -76,7 +77,7 @@ class DiaryScreen extends ConsumerWidget {
           }
         },
         tooltip: l10n.addLogHubTitle,
-        child: const Icon(Icons.add),
+        child: const Icon(Boxicons.bx_plus),
       ),
     );
   }
@@ -154,7 +155,7 @@ class _DateStepper extends StatelessWidget {
       children: [
         IconButton(
           visualDensity: VisualDensity.compact,
-          icon: const Icon(Icons.chevron_left),
+          icon: const Icon(Boxicons.bx_chevron_left),
           onPressed: onPrevious,
           tooltip: l10n.diaryPreviousDay,
         ),
@@ -178,7 +179,7 @@ class _DateStepper extends StatelessWidget {
         ),
         IconButton(
           visualDensity: VisualDensity.compact,
-          icon: const Icon(Icons.chevron_right),
+          icon: const Icon(Boxicons.bx_chevron_right),
           onPressed: onNext,
           tooltip: l10n.diaryNextDay,
         ),
@@ -227,10 +228,10 @@ class _MealSlotSection extends StatelessWidget {
             children: [
               TextButton.icon(
                 onPressed: () => context.push('/diary/add/${slot.id}'),
-                icon: const Icon(Icons.add, size: 18),
+                icon: const Icon(Boxicons.bx_plus, size: 18),
                 label: Text(l10n.diaryAddToSlot(slot.name)),
               ),
-              const Icon(Icons.chevron_right),
+              const Icon(Boxicons.bx_chevron_right),
             ],
           ),
           onTap: () => context.push('/diary/slot/${slot.id}'),

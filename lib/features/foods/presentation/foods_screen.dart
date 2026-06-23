@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:opendiet/core/widgets/empty_state.dart';
@@ -61,7 +62,7 @@ class _FoodsScreenState extends ConsumerState<FoodsScreen> {
         title: Text(l10n.foodsTitle),
         actions: [
           IconButton(
-            icon: const Icon(Icons.qr_code_scanner),
+            icon: const Icon(Boxicons.bx_qr),
             tooltip: l10n.foodsBarcodeScan,
             onPressed: () => context.push('/log/scan'),
           ),
@@ -75,10 +76,10 @@ class _FoodsScreenState extends ConsumerState<FoodsScreen> {
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: l10n.foodsSearchHint,
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: const Icon(Boxicons.bx_search),
                 suffixIcon: searchQuery.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear),
+                        icon: const Icon(Boxicons.bx_x_circle),
                         onPressed: _searchController.clear,
                       )
                     : null,
@@ -130,7 +131,7 @@ class _FoodsScreenState extends ConsumerState<FoodsScreen> {
                 final filtered = result.filterBySource(sourceFilter);
                 if (filtered.isEmpty) {
                   return EmptyState(
-                    icon: Icons.restaurant_outlined,
+                    icon: Boxicons.bx_food_menu,
                     message: l10n.foodsEmptyMessage,
                   );
                 }
@@ -147,7 +148,7 @@ class _FoodsScreenState extends ConsumerState<FoodsScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/foods/new'),
         tooltip: l10n.foodEditorNewTitle,
-        child: const Icon(Icons.add),
+        child: const Icon(Boxicons.bx_plus),
       ),
     );
   }

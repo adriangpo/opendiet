@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:opendiet/core/nutrition/nutrients.dart';
 import 'package:opendiet/core/units/measurement_unit.dart';
@@ -103,7 +104,7 @@ void main() {
     await tester.pump();
 
     expect((await repository.findFood('rice'))!.isFavorite, isTrue);
-    expect(find.byIcon(Icons.favorite), findsOneWidget);
+    expect(find.byIcon(Boxicons.bxs_heart), findsOneWidget);
   });
 
   testWidgets('edit and log buttons invoke entry point callbacks', (

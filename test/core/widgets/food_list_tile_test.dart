@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:opendiet/core/nutrition/nutrients.dart';
 import 'package:opendiet/core/units/measurement_unit.dart';
@@ -182,7 +183,7 @@ void main() {
       FoodListTile(
         food: _food(),
         onAction: () {},
-        actionIcon: Icons.favorite_border,
+        actionIcon: Boxicons.bx_heart,
         actionLabel: 'Add to diary',
       ),
     );

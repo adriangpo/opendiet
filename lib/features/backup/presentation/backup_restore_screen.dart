@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:opendiet/features/backup/data/backup_providers.dart';
 import 'package:opendiet/features/backup/domain/backup_document.dart';
@@ -41,7 +42,7 @@ class _BackupRestoreScreenState extends ConsumerState<BackupRestoreScreen> {
           const SizedBox(height: 24),
           FilledButton.icon(
             onPressed: _isBusy ? null : () => unawaited(_exportBackup(l10n)),
-            icon: const Icon(Icons.ios_share),
+            icon: const Icon(Boxicons.bx_share),
             label: Text(
               _isExporting ? l10n.backupExportInProgress : l10n.backupExport,
             ),
@@ -51,7 +52,7 @@ class _BackupRestoreScreenState extends ConsumerState<BackupRestoreScreen> {
           const Divider(height: 32),
           FilledButton.tonalIcon(
             onPressed: _isBusy ? null : () => unawaited(_restoreBackup(l10n)),
-            icon: const Icon(Icons.restore),
+            icon: const Icon(Boxicons.bx_history),
             label: Text(
               _isRestoring ? l10n.backupRestoreInProgress : l10n.backupRestore,
             ),
@@ -61,7 +62,7 @@ class _BackupRestoreScreenState extends ConsumerState<BackupRestoreScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(
-                Icons.warning_amber,
+                Boxicons.bx_info_circle,
                 color: Theme.of(context).colorScheme.error,
               ),
               const SizedBox(width: 8),
@@ -199,7 +200,7 @@ class _MessageBanner extends StatelessWidget {
         child: Row(
           children: [
             Icon(
-              isError ? Icons.error_outline : Icons.check_circle_outline,
+              isError ? Boxicons.bx_info_circle : Boxicons.bx_check_circle,
               color: isError
                   ? colorScheme.onErrorContainer
                   : colorScheme.primary,

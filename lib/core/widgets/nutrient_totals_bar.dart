@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:opendiet/core/nutrition/nutrient.dart';
 import 'package:opendiet/core/nutrition/nutrients.dart';
 import 'package:opendiet/features/diary/domain/diary_totals.dart';
@@ -137,7 +138,7 @@ class _ComparisonChip extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (isOver) ...[
-          Icon(Icons.warning_amber_rounded, size: 16, color: color),
+          Icon(Boxicons.bx_info_circle, size: 16, color: color),
           const SizedBox(width: 4),
         ],
         Flexible(child: Text(text, style: style)),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:opendiet/core/nutrition/nutrient.dart';
 import 'package:opendiet/core/nutrition/nutrients.dart';
@@ -157,7 +158,7 @@ class _DailyTargetScreenState extends ConsumerState<DailyTargetScreen> {
         OutlinedButton.icon(
           key: const Key('clear-target'),
           onPressed: _clear,
-          icon: const Icon(Icons.delete_outline),
+          icon: const Icon(Boxicons.bx_trash),
           label: Text(l10n.settingsClearTarget),
         ),
       ],

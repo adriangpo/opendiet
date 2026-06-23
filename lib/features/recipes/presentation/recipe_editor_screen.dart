@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:opendiet/core/identifiers/identifier_providers.dart';
 import 'package:opendiet/core/nutrition/nutrients.dart';
@@ -267,7 +268,7 @@ class _RecipeEditorScreenState extends ConsumerState<RecipeEditorScreen> {
                 OutlinedButton.icon(
                   key: const Key('recipe-add-ingredient-button'),
                   onPressed: _addIngredient,
-                  icon: const Icon(Icons.add),
+                  icon: const Icon(Boxicons.bx_plus),
                   label: Text(l10n.recipeAddIngredient),
                 ),
                 if (totalNutrients != null) ...[
@@ -316,7 +317,7 @@ class _IngredientCard extends StatelessWidget {
                 ),
                 IconButton(
                   key: Key('recipe-delete-ingredient-$index'),
-                  icon: const Icon(Icons.close),
+                  icon: const Icon(Boxicons.bx_x),
                   tooltip: AppLocalizations.of(context).recipeDeleteIngredient,
                   onPressed: onDelete,
                 ),

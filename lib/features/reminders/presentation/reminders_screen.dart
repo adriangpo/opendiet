@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:opendiet/features/reminders/data/reminder_providers.dart';
 import 'package:opendiet/features/reminders/domain/reminder.dart';
@@ -113,7 +114,7 @@ class _EmptyState extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.notifications_outlined,
+            Boxicons.bx_bell,
             size: 64,
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
@@ -127,7 +128,7 @@ class _EmptyState extends ConsumerWidget {
           const SizedBox(height: 24),
           FilledButton.icon(
             onPressed: () => _addReminder(context, ref),
-            icon: const Icon(Icons.add),
+            icon: const Icon(Boxicons.bx_plus),
             label: Text(l10n.remindersAdd),
           ),
         ],
@@ -154,9 +155,7 @@ class _ReminderList extends ConsumerWidget {
 
         return ListTile(
           leading: Icon(
-            reminder.enabled
-                ? Icons.notifications_active
-                : Icons.notifications_off,
+            reminder.enabled ? Boxicons.bxs_bell : Boxicons.bx_bell_off,
             color: reminder.enabled
                 ? Theme.of(context).colorScheme.primary
                 : Theme.of(context).colorScheme.onSurfaceVariant,
@@ -177,11 +176,11 @@ class _ReminderList extends ConsumerWidget {
               IconButton(
                 key: Key('reminder-edit-${reminder.id}'),
                 tooltip: AppLocalizations.of(context).remindersEdit,
-                icon: const Icon(Icons.edit),
+                icon: const Icon(Boxicons.bx_pencil),
                 onPressed: () => _editReminder(context, ref, reminder),
               ),
               IconButton(
-                icon: const Icon(Icons.delete),
+                icon: const Icon(Boxicons.bx_trash),
                 onPressed: () => _confirmDelete(context, ref, reminder),
               ),
             ],
@@ -253,7 +252,7 @@ class _AddButton extends ConsumerWidget {
         width: double.infinity,
         child: OutlinedButton.icon(
           onPressed: () => _addReminder(context, ref),
-          icon: const Icon(Icons.add),
+          icon: const Icon(Boxicons.bx_plus),
           label: Text(l10n.remindersAdd),
         ),
       ),

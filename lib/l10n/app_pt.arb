@@ -264,5 +264,9 @@
   "nutrientPolyunsaturated": "Poli-insaturadas",
   "nutrientOmega3": "Ômega-3",
   "nutrientOmega6": "Ômega-6",
-  "nutrientCholesterol": "Colesterol"
+  "nutrientCholesterol": "Colesterol",
+  "quickActionScanBarcode": "Escanear c\u00f3digo de barras",
+  "quickActionNewFood": "Novo alimento",
+  "quickActionNewRecipe": "Nova receita",
+  "quickActionQuickAdd": "Adi\u00e7\u00e3o r\u00e1pida"
 }

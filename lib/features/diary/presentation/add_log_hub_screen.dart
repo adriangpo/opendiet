@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:opendiet/core/identifiers/identifier_providers.dart';
@@ -52,7 +53,7 @@ class _AddLogHubScreenState extends ConsumerState<AddLogHubScreen> {
       appBar: AppBar(
         title: Text(l10n.addLogHubTitle),
         leading: IconButton(
-          icon: const Icon(Icons.close),
+          icon: const Icon(Boxicons.bx_x),
           onPressed: () => context.pop(),
         ),
       ),
@@ -143,8 +144,8 @@ class _SearchBar extends StatelessWidget {
         controller: controller,
         decoration: InputDecoration(
           hintText: l10n.addLogSearchHint,
-          prefixIcon: const Icon(Icons.search),
-          suffixIcon: const Icon(Icons.qr_code_scanner),
+          prefixIcon: const Icon(Boxicons.bx_search),
+          suffixIcon: const Icon(Boxicons.bx_qr),
           border: const OutlineInputBorder(),
         ),
       ),
@@ -326,7 +327,7 @@ class _BottomActions extends StatelessWidget {
           children: [
             OutlinedButton.icon(
               onPressed: () => context.push('/foods/new'),
-              icon: const Icon(Icons.add),
+              icon: const Icon(Boxicons.bx_plus),
               label: Text(l10n.addLogCreateCustom),
             ),
           ],

@@ -26,6 +26,8 @@ OpenDiet shall allow a user who is signed in to their Open Food Facts account to
 
 ## Implementation Notes
 
+- 2026-06-21: S-07 exposes the correction entry point only for saved Open Food
+  Facts foods. Submission/auth handling remains in S-17.
 - The Open Food Facts account state is restored from platform secure storage
   when the S-17 settings screen loads. Restoring a stored account configures
   the OFF client for authenticated write operations without calling the live

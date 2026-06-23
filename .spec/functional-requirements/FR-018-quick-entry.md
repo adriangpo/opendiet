@@ -28,11 +28,13 @@ OpenDiet shall provide fast-logging helpers: recently logged foods, user-marked 
 
 ## Implementation Notes
 
-<!-- Engineers add notes here during implementation -->
+- 2026-06-21: S-07 lets users toggle a saved food favorite from the detail
+  screen using `FoodRepository.toggleFavorite`, so favorites stay source
+  independent.
 
 ## Test Cases
 
-<!-- QA adds test case references here -->
+- `test/features/foods/presentation/food_detail_screen_test.dart`
 
 ---
 *Created: 2026-06-19*

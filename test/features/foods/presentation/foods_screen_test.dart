@@ -60,6 +60,19 @@ void main() {
     expect(find.text('Banana'), findsOneWidget);
   });
 
+  testWidgets('opens food detail when a saved food is tapped', (tester) async {
+    final repo = FakeFoodRepository();
+    await repo.saveFood(_food(name: 'Oats', energy: 180));
+
+    await pumpFoodsTab(tester, baseOverrides(repo));
+
+    await tester.tap(find.widgetWithText(ListTile, 'Oats'));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Nutrition facts'), findsOneWidget);
+  });
+
   testWidgets('shows energy per 100g on food tiles', (tester) async {
     final repo = FakeFoodRepository();
     await repo.saveFood(_food(name: 'Oats', energy: 180));

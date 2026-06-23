@@ -26,11 +26,13 @@ OpenDiet shall allow the user to log a food by a number of servings or by a weig
 
 ## Implementation Notes
 
-<!-- Engineers add notes here during implementation -->
+- 2026-06-21: The first S-04 implementation handles saved local food
+  references from `/log/quantity/food:<id>`. Recipe servings and transient
+  Open Food Facts product references remain separate route integrations.
 
 ## Test Cases
 
-<!-- QA adds test case references here -->
+- `test/features/diary/presentation/food_quantity_entry_screen_test.dart`
 
 ---
 *Created: 2026-06-19*

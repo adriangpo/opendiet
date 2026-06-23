@@ -475,6 +475,64 @@
   "@foodsFilterAll": {
     "description": "Source filter tab showing all foods regardless of source."
   },
+  "foodDetailBrand": "Brand: {brand}",
+  "@foodDetailBrand": {
+    "description": "Food detail metadata line showing a brand.",
+    "placeholders": {
+      "brand": { "type": "String", "example": "Generic" }
+    }
+  },
+  "foodDetailSource": "Source: {source}",
+  "@foodDetailSource": {
+    "description": "Food detail metadata line showing the food source.",
+    "placeholders": {
+      "source": { "type": "String", "example": "Open Food Facts" }
+    }
+  },
+  "foodSourceOpenFoodFacts": "Open Food Facts",
+  "@foodSourceOpenFoodFacts": {
+    "description": "Saved food source label for Open Food Facts products."
+  },
+  "foodSourceImported": "Imported",
+  "@foodSourceImported": {
+    "description": "Saved food source label for imported foods."
+  },
+  "foodDetailLogFood": "Log this food",
+  "@foodDetailLogFood": {
+    "description": "Primary action on food detail that opens quantity entry."
+  },
+  "foodDetailEdit": "Edit",
+  "@foodDetailEdit": {
+    "description": "Action on food detail that opens the saved-food editor."
+  },
+  "foodDetailSuggestCorrection": "Suggest a correction",
+  "@foodDetailSuggestCorrection": {
+    "description": "Action on saved Open Food Facts food detail for corrections."
+  },
+  "foodDetailNotFound": "Food not found.",
+  "@foodDetailNotFound": {
+    "description": "Shown when a saved food id cannot be found."
+  },
+  "foodDetailFavoriteAdd": "Add to favorites",
+  "@foodDetailFavoriteAdd": {
+    "description": "Tooltip for marking a saved food as favorite."
+  },
+  "foodDetailFavoriteRemove": "Remove from favorites",
+  "@foodDetailFavoriteRemove": {
+    "description": "Tooltip for unmarking a saved food as favorite."
+  },
+  "foodQuantityPreviewTitle": "For this amount",
+  "@foodQuantityPreviewTitle": {
+    "description": "Heading above the live nutrition preview in quantity entry."
+  },
+  "foodQuantityAddToDiary": "Add to diary",
+  "@foodQuantityAddToDiary": {
+    "description": "Button that saves a quantity entry to the diary."
+  },
+  "foodQuantityNoMealSlots": "No meal slots available.",
+  "@foodQuantityNoMealSlots": {
+    "description": "Shown when quantity entry has no meal slot to save into."
+  },
   "@foodEnergyPer100": {
     "description": "Per-100 energy shown on a food list tile, e.g. '180 kcal / 100 g'. The energy value is a pre-formatted number, or '--' when not informed; unit is the basis abbreviation (g or ml).",
     "placeholders": {

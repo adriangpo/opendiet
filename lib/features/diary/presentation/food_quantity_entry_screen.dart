@@ -20,12 +20,17 @@ import 'package:opendiet/features/settings/presentation/settings_controller.dart
 import 'package:opendiet/l10n/app_localizations.dart';
 
 /// Quantity entry for saved foods (S-04, FR-003).
+///
+/// When [existingEntry] is provided, the form pre-fills the quantity and meal
+/// slot from that entry and saves as an update (same entry id) instead of
+/// creating a new entry.
 class FoodQuantityEntryScreen extends ConsumerStatefulWidget {
   /// Creates a saved-food quantity entry screen.
   const FoodQuantityEntryScreen({
     required this.foodId,
     required this.day,
     this.mealSlotId,
+    this.existingEntry,
     super.key,
   });
 
@@ -38,6 +43,9 @@ class FoodQuantityEntryScreen extends ConsumerStatefulWidget {
   /// Optional preselected meal slot.
   final String? mealSlotId;
 
+  /// When set, pre-fills the form and updates this entry on save.
+  final DiaryEntry? existingEntry;
+
   @override
   ConsumerState<FoodQuantityEntryScreen> createState() =>
       _FoodQuantityEntryScreenState();
@@ -47,6 +55,16 @@ class _FoodQuantityEntryScreenState
     extends ConsumerState<FoodQuantityEntryScreen> {
   Quantity? _quantity;
   String? _mealSlotId;
+
+  @override
+  void initState() {
+    super.initState();
+    final existing = widget.existingEntry;
+    if (existing != null) {
+      _quantity = existing.quantity;
+      _mealSlotId = existing.mealSlotId;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,8 +149,9 @@ class _FoodQuantityEntryScreenState
 
     final now = ref.read(clockProvider).now();
     final nutrients = FoodNutrition.forQuantity(food, quantity);
+    final existing = widget.existingEntry;
     final entry = DiaryEntry(
-      id: ref.read(idGeneratorProvider).newId(),
+      id: existing?.id ?? ref.read(idGeneratorProvider).newId(),
       day: widget.day,
       mealSlotId: mealSlotId,
       referenceKind: DiaryReferenceKind.food,
@@ -140,11 +159,14 @@ class _FoodQuantityEntryScreenState
       label: food.name,
       quantity: quantity,
       nutrients: nutrients,
-      loggedAt: now,
+      loggedAt: existing?.loggedAt ?? now,
     );
 
     await ref.read(diaryRepositoryProvider).saveEntry(entry);
-    await ref.read(foodRepositoryProvider).markLastLoggedAt(food.id, now);
+    if (existing == null) {
+      await ref.read(foodRepositoryProvider).markLastLoggedAt(food.id, now);
+    }
+    ref.read(diaryMutationProvider.notifier).touch();
 
     if (!mounted) return;
     final router = GoRouter.maybeOf(context);

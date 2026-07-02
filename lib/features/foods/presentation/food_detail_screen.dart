@@ -78,26 +78,26 @@ class FoodDetailScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(16),
             children: [
               _FoodMetadata(food: food),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               NutritionTableBR.forFood(
                 food: food,
                 vdRegion: settings.vdRegion,
                 unitSystem: settings.unitSystem,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
               FilledButton(
                 key: const Key('food-detail-log-button'),
                 onPressed: onLog ?? () => _openLog(context, food),
                 child: Text(l10n.foodDetailLogFood),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               OutlinedButton(
                 key: const Key('food-detail-edit-button'),
                 onPressed: onEdit ?? () => _openEdit(context, food),
                 child: Text(l10n.foodDetailEdit),
               ),
               if (food.source == FoodSource.openFoodFacts) ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: 4),
                 TextButton(
                   key: const Key('food-detail-correction-button'),
                   onPressed:

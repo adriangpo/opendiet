@@ -13,6 +13,7 @@ import 'package:opendiet/features/diary/domain/diary_day_providers.dart';
 import 'package:opendiet/features/diary/domain/diary_entry.dart';
 import 'package:opendiet/features/diary/domain/diary_totals.dart';
 import 'package:opendiet/features/diary/domain/meal_slot.dart';
+import 'package:opendiet/features/diary/presentation/diary_entry_row.dart';
 import 'package:opendiet/features/settings/presentation/settings_controller.dart';
 import 'package:opendiet/l10n/app_localizations.dart';
 
@@ -116,7 +117,6 @@ class _DiaryContent extends StatelessWidget {
         for (final slot in slots) ...[
           _MealSlotSection(
             slot: slot,
-            entryCount: entriesBySlot[slot.id]?.length ?? 0,
             entries: entriesBySlot[slot.id] ?? [],
             l10n: l10n,
           ),
@@ -196,53 +196,89 @@ class _DateStepper extends StatelessWidget {
   }
 }
 
-class _MealSlotSection extends StatelessWidget {
+class _MealSlotSection extends ConsumerWidget {
   const _MealSlotSection({
     required this.slot,
-    required this.entryCount,
     required this.entries,
     required this.l10n,
   });
 
   final MealSlot slot;
-  final int entryCount;
   final List<DiaryEntry> entries;
   final AppLocalizations l10n;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
     final slotTotals = DiaryTotals.forEntries(entries);
     final slotKcal = slotTotals.energyKcal;
-    final subtitle = entryCount == 0
-        ? l10n.diarySlotNoEntries
-        : '${_formatKcal(slotKcal)} ${l10n.unitKilocalorie}';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ListTile(
-          title: Text(slot.name),
-          subtitle: Text(subtitle),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+          child: Row(
             children: [
-              TextButton.icon(
-                onPressed: () => context.push('/diary/add/${slot.id}'),
-                icon: const Icon(Boxicons.bx_plus, size: 18),
-                label: Text(l10n.diaryAddToSlot(slot.name)),
+              Expanded(
+                child: Text(
+                  slot.name,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-              const Icon(Boxicons.bx_chevron_right),
+              Text(
+                _slotKcalText(slotKcal, l10n),
+                style: theme.textTheme.titleMedium,
+              ),
             ],
           ),
-          onTap: () => context.push('/diary/slot/${slot.id}'),
+        ),
+        if (entries.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Text(
+              l10n.diarySlotNoEntries,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          )
+        else
+          for (final entry in entries)
+            DiaryEntryRow(
+              entry: entry,
+              onTap: () => _editEntry(context, entry),
+              onDelete: () => _deleteEntry(ref, entry),
+            ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: TextButton.icon(
+            onPressed: () => context.push('/diary/add/${slot.id}'),
+            icon: const Icon(Boxicons.bx_plus, size: 18),
+            label: Text(l10n.diarySlotAddLabel(slot.name)),
+          ),
         ),
       ],
     );
   }
+
+  void _editEntry(BuildContext context, DiaryEntry entry) {
+    unawaited(context.push('/diary/entry/${entry.id}/edit'));
+  }
+
+  Future<void> _deleteEntry(WidgetRef ref, DiaryEntry entry) async {
+    await ref.read(diaryRepositoryProvider).deleteEntry(entry.id);
+    ref.read(diaryMutationProvider.notifier).touch();
+  }
 }
 
-String _formatKcal(double? kcal) {
+String _slotKcalText(double? kcal, AppLocalizations l10n) {
   if (kcal == null) return '--';
   final rounded = kcal.roundToDouble();
-  return rounded == kcal ? rounded.toInt().toString() : kcal.toStringAsFixed(1);
+  final number = rounded == kcal
+      ? rounded.toInt().toString()
+      : kcal.toStringAsFixed(1);
+  return '$number ${l10n.unitKilocalorie}';
 }

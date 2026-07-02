@@ -278,5 +278,12 @@
   "quickActionScanBarcode": "Escanear c\u00f3digo de barras",
   "quickActionNewFood": "Novo alimento",
   "quickActionNewRecipe": "Nova receita",
-  "quickActionQuickAdd": "Adi\u00e7\u00e3o r\u00e1pida"
+  "quickActionQuickAdd": "Adi\u00e7\u00e3o r\u00e1pida",
+  "actionDelete": "Excluir",
+  "actionUndo": "Desfazer",
+  "diaryEntryDeleteTitle": "Remover entrada",
+  "diaryEntryDeleteMessage": "Remover {label}?",
+  "diaryEntryDeleted": "{label} removido",
+  "diarySlotAddLabel": "+ Adicionar a {slotName}",
+  "logQuantityEdit": "Salvar altera\u00e7\u00f5es"
 }

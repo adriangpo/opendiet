@@ -38,7 +38,7 @@ void main() {
     // No target -> no remaining/over comparison anywhere.
     expect(find.textContaining('left'), findsNothing);
     expect(find.textContaining('over'), findsNothing);
-    expect(find.byIcon(Boxicons.bx_info_circle), findsNothing);
+    expect(find.byIcon(Boxicons.bx_error_circle), findsNothing);
   });
 
   testWidgets('shows remaining amount when under target', (tester) async {
@@ -52,7 +52,7 @@ void main() {
 
     expect(_inRow('energy', find.textContaining('140')), findsOneWidget);
     expect(_inRow('energy', find.textContaining('left')), findsOneWidget);
-    expect(find.byIcon(Boxicons.bx_info_circle), findsNothing);
+    expect(find.byIcon(Boxicons.bx_error_circle), findsNothing);
   });
 
   testWidgets('shows over amount with the error role and an icon when over '
@@ -70,7 +70,7 @@ void main() {
 
     // Color is never the only signal: the over state pairs text with an icon.
     expect(
-      _inRow('energy', find.byIcon(Boxicons.bx_info_circle)),
+      _inRow('energy', find.byIcon(Boxicons.bx_error_circle)),
       findsOneWidget,
     );
 
@@ -92,7 +92,7 @@ void main() {
 
     expect(_inRow('energy', find.textContaining('left')), findsOneWidget);
     expect(find.textContaining('over'), findsNothing);
-    expect(find.byIcon(Boxicons.bx_info_circle), findsNothing);
+    expect(find.byIcon(Boxicons.bx_error_circle), findsNothing);
   });
 
   testWidgets('compares only the nutrients the target sets a value for', (
@@ -141,7 +141,7 @@ void main() {
       findsOneWidget,
     );
     expect(
-      _inRow('energy', find.byIcon(Boxicons.bx_info_circle)),
+      _inRow('energy', find.byIcon(Boxicons.bx_error_circle)),
       findsOneWidget,
     );
     expect(
@@ -149,16 +149,16 @@ void main() {
       findsOneWidget,
     );
     expect(
-      _inRow('totalFat', find.byIcon(Boxicons.bx_info_circle)),
+      _inRow('totalFat', find.byIcon(Boxicons.bx_error_circle)),
       findsOneWidget,
     );
     // Protein and carbohydrates have no target so no over state.
     expect(
-      _inRow('protein', find.byIcon(Boxicons.bx_info_circle)),
+      _inRow('protein', find.byIcon(Boxicons.bx_error_circle)),
       findsNothing,
     );
     expect(
-      _inRow('carbohydrates', find.byIcon(Boxicons.bx_info_circle)),
+      _inRow('carbohydrates', find.byIcon(Boxicons.bx_error_circle)),
       findsNothing,
     );
   });
@@ -179,10 +179,10 @@ void main() {
       findsOneWidget,
     );
     expect(
-      _inRow('energy', find.byIcon(Boxicons.bx_info_circle)),
+      _inRow('energy', find.byIcon(Boxicons.bx_error_circle)),
       findsOneWidget,
     );
     // Other nutrients have no target, so only one warning icon appears.
-    expect(find.byIcon(Boxicons.bx_info_circle), findsOneWidget);
+    expect(find.byIcon(Boxicons.bx_error_circle), findsOneWidget);
   });
 }

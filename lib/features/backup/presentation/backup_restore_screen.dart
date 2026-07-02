@@ -67,7 +67,7 @@ class _BackupRestoreScreenState extends ConsumerState<BackupRestoreScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(
-                Boxicons.bx_info_circle,
+                Boxicons.bx_error_circle,
                 color: Theme.of(context).colorScheme.error,
               ),
               const SizedBox(width: 8),
@@ -218,7 +218,7 @@ class _MessageBanner extends StatelessWidget {
         child: Row(
           children: [
             Icon(
-              isError ? Boxicons.bx_info_circle : Boxicons.bx_check_circle,
+              isError ? Boxicons.bx_error_circle : Boxicons.bx_check_circle,
               color: isError
                   ? colorScheme.onErrorContainer
                   : colorScheme.primary,

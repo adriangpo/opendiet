@@ -6,16 +6,21 @@ import 'package:opendiet/core/identifiers/identifier_providers.dart';
 import 'package:opendiet/core/nutrition/nutrients.dart';
 import 'package:opendiet/core/time/time_providers.dart';
 import 'package:opendiet/features/diary/data/diary_providers.dart';
+import 'package:opendiet/features/diary/domain/diary_entry.dart';
 import 'package:opendiet/features/diary/domain/quick_add.dart';
 import 'package:opendiet/l10n/app_localizations.dart';
 
 /// A quick-add form for logging an ad-hoc food straight into a meal slot
 /// (FR-031). Accessed from `/log?slot={id}&date={isoDate}`.
+///
+/// When [existingEntry] is provided, the form pre-fills its fields and saves as
+/// an update (same entry id) instead of creating a new entry.
 class QuickAddScreen extends ConsumerStatefulWidget {
   /// Creates a quick-add screen for [slotId] on [day].
   const QuickAddScreen({
     required this.slotId,
     required this.day,
+    this.existingEntry,
     super.key,
   });
 
@@ -24,6 +29,9 @@ class QuickAddScreen extends ConsumerStatefulWidget {
 
   /// The calendar day for the entry.
   final DateTime day;
+
+  /// When set, pre-fills the form and updates this entry on save.
+  final DiaryEntry? existingEntry;
 
   @override
   ConsumerState<QuickAddScreen> createState() => _QuickAddScreenState();
@@ -36,6 +44,32 @@ class _QuickAddScreenState extends ConsumerState<QuickAddScreen> {
   final _proteinController = TextEditingController();
   final _carbsController = TextEditingController();
   final _fatController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final existing = widget.existingEntry;
+    if (existing != null) {
+      _nameController.text = existing.label;
+      final energy = existing.nutrients.energyKcal;
+      if (energy != null) {
+        _energyController.text = energy.roundToDouble() == energy
+            ? energy.toInt().toString()
+            : energy.toString();
+      }
+      _setIfPresent(_proteinController, existing.nutrients.protein);
+      _setIfPresent(_carbsController, existing.nutrients.carbohydrates);
+      _setIfPresent(_fatController, existing.nutrients.totalFat);
+    }
+  }
+
+  void _setIfPresent(TextEditingController ctrl, double? value) {
+    if (value != null) {
+      ctrl.text = value.roundToDouble() == value
+          ? value.toInt().toString()
+          : value.toString();
+    }
+  }
 
   @override
   void dispose() {
@@ -54,6 +88,7 @@ class _QuickAddScreenState extends ConsumerState<QuickAddScreen> {
     final idGenerator = ref.read(idGeneratorProvider);
     final clock = ref.read(clockProvider);
     final now = clock.now();
+    final existing = widget.existingEntry;
 
     final additionalNutrients = Nutrients(
       protein: _doubleOrNull(_proteinController.text),
@@ -62,16 +97,17 @@ class _QuickAddScreenState extends ConsumerState<QuickAddScreen> {
     );
 
     final entry = QuickAdd.entry(
-      id: idGenerator.newId(),
+      id: existing?.id ?? idGenerator.newId(),
       mealSlotId: widget.slotId,
       day: widget.day,
-      loggedAt: now,
+      loggedAt: existing?.loggedAt ?? now,
       name: _nameController.text,
       energyKcal: double.parse(_energyController.text),
       additionalNutrients: additionalNutrients,
     );
 
     await repository.saveEntry(entry);
+    ref.read(diaryMutationProvider.notifier).touch();
 
     if (mounted) _closeAfterSave();
   }

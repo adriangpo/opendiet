@@ -13,6 +13,17 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'diary_providers.g.dart';
 
+/// Incremented after every diary mutation (save/delete) so that
+/// [selectedDayEntriesProvider] and other cached providers can re-fetch.
+@Riverpod(keepAlive: true)
+class DiaryMutation extends _$DiaryMutation {
+  @override
+  int build() => 0;
+
+  /// Increments the counter, triggering watchers to re-evaluate.
+  void touch() => state++;
+}
+
 /// The meal-slot repository, backed by the on-device database.
 @Riverpod(keepAlive: true)
 MealSlotRepository mealSlotRepository(Ref ref) =>
@@ -49,9 +60,12 @@ String _defaultName(DefaultMealSlotKind kind) => switch (kind) {
 };
 
 /// Diary entries for the currently selected day (FR-004).
+///
+/// Watches [diaryMutationProvider] to re-fetch after any save or delete.
 final selectedDayEntriesProvider = FutureProvider<List<DiaryEntry>>((
   ref,
 ) async {
+  ref.watch(diaryMutationProvider);
   final day = ref.watch(diaryDayProvider);
   final repository = ref.watch(diaryRepositoryProvider);
   return repository.entriesForDay(day);

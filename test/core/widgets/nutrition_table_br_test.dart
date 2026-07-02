@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:opendiet/core/nutrition/nutrients.dart';
 import 'package:opendiet/core/nutrition/vd_reference.dart';
@@ -133,6 +134,7 @@ void main() {
           food: _oats(),
           vdRegion: VdRegion.brazil,
           unitSystem: UnitSystem.metric,
+          initiallyExpanded: true,
         ),
       );
       expect(_cell(tester, 'addedSugars', 'per100'), 'Not informed');
@@ -149,6 +151,7 @@ void main() {
           food: _oats(),
           vdRegion: VdRegion.brazil,
           unitSystem: UnitSystem.metric,
+          initiallyExpanded: true,
         ),
       );
       expect(_cell(tester, 'totalSugars', 'vd'), '-');
@@ -158,6 +161,7 @@ void main() {
           food: _oats(),
           vdRegion: VdRegion.europeanUnion,
           unitSystem: UnitSystem.metric,
+          initiallyExpanded: true,
         ),
       );
       expect(_cell(tester, 'totalSugars', 'vd'), '0%');
@@ -250,6 +254,7 @@ void main() {
           food: _oats(nutrients: const Nutrients(addedSugars: 20)),
           vdRegion: VdRegion.brazil,
           unitSystem: UnitSystem.metric,
+          initiallyExpanded: true,
         ),
       );
       expect(_cell(tester, 'addedSugars', 'vd'), '10%');
@@ -259,6 +264,7 @@ void main() {
           food: _oats(nutrients: const Nutrients(addedSugars: 20)),
           vdRegion: VdRegion.europeanUnion,
           unitSystem: UnitSystem.metric,
+          initiallyExpanded: true,
         ),
       );
       expect(_cell(tester, 'addedSugars', 'vd'), '-');
@@ -282,6 +288,7 @@ void main() {
           ),
           vdRegion: VdRegion.brazil,
           unitSystem: UnitSystem.metric,
+          initiallyExpanded: true,
         ),
       );
       expect(_microCell(tester, Nutrients.calciumKey, 'per100'), '20 mg');
@@ -309,10 +316,106 @@ void main() {
           ),
           vdRegion: VdRegion.brazil,
           unitSystem: UnitSystem.metric,
+          initiallyExpanded: true,
         ),
       );
       expect(_microCell(tester, Nutrients.calciumKey, 'vd'), '50%');
       expect(_microCell(tester, Nutrients.ironKey, 'vd'), '25%');
+    });
+
+    testWidgets('collapsible sections are hidden by default', (tester) async {
+      await _pumpTable(
+        tester,
+        NutritionTableBR.forFood(
+          food: _oats(),
+          vdRegion: VdRegion.brazil,
+          unitSystem: UnitSystem.metric,
+        ),
+      );
+      // Section headers are visible
+      expect(find.text('Fats'), findsOneWidget);
+      expect(find.text('Sugars'), findsOneWidget);
+      expect(find.text('Minerals'), findsOneWidget);
+      expect(find.text('Vitamins'), findsOneWidget);
+      // But their content is not in the tree
+      expect(
+        find.byKey(const Key('nutrition-${Nutrients.calciumKey}-per100')),
+        findsNothing,
+      );
+      expect(
+        find.byKey(
+          const Key('nutrition-${Nutrients.monounsaturatedKey}-per100'),
+        ),
+        findsNothing,
+      );
+    });
+
+    testWidgets('initiallyExpanded shows all sections', (tester) async {
+      await _pumpTable(
+        tester,
+        NutritionTableBR.forFood(
+          food: _oats(
+            nutrients: const Nutrients(
+              micronutrients: {
+                Nutrients.calciumKey: 20,
+              },
+            ),
+          ),
+          vdRegion: VdRegion.brazil,
+          unitSystem: UnitSystem.metric,
+          initiallyExpanded: true,
+        ),
+      );
+      // Calcium should now be visible (Minerals section expanded)
+      expect(
+        find.byKey(const Key('nutrition-${Nutrients.calciumKey}-per100')),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('shows mismatch warning icon on Fats section', (tester) async {
+      await _pumpTable(
+        tester,
+        NutritionTableBR.forFood(
+          food: _oats(
+            nutrients: const Nutrients(
+              totalFat: 10,
+              micronutrients: {
+                Nutrients.monounsaturatedKey: 4,
+                Nutrients.polyunsaturatedKey: 4,
+                Nutrients.omega3Key: 2,
+                Nutrients.omega6Key: 2,
+                Nutrients.cholesterolKey: 0.1,
+              },
+            ),
+          ),
+          vdRegion: VdRegion.brazil,
+          unitSystem: UnitSystem.metric,
+        ),
+      );
+      // Fat subtypes sum = 4+4+2+2+0.1 = 12.1 > 10*1.05 = 10.5 -> mismatch
+      expect(find.byIcon(Boxicons.bx_error_circle), findsOneWidget);
+    });
+
+    testWidgets('no mismatch warning when subtypes match', (tester) async {
+      await _pumpTable(
+        tester,
+        NutritionTableBR.forFood(
+          food: _oats(
+            nutrients: const Nutrients(
+              totalFat: 10,
+              micronutrients: {
+                Nutrients.monounsaturatedKey: 3,
+                Nutrients.polyunsaturatedKey: 3,
+              },
+            ),
+          ),
+          vdRegion: VdRegion.brazil,
+          unitSystem: UnitSystem.metric,
+        ),
+      );
+      // Fat subtypes sum = 6 <= 10*1.05 -> no mismatch
+      expect(find.byIcon(Boxicons.bx_error_circle), findsNothing);
     });
   });
 }

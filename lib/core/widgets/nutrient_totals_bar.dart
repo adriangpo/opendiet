@@ -138,7 +138,7 @@ class _ComparisonChip extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (isOver) ...[
-          Icon(Boxicons.bx_info_circle, size: 16, color: color),
+          Icon(Boxicons.bx_error_circle, size: 16, color: color),
           const SizedBox(width: 4),
         ],
         Flexible(child: Text(text, style: style)),

@@ -385,7 +385,7 @@ class _CsvImportScreenState extends ConsumerState<CsvImportScreen> {
           Icon(
             result.rejectedCount == 0
                 ? Boxicons.bxs_check_circle
-                : Boxicons.bx_info_circle,
+                : Boxicons.bx_error_circle,
             size: 64,
             color: result.rejectedCount == 0
                 ? Theme.of(context).colorScheme.primary

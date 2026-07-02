@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +8,7 @@ import 'package:opendiet/core/nutrition/nutrients.dart';
 import 'package:opendiet/features/diary/data/diary_providers.dart';
 import 'package:opendiet/features/diary/domain/diary_entry.dart';
 import 'package:opendiet/features/diary/domain/diary_totals.dart';
+import 'package:opendiet/features/diary/presentation/diary_entry_row.dart';
 import 'package:opendiet/l10n/app_localizations.dart';
 
 /// A meal slot's logged entries with a subtotal (FR-004).
@@ -67,7 +70,7 @@ class MealSlotDetailScreen extends ConsumerWidget {
   }
 }
 
-class _EntryList extends StatelessWidget {
+class _EntryList extends ConsumerWidget {
   const _EntryList({
     required this.entries,
     required this.totals,
@@ -79,34 +82,29 @@ class _EntryList extends StatelessWidget {
   final AppLocalizations l10n;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        for (final entry in entries) _EntryRow(entry: entry, l10n: l10n),
+        for (final entry in entries)
+          DiaryEntryRow(
+            entry: entry,
+            onTap: () => _editEntry(context, entry),
+            onDelete: () => _deleteEntry(ref, entry),
+          ),
         const Divider(height: 24),
         _TotalRow(totals: totals, l10n: l10n),
       ],
     );
   }
-}
 
-class _EntryRow extends StatelessWidget {
-  const _EntryRow({required this.entry, required this.l10n});
+  void _editEntry(BuildContext context, DiaryEntry entry) {
+    unawaited(context.push('/diary/entry/${entry.id}/edit'));
+  }
 
-  final DiaryEntry entry;
-  final AppLocalizations l10n;
-
-  @override
-  Widget build(BuildContext context) {
-    final kcal = entry.nutrients.energyKcal;
-    return ListTile(
-      title: Text(entry.label),
-      trailing: Text(
-        kcal == null ? '--' : _formatKcal(kcal),
-        style: Theme.of(context).textTheme.bodyMedium,
-      ),
-    );
+  Future<void> _deleteEntry(WidgetRef ref, DiaryEntry entry) async {
+    await ref.read(diaryRepositoryProvider).deleteEntry(entry.id);
+    ref.read(diaryMutationProvider.notifier).touch();
   }
 }
 

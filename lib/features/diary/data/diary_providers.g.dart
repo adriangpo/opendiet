@@ -8,6 +8,68 @@ part of 'diary_providers.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// Incremented after every diary mutation (save/delete) so that
+/// [selectedDayEntriesProvider] and other cached providers can re-fetch.
+
+@ProviderFor(DiaryMutation)
+final diaryMutationProvider = DiaryMutationProvider._();
+
+/// Incremented after every diary mutation (save/delete) so that
+/// [selectedDayEntriesProvider] and other cached providers can re-fetch.
+final class DiaryMutationProvider
+    extends $NotifierProvider<DiaryMutation, int> {
+  /// Incremented after every diary mutation (save/delete) so that
+  /// [selectedDayEntriesProvider] and other cached providers can re-fetch.
+  DiaryMutationProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'diaryMutationProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$diaryMutationHash();
+
+  @$internal
+  @override
+  DiaryMutation create() => DiaryMutation();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(int value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<int>(value),
+    );
+  }
+}
+
+String _$diaryMutationHash() => r'4e4790e19583c760b8ad73aa97a821fe17636096';
+
+/// Incremented after every diary mutation (save/delete) so that
+/// [selectedDayEntriesProvider] and other cached providers can re-fetch.
+
+abstract class _$DiaryMutation extends $Notifier<int> {
+  int build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<int, int>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<int, int>,
+              int,
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(ref, build);
+  }
+}
+
 /// The meal-slot repository, backed by the on-device database.
 
 @ProviderFor(mealSlotRepository)

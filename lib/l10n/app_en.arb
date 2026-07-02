@@ -980,5 +980,42 @@
   "quickActionQuickAdd": "Quick add",
   "@quickActionQuickAdd": {
     "description": "Quick action to open the quick-add form."
+  },
+  "actionDelete": "Delete",
+  "@actionDelete": {
+    "description": "Generic delete/remove action."
+  },
+  "actionUndo": "Undo",
+  "@actionUndo": {
+    "description": "Generic undo action."
+  },
+  "diaryEntryDeleteTitle": "Remove entry",
+  "@diaryEntryDeleteTitle": {
+    "description": "Title for the delete-entry confirmation dialog."
+  },
+  "diaryEntryDeleteMessage": "Remove {label}?",
+  "@diaryEntryDeleteMessage": {
+    "description": "Confirmation message when deleting a diary entry.",
+    "placeholders": {
+      "label": { "type": "String", "example": "Oats" }
+    }
+  },
+  "diaryEntryDeleted": "{label} removed",
+  "@diaryEntryDeleted": {
+    "description": "Snackbar text after deleting a diary entry.",
+    "placeholders": {
+      "label": { "type": "String", "example": "Oats" }
+    }
+  },
+  "diarySlotAddLabel": "+ Add to {slotName}",
+  "@diarySlotAddLabel": {
+    "description": "Compact label for the add-to-slot button below entries.",
+    "placeholders": {
+      "slotName": { "type": "String", "example": "Breakfast" }
+    }
+  },
+  "logQuantityEdit": "Save changes",
+  "@logQuantityEdit": {
+    "description": "Label for the save button when editing an existing diary entry."
   }
 }
